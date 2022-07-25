@@ -1,0 +1,26 @@
+
+.find-your-prop {
+    text-transform: inherit !important;
+}
+
+.search-box {
+    background-color: #FFFFFF !important;
+    display: flex;
+    justify-content: center;
+    border-radius: 10px;
+    margin-top: 20%;
+    opacity: 0.84;
+}
+
+.search-font {
+    padding: 2rem 0.5rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    border: 2px solid transparent;
+    font-family: "Open Sans",sans-serif;
+    text-align: center;
+}
+
+.slider-and-search {
+    margin-top: 30px;
+}

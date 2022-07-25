@@ -1,0 +1,9 @@
+export enum ImageSizeEnum {
+    BANNER_WIDTH = 1920,
+    BANNER_HEIGHT = 1080,
+    PROPERTY_WIDTH = 1920,
+    PROPERTY_HEIGHT = 1080,
+    POST_WIDTH = 1920,
+    POST_HEIGHT = 1080,
+    LOGO_WIDTH = 350
+}

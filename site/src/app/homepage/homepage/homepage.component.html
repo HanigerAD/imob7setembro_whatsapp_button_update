@@ -1,0 +1,289 @@
+
+<!-- MOST POPULAR PLACES -->
+<section class="wrap__heading " *ngIf="featuredProperties.length">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-8 col-lg-6 mx-auto">
+                <div class="title__head">
+                    <h2 class="text-center text-capitalize">
+                        Imóveis destaque
+                    </h2>
+                </div>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+        <div class="row">
+            <div class="col-lg-5 col-xl-5 col-padd" (click)="seePropertyDetails(featuredProperties[0].code)">
+                <!-- CARD IMAGE -->
+                <a>
+                    <div class="card__image-hover-style-v3">
+                        <div class="card__image-hover-style-v3-thumb h-475">
+                            <div class="image-watermark">
+                                <img [src]="getImageUrl(featuredProperties[0]?.photo)" alt="" class="img-fluid w-100">
+                                <div class="watermark-position">
+                                    <img class="watermark-large" src="./assets/images/logo-sete-colorido-transparent.png"/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="overlay">
+                            <div class="desc">
+                                <h6 class="text-capitalize"> Cód. {{ featuredProperties[0]?.internalCode }} - {{ featuredProperties[0]?.title }} - {{ featuredProperties[0]?.neighborhood }}, {{ featuredProperties[0]?.city }} </h6>
+                                <p class="text-capitalize"> {{ featuredProperties[0]?.price | currency: 'R$ ' }}</p>
+                                <span class="financeable-label text-white" *ngIf="featuredProperties[0]?.financeable"> Financiável </span>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            <div class="col-lg-7 col-xl-7">
+                <div class="row">
+                    <div class="col-md-6 col-padd" *ngFor="let property of featuredProperties.slice(1, 5)"
+                         (click)="seePropertyDetails(property.code)">
+                        <!-- CARD IMAGE -->
+                        <a>
+                            <div class="card__image-hover-style-v3">
+                                <div class="card__image-hover-style-v3-thumb h-230">
+                                    <div class="image-watermark">
+                                        <img [src]="getImageUrl(property.photo)" alt="" class="img-fluid w-100">
+                                    </div>
+                                    <div class="watermark-position">
+                                        <img class="watermark-small" src="./assets/images/logo-sete-colorido-transparent.png"/>
+                                    </div>
+                                </div>
+                                <div class="overlay">
+                                    <div class="desc">
+                                        <h6 class="text-capitalize"> Cód. {{ property.internalCode }} - {{ property.title }} - {{ property.neighborhood }}, {{ property.city }} </h6>
+                                        <p class="text-capitalize"> {{ property.price | currency: 'R$ ' }} </p>
+                                        <span class="financeable-label text-white" *ngIf="property.financeable"> Financiável </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- END MOST POPULAR PLACES -->
+
+
+
+
+<!-- ABOUT -->
+<section class="home__about bg-theme-v4">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-7">
+                <div class="title__leading">
+                    <!-- <h6 class="text-uppercase">trusted By thousands</h6> -->
+                    <h2 class="text-capitalize"> ENCONTRE O MELHOR LUGAR PARA VIVER </h2>
+                    <p class="text-dark">
+                        Nossa equipe de profissionais está a sua disposição!
+
+                        Encontre os melhores imóveis através de nossos agentes.
+                    </p>
+
+<!--                    <a href="#" class="btn btn-primary mt-3 text-capitalize"> read more-->
+<!--                        <i class="fa fa-angle-right ml-3 "></i></a>-->
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- TESTIMONIAL -->
+<section>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-8 col-lg-6 mx-auto">
+                <div class="title__head">
+                    <h2 class="text-center text-capitalize">
+                        O que nossos clientes dizem
+                    </h2>
+                    <p class="text-center text-capitalize">"Obrigado a vocês por me ajudarem a escolher a minha casa dos sonhos. Nós estamos impressionados com a qualidade do serviço e do imóvel, além de ser por preços acessíveis."</p>
+                </div>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+        <div class="testimonial owl-carousel owl-theme">
+            <!-- TESTIMONIAL -->
+            <div class="item testimonial__block">
+                <div class="testimonial__block-card bg-reviews">
+                    <p>
+                        Thank you walls property help me, choice dream home We were impressed with the build
+                        quality, Plus they are competitively priced.
+                    </p>
+                </div>
+                <div class="testimonial__block-users">
+                    <div class="testimonial__block-users-img">
+                        <img src="../../../assets/images/80x80.jpg" alt="" class="img-fluid">
+                    </div>
+                    <div class="testimonial__block-users-name">
+                        jhon doe <br>
+                        <span>owner, digital agency</span>
+                    </div>
+                </div>
+            </div>
+            <!-- END TESTIMONIAL -->
+            <!-- TESTIMONIAL -->
+            <div class="item testimonial__block">
+                <div class="testimonial__block-card bg-reviews">
+                    <p>
+                        Thank you walls property help me, choice dream home We were impressed with the build
+                        quality, Plus they are competitively priced.
+                    </p>
+                </div>
+                <div class="testimonial__block-users">
+                    <div class="testimonial__block-users-img">
+                        <img src="../../../assets/images/80x80.jpg" alt="" class="img-fluid">
+                    </div>
+                    <div class="testimonial__block-users-name">
+                        jhon doe <br>
+                        <span>owner, digital agency</span>
+                    </div>
+                </div>
+            </div>
+            <!-- END TESTIMONIAL -->
+            <!-- TESTIMONIAL -->
+            <div class="item testimonial__block">
+                <div class="testimonial__block-card bg-reviews">
+                    <p>
+                        Thank you walls property help me, choice dream home We were impressed with the build
+                        quality, Plus they are competitively priced.
+                    </p>
+                </div>
+                <div class="testimonial__block-users">
+                    <div class="testimonial__block-users-img">
+                        <img src="../../../assets/images/80x80.jpg" alt="" class="img-fluid">
+                    </div>
+                    <div class="testimonial__block-users-name">
+                        jhon doe <br>
+                        <span>owner, digital agency</span>
+                    </div>
+                </div>
+            </div>
+            <!-- END TESTIMONIAL -->
+            <!-- TESTIMONIAL -->
+            <div class="item testimonial__block">
+                <div class="testimonial__block-card bg-reviews">
+                    <p>
+                        Thank you walls property help me, choice dream home We were impressed with the build
+                        quality, Plus they are competitively priced.
+                    </p>
+                </div>
+                <div class="testimonial__block-users">
+                    <div class="testimonial__block-users-img">
+                        <img src="../../../assets/images/80x80.jpg" alt="" class="img-fluid">
+                    </div>
+                    <div class="testimonial__block-users-name">
+                        jhon doe <br>
+                        <span>owner, digital agency</span>
+                    </div>
+                </div>
+            </div>
+            <!-- END TESTIMONIAL -->
+            <!-- TESTIMONIAL -->
+            <div class="item testimonial__block">
+                <div class="testimonial__block-card bg-reviews">
+                    <p>
+                        Thank you walls property help me, choice dream home We were impressed with the build
+                        quality, Plus they are competitively priced.
+                    </p>
+                </div>
+                <div class="testimonial__block-users">
+                    <div class="testimonial__block-users-img">
+                        <img src="../../../assets/images/80x80.jpg" alt="" class="img-fluid">
+                    </div>
+                    <div class="testimonial__block-users-name">
+                        jhon doe <br>
+                        <span>owner, digital agency</span>
+                    </div>
+                </div>
+            </div>
+            <!-- END TESTIMONIAL -->
+
+        </div>
+    </div>
+</section>
+<!-- END TESTIMONIAL -->
+
+<!-- CALL TO ACTION -->
+<section class="bg-theme-v1" [style]="banner">
+    <div class="cta">
+        <div class="container">
+            <div class="row d-flex justify-content-center">
+                <div class="col-md-12 col-lg-12 text-center">
+                    <h2 class="text-uppercase text-white">Já encontrou seu imóvel?</h2>
+                    <p class="text-capitalize text-white">Simule seu financiamento com nossos parceiros!</p>
+                    <a (click)="redirectToPartners()" class="btn btn-primary text-uppercase ">Realize sua simulação
+                        <i class="fa fa-angle-right ml-3 arrow-btn "></i></a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<!-- BLOG -->
+<section class="blog__home" *ngIf="posts.length">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-8 col-lg-6 mx-auto">
+                <div class="title__head">
+                    <h2 class="text-center text-capitalize">
+                        Últimas novidades de nosso blog
+                    </h2>
+                    <p class="text-center text-capitalize"> </p>
+                </div>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+        <div class="row">
+            <div class="col-md-4" *ngFor="let post of posts" (click)="seePost(post.code)">
+                <!-- BLOG  -->
+                <div class="card__image">
+                    <div class="card__image-header h-250">
+                        <img [src]="post?.image " alt="" class="img-fluid w100 img-transition">
+                        <div class="row post-keys">
+                            <div class="col post-key-label" *ngFor="let keyword of post.keywords">
+                                {{ keyword.toUpperCase() }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card__image-body">
+                         <span class="badge badge-secondary p-1 text-capitalize mb-3"> {{ getDate(post?.createDate) }} </span>
+                        <h6 class="text-capitalize">
+                            <a href="/blog-single.html"> {{ post?.title }} </a>
+                        </h6>
+                        <div class=" mb-0" [innerHTML]="post?.text.slice(0,150)"></div>...
+                    </div>
+                    <div class="card__image-footer">
+                        <ul class="list-inline my-auto">
+                            <li class="list-inline-item ">
+                                <a href="#">
+                                    {{ post?.user?.name }}
+                                </a>
+
+                            </li>
+                        </ul>
+                        <ul class="list-inline my-auto ml-auto">
+                            <li class="list-inline-item ">
+                                <a class="btn btn-sm btn-primary "><small class="text-white ">Leia mais<i
+                                        class="fa fa-angle-right ml-1"></i></small></a>
+                            </li>
+
+                        </ul>
+                    </div>
+                </div>
+                <!-- END BLOG -->
+            </div>
+        </div>
+    </div>
+</section>
+<!-- END BLOG -->
+
+<!-- SCROLL TO TOP -->
+<a id="return-to-top" (click)="scrollToTop()"><i class="fa fa-chevron-up"></i></a>
+<!-- END SCROLL TO TOP -->
+<script type="text/javascript" src="./js/index.bundle.js"></script>
