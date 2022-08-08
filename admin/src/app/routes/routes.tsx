@@ -1,9 +1,10 @@
-import { Navigate, Routes as RrdRoutes, Route } from "react-router-dom";
+import { Routes as RrdRoutes, Route } from "react-router-dom";
 import { AdminLayout } from "../components/layouts/admin/admin-layout";
 import { GuestLayout } from "../components/layouts/guest/guest-layout";
 import { DashboardPage } from "../components/pages/dashboard/dashboard-page";
+import { ImoveisPage } from "../components/pages/imoveis/imoveis-page";
 import { LoginPage } from "../components/pages/login/login-page";
-import { isAuthenticated } from "../services/auth.service";
+import { PerfilPage } from "../components/pages/perfil/perfil-page";
 
 export const Routes = () => (
   <RrdRoutes>
@@ -13,6 +14,8 @@ export const Routes = () => (
 
     <Route path="admin" element={<AdminLayout />}>
       <Route index element={<DashboardPage />} />
+      <Route path="imoveis" element={<ImoveisPage />} />
+      <Route path="perfil" element={<PerfilPage />} />
     </Route>
   </RrdRoutes>
 );
