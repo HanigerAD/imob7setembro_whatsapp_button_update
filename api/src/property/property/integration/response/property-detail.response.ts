@@ -22,21 +22,21 @@ export class PropertyDetailResponse {
     public parkingVacancy?: number;//ok
     public privativeArea?: string;//ok
     public totalArea?: string;//ok
-    public pavement?: number;
-    public financeable?: boolean;
+    public pavement?: number;//ok
+    public financeable?: boolean;//ok
     public description?: string;//ok
-    public privateInfo?: string;
-    public show?: boolean;
-    public reserved?: boolean;
-    public reserveDate?: string;
-    public hectare?: number;
-    public constuctionYear?: number;
-    public featured?: boolean;
-    public superFeatured?: boolean;
+    public privateInfo?: string;//ok
+    public show?: boolean;//ok
+    public reserved?: boolean;//ok
+    public reserveDate?: string;//ok
+    public hectare?: number;//ok
+    public constuctionYear?: number;//ok
+    public featured?: boolean;//ok
+    public superFeatured?: boolean;//ok
     public suite?: number;//ok
-    public rented?: boolean;
-    public condominiumPrice?: string;
-    public showValue?: boolean;
+    public rented?: boolean;//ok
+    public condominiumPrice?: string;//ok
+    public showValue?: boolean;//ok
     public city?: CityResponse;
     public neighborhood?: NeighborhoodResponse;
     public zipCode?: string;
@@ -47,13 +47,13 @@ export class PropertyDetailResponse {
     public longitude?: string;
     public mainPhoto: string;
     public category?: CategoryResponse;//ok
-    public type?: TypeResponse;
+    public type?: TypeResponse;//ok
     public conservationState?: ConservationStateResponse;//ok
-    public profile?: ProfileResponse;
-    public zone?: ZoneResponse;
+    public profile?: ProfileResponse;//ok
+    public zone?: ZoneResponse;//ok
     public agent?: AgentResponse;//ok
-    public situation?: SituationResponse;
+    public situation?: SituationResponse;//ok
     public finality?: FinalityResponse;
-    public transaction?: TransactionResponse;
+    public transaction?: TransactionResponse;//ok
     public federativeUnit?: FederativeUnitResponse;
 }

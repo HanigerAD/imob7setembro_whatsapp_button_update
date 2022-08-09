@@ -64,10 +64,7 @@ export const ImoveisPage = () => {
       </ol>
 
       <div className="card mb-4">
-        <div className="card-header">
-          <i className="fas fa-table me-1"></i>
-          Imóveis
-        </div>
+        <div className="card-header">Imóveis</div>
 
         <div className="card-body">
           {carregando ? (
@@ -122,13 +119,17 @@ export const ImoveisPage = () => {
                           <td>{model.zone}</td>
                           <td>
                             <Link
-                              className="btn btn-link text-warning p-0"
+                              className="btn btn-link text-dark p-0"
+                              title="Editar"
                               to={`/admin/imoveis/${model.code}`}
                             >
                               <i className="fas fa-pen-to-square fa-fw"></i>
                             </Link>
                             &nbsp;
-                            <button className="btn btn-link text-danger p-0">
+                            <button
+                              className="btn btn-link text-dark p-0"
+                              title="Deletar"
+                            >
                               <i className="fas fa-trash fa-fw"></i>
                             </button>
                           </td>

@@ -30,7 +30,7 @@ export const Pagination = ({
       <ul className="pagination justify-content-center">
         <li className="page-item">
           <button
-            className="page-link"
+            className="page-link text-dark"
             type="button"
             onClick={() => prevPage()}
           >
@@ -43,7 +43,7 @@ export const Pagination = ({
             key={num}
           >
             <button
-              className={`page-link`}
+              className={`page-link ${currentPage == num ? "bg-dark" : "text-dark"}`}
               type="button"
               onClick={() => paginate(num)}
             >
@@ -53,7 +53,7 @@ export const Pagination = ({
         ))}
         <li className="page-item">
           <button
-            className="page-link"
+            className="page-link text-dark"
             type="button"
             onClick={() => nextPage()}
           >
