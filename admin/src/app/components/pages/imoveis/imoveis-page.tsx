@@ -1,7 +1,64 @@
+import { useEffect, useMemo, useState } from "react";
+import { Link } from "react-router-dom";
+import { imageFallback } from "../../../helpers/image-fallback";
+import { apiService } from "../../../services/api.service";
+import { Pagination } from "../../layouts/admin/components/pagination";
+
 export const ImoveisPage = () => {
+  const [models, setModels] = useState([]);
+  const [carregando, setCarregando] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(8);
+
+  async function buscar() {
+    setCarregando(true);
+    setModels([]);
+
+    try {
+      const resposta = await apiService.get("/property/properties");
+      setModels(resposta.data);
+      setCarregando(false);
+    } catch (error) {
+      console.log({ error });
+      setCarregando(false);
+    }
+  }
+
+  const indexOfLastItem = useMemo(
+    () => currentPage * itemsPerPage,
+    [currentPage, itemsPerPage]
+  );
+
+  const indexOfFirstItem = useMemo(
+    () => indexOfLastItem - itemsPerPage,
+    [indexOfLastItem, itemsPerPage]
+  );
+
+  const currentItems = useMemo(
+    () => models.slice(indexOfFirstItem, indexOfLastItem),
+    [models, indexOfFirstItem, indexOfLastItem]
+  );
+
+  const paginate = (pageNum: number) => setCurrentPage(pageNum);
+
+  const nextPage = () => setCurrentPage(currentPage + 1);
+
+  const prevPage = () => setCurrentPage(currentPage - 1);
+
+  useEffect(() => {
+    buscar();
+  }, []);
+
   return (
     <div className="container-fluid px-4">
-      <h1 className="mt-4">Imóveis</h1>
+      <div className="mt-4 d-flex justify-content-between align-items-center">
+        <h1>Imóveis</h1>
+
+        <Link className="btn btn-primary btn-sm" to="/admin/imoveis/cadastrar">
+          Cadastrar
+        </Link>
+      </div>
+
       <ol className="breadcrumb mb-4">
         <li className="breadcrumb-item active">Imóveis</li>
       </ol>
@@ -11,36 +68,93 @@ export const ImoveisPage = () => {
           <i className="fas fa-table me-1"></i>
           Imóveis
         </div>
+
         <div className="card-body">
-          <table className="table">
-            <thead>
-              <tr>
-                <th scope="col">#</th>
-                <th scope="col">First</th>
-                <th scope="col">Last</th>
-                <th scope="col">Handle</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <th scope="row">1</th>
-                <td>Mark</td>
-                <td>Otto</td>
-                <td>@mdo</td>
-              </tr>
-              <tr>
-                <th scope="row">2</th>
-                <td>Jacob</td>
-                <td>Thornton</td>
-                <td>@fat</td>
-              </tr>
-              <tr>
-                <th scope="row">3</th>
-                <td colSpan={2}>Larry the Bird</td>
-                <td>@twitter</td>
-              </tr>
-            </tbody>
-          </table>
+          {carregando ? (
+            <div className="text-center">Carregando...</div>
+          ) : (
+            <>
+              <div className="table-responsive">
+                <table className="table table-sm">
+                  <thead>
+                    <tr>
+                      <th scope="col">#</th>
+                      <th scope="col">Foto</th>
+                      <th scope="col">Titulo</th>
+                      <th scope="col">Categoria</th>
+                      <th scope="col">Cidade</th>
+                      <th scope="col">Financiavel</th>
+                      <th scope="col">Bairro</th>
+                      <th scope="col">Quartos</th>
+                      <th scope="col">Vagas de Garagem</th>
+                      <th scope="col">Preço</th>
+                      <th scope="col">Area Total</th>
+                      <th scope="col">Tipo</th>
+                      <th scope="col">Zona</th>
+                      <th scope="col" style={{ minWidth: 60 }}>
+                        Opções
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {currentItems.length ? (
+                      currentItems.map((model: any) => (
+                        <tr key={model.code}>
+                          <th scope="row">{model.code}</th>
+                          <td>
+                            <img
+                              width={80}
+                              src={model.photo}
+                              alt={model.title}
+                              onError={imageFallback}
+                            />
+                          </td>
+                          <td>{model.title}</td>
+                          <td>{model.category}</td>
+                          <td>{model.city}</td>
+                          <td>{model.financeable ? "Sim" : "Não"}</td>
+                          <td>{model.neighborhood}</td>
+                          <td>{model.bedroom || 0}</td>
+                          <td>{model.parkingVacancy || 0}</td>
+                          <td>{model.price || 0}</td>
+                          <td>{model.totalArea || 0} m2</td>
+                          <td>{model.transaction}</td>
+                          <td>{model.zone}</td>
+                          <td>
+                            <Link
+                              className="btn btn-link text-warning p-0"
+                              to={`/admin/imoveis/${model.code}`}
+                            >
+                              <i className="fas fa-pen-to-square fa-fw"></i>
+                            </Link>
+                            &nbsp;
+                            <button className="btn btn-link text-danger p-0">
+                              <i className="fas fa-trash fa-fw"></i>
+                            </button>
+                          </td>
+                        </tr>
+                      ))
+                    ) : (
+                      <tr>
+                        <td colSpan={4} className="text-center">
+                          Nenhum registro encontrado
+                        </td>
+                      </tr>
+                    )}
+                  </tbody>
+                </table>
+              </div>
+
+              <Pagination
+                itemsPerPage={itemsPerPage}
+                totalItems={models.length}
+                currentPage={currentPage}
+                paginate={paginate}
+                nextPage={nextPage}
+                prevPage={prevPage}
+              />
+            </>
+          )}
         </div>
       </div>
     </div>

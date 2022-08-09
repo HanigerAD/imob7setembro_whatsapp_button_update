@@ -78,9 +78,7 @@ export const LoginPage = () => {
                 ) : null}
 
                 <div className="d-flex align-items-center justify-content-between mt-4 mb-0">
-                  <a className="small" href="password.html">
-                    {/* Esqueceu sua senha? */}
-                  </a>
+                  <div className="small"></div>
                   <button className="btn btn-primary" type="submit">
                     Entrar
                   </button>

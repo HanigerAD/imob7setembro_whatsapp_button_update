@@ -74,6 +74,10 @@ export const Sidenav = () => {
             </div>
           </div>
         </div>
+
+        <div className="sb-sidenav-footer">
+          <div className="small">Copyright &copy; Haniger 2022</div>
+        </div>
       </nav>
     </div>
   );

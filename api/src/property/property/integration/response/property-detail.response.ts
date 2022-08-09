@@ -12,19 +12,19 @@ import { TypeResponse } from './../../../type/integration/response/type.response
 import { CategoryResponse } from './../../../category/integration/response/category.response';
 
 export class PropertyDetailResponse {
-    public code?: number;
-    public internalCode?: number;
-    public title?: string;
-    public price?: string;
-    public dormitory?: number;
-    public unitAvailable?: number;
-    public bathroom?: number;
-    public parkingVacancy?: number;
-    public privativeArea?: string;
-    public totalArea?: string;
+    public code?: number;//ok
+    public internalCode?: number;//ok
+    public title?: string;//ok
+    public price?: string;//ok
+    public dormitory?: number;//ok
+    public unitAvailable?: number;//ok
+    public bathroom?: number;//ok
+    public parkingVacancy?: number;//ok
+    public privativeArea?: string;//ok
+    public totalArea?: string;//ok
     public pavement?: number;
     public financeable?: boolean;
-    public description?: string;
+    public description?: string;//ok
     public privateInfo?: string;
     public show?: boolean;
     public reserved?: boolean;
@@ -33,7 +33,7 @@ export class PropertyDetailResponse {
     public constuctionYear?: number;
     public featured?: boolean;
     public superFeatured?: boolean;
-    public suite?: number;
+    public suite?: number;//ok
     public rented?: boolean;
     public condominiumPrice?: string;
     public showValue?: boolean;
@@ -46,12 +46,12 @@ export class PropertyDetailResponse {
     public latitude?: string;
     public longitude?: string;
     public mainPhoto: string;
-    public category?: CategoryResponse;
+    public category?: CategoryResponse;//ok
     public type?: TypeResponse;
-    public conservationState?: ConservationStateResponse;
+    public conservationState?: ConservationStateResponse;//ok
     public profile?: ProfileResponse;
     public zone?: ZoneResponse;
-    public agent?: AgentResponse;
+    public agent?: AgentResponse;//ok
     public situation?: SituationResponse;
     public finality?: FinalityResponse;
     public transaction?: TransactionResponse;

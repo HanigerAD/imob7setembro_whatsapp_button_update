@@ -2,7 +2,7 @@ import { Outlet } from "react-router-dom";
 
 export const GuestLayout = () => {
   return (
-    <div className="root-layout bg-primary">
+    <div className="root-layout" style={{ backgroundColor: '#233492' }}>
       <div id="layoutAuthentication">
         <div id="layoutAuthentication_content">
           <main>

@@ -1,7 +1,6 @@
 import { useEffect } from "react";
 import { Navigate, Outlet } from "react-router-dom";
 import { isAuthenticated } from "../../../services/auth.service";
-import { Footer } from "./components/footer";
 import { Navbar } from "./components/navbar";
 import { Sidenav } from "./components/sidenav";
 import { SidebarProvider, useSidebar } from "./hooks/useSidebar";
@@ -22,7 +21,6 @@ const Layout = () => {
           <main>
             <Outlet />
           </main>
-          <Footer />
         </div>
       </div>
     </div>
