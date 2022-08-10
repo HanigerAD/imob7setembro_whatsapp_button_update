@@ -48,6 +48,6 @@ export class ConfigurationController {
     @Get('/logo')
     public async getLogo(@Res() res): Promise<any> {
         const data: ConfigurationResponse = await this.service.get();
-        return res.sendFile(data.logo, 'http://cdn-imobiliaria7setembro-com-br.umbler.net/')
+        return res.sendFile(data.logo, process.env.CDN_URL)
     }
 }
