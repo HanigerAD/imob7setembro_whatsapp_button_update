@@ -1,15 +1,44 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
+import { confirmAlert } from "react-confirm-alert";
 import { imageFallback } from "../../../helpers/image-fallback";
 import { apiService } from "../../../services/api.service";
 import { CDN_URL } from "../../../services/cdn.service";
 import { Pagination } from "../../layouts/admin/components/pagination";
+import { toast } from "react-toastify";
 
 export const ImoveisPage = () => {
   const [models, setModels] = useState([]);
   const [carregando, setCarregando] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(8);
+
+  async function deletar(model: any) {
+    // confirmAlert({
+    //   title: "Atenção",
+    //   message: `Você deseja realmente deletar o imovel ${model.title} ?`,
+    //   buttons: [
+    //     {
+    //       label: "Sim",
+    //       onClick: async () => {
+    //         try {
+    //           setCarregando(true);
+    //           await apiService.delete("/property/properties");
+    //           toast.success("Registro removido com sucesso");
+    //           buscar();
+    //         } catch (error) {
+    //           console.log({ error });
+    //           setCarregando(false);
+    //         }
+    //       },
+    //     },
+    //     {
+    //       label: "Não",
+    //       onClick: () => {},
+    //     },
+    //   ],
+    // });
+  }
 
   async function buscar() {
     setCarregando(true);
@@ -131,13 +160,14 @@ export const ImoveisPage = () => {
                             >
                               <i className="fas fa-pen-to-square fa-fw"></i>
                             </Link>
-                            &nbsp;
+                            {/* &nbsp;
                             <button
                               className="btn btn-link text-dark p-0"
                               title="Deletar"
+                              onClick={() => deletar(model)}
                             >
                               <i className="fas fa-trash fa-fw"></i>
-                            </button>
+                            </button> */}
                           </td>
                         </tr>
                       ))

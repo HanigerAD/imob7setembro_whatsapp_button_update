@@ -1,5 +1,6 @@
 import "./sb-admin-bootstrap.css";
 import "react-quill/dist/quill.snow.css";
+import 'react-confirm-alert/src/react-confirm-alert.css';
 import { createGlobalStyle } from "styled-components";
 
 export const GlobalStyles = createGlobalStyle`
