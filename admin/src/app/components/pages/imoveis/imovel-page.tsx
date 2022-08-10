@@ -1,11 +1,14 @@
 import _ from "lodash";
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import TextEditor from "react-quill";
+import { toast } from "react-toastify";
 import { apiService } from "../../../services/api.service";
 import { ObjectHelper } from "../../../helpers/object.helper";
+import { GaleriaDeImagens } from "./galeria-de-imagens";
 
 export const ImovelPage = () => {
+  const navigate = useNavigate();
   const params = useParams();
   const [model, setModel] = useState({} as any);
   const [modelAnt, setModelAnt] = useState({} as any);
@@ -17,7 +20,9 @@ export const ImovelPage = () => {
   const [zones, setZones] = useState([]);
   const [situations, setSituations] = useState([]);
   const [transactions, setTransactions] = useState([]);
-  // const [finalities, setFinalities] = useState([]);
+  const [cities, setCities] = useState([]);
+  const [federativeUnits, setFederativeUnits] = useState([]);
+  const [neighborhoods, setNeighborhoods] = useState([]);
   const [carregando, setCarregando] = useState(false);
 
   const modelId = params.code || null;
@@ -29,7 +34,7 @@ export const ImovelPage = () => {
   async function cancelar(event: any) {
     event.preventDefault();
 
-    setModel(modelAnt);
+    navigate(`/admin/imoveis`);
   }
 
   async function manipularEnvio(event: any) {
@@ -155,30 +160,83 @@ export const ImovelPage = () => {
     return newModel;
   }
 
+  async function salvarImovel(data: any) {
+    const newModel = removeCamposSalvar(data);
+    let code = modelId || "";
+
+    if (code) {
+      await apiService.patch(`/property/properties/${code}`, newModel);
+    } else {
+      const resposta = await apiService.post(`/property/properties`, newModel);
+
+      code = resposta.data.code;
+    }
+
+    return code;
+  }
+
+  async function salvarImagensDoImovel(code: string, images: any[]) {
+    console.log({ code, images });
+
+    const deletedImages = images
+      .filter((image) => !!image.remove)
+      .map((image) => image.photo);
+
+    if (deletedImages.length) {
+      await apiService.patch(
+        `/property/properties/${code}/delete-images`,
+        deletedImages
+      );
+    }
+
+    const newImages = images.filter((image) => !!image.upload);
+
+    if (newImages.length) {
+      for (const image of newImages) {
+        const data = new FormData();
+
+        data.append("file", image.photo);
+
+        await apiService.post(`/property/properties/${code}/image`, data, {
+          params: { order: image.order },
+        });
+      }
+    }
+
+    const updatedOrderImages = images.filter(
+      (image) => !image.remove && !image.upload
+    );
+
+    if (updatedOrderImages.length) {
+      const data = updatedOrderImages.map((image) => ({
+        path: image.photo,
+        index: image.order,
+      }));
+
+      await apiService.put(`/property/properties/images-sort`, data);
+    }
+  }
+
   async function salvar(data: any) {
     setCarregando(true);
 
     try {
-      const newModel = removeCamposSalvar(data);
-      let code = modelId || "";
+      let code = await salvarImovel(data);
+      await salvarImagensDoImovel(code, data.images);
 
-      if (code) {
-        const resposta = await apiService.patch(
-          `/property/properties/${modelId}`,
-          newModel
-        );
+      toast.success("Registro salvo com sucesso");
+      setCarregando(false);
+
+      if (code != modelId) {
+        navigate(`/admin/imoveis/${code}`);
       } else {
-        const resposta = await apiService.post(
-          `/property/properties`,
-          newModel
-        );
-
-        code = resposta.data.code;
+        buscar(code);
       }
-
-      buscar(code);
     } catch (error) {
       console.log({ error });
+      toast.error(
+        "Houve um erro ao salvar o Imovel. Verifique se os campos foram preenchidos corretamente"
+      );
       setCarregando(false);
     }
   }
@@ -193,6 +251,7 @@ export const ImovelPage = () => {
       setCarregando(false);
     } catch (error) {
       console.log({ error });
+      toast.error("Houve um erro ao buscar os Agenciadores.");
       setCarregando(false);
     }
   }
@@ -207,6 +266,7 @@ export const ImovelPage = () => {
       setCarregando(false);
     } catch (error) {
       console.log({ error });
+      toast.error("Houve um erro ao buscar as Categorias.");
       setCarregando(false);
     }
   }
@@ -221,6 +281,7 @@ export const ImovelPage = () => {
       setCarregando(false);
     } catch (error) {
       console.log({ error });
+      toast.error("Houve um erro ao buscar os Estados de Conservação.");
       setCarregando(false);
     }
   }
@@ -235,6 +296,7 @@ export const ImovelPage = () => {
       setCarregando(false);
     } catch (error) {
       console.log({ error });
+      toast.error("Houve um erro ao buscar os Tipos de Imovel.");
       setCarregando(false);
     }
   }
@@ -249,6 +311,7 @@ export const ImovelPage = () => {
       setCarregando(false);
     } catch (error) {
       console.log({ error });
+      toast.error("Houve um erro ao buscar os Perfis.");
       setCarregando(false);
     }
   }
@@ -263,6 +326,7 @@ export const ImovelPage = () => {
       setCarregando(false);
     } catch (error) {
       console.log({ error });
+      toast.error("Houve um erro ao buscar as Zonas.");
       setCarregando(false);
     }
   }
@@ -277,6 +341,7 @@ export const ImovelPage = () => {
       setCarregando(false);
     } catch (error) {
       console.log({ error });
+      toast.error("Houve um erro ao buscar as Situações.");
       setCarregando(false);
     }
   }
@@ -291,23 +356,67 @@ export const ImovelPage = () => {
       setCarregando(false);
     } catch (error) {
       console.log({ error });
+      toast.error("Houve um erro ao buscar as Transações.");
       setCarregando(false);
     }
   }
 
-  // async function buscarFinalidades() {
-  //   setCarregando(true);
-  //   setFinalities([]);
+  async function buscarCidades() {
+    setCarregando(true);
+    setCities([]);
 
-  //   try {
-  //     const resposta = await apiService.get(`/property/finalities`);
-  //     setFinalities(resposta.data);
-  //     setCarregando(false);
-  //   } catch (error) {
-  //     console.log({ error });
-  //     setCarregando(false);
-  //   }
-  // }
+    try {
+      const resposta = await apiService.get(`/locality/city`);
+      setCities(resposta.data);
+      setCarregando(false);
+    } catch (error) {
+      console.log({ error });
+      toast.error("Houve um erro ao buscar as Cidades.");
+      setCarregando(false);
+    }
+  }
+
+  async function buscarUfs() {
+    setCarregando(true);
+    setFederativeUnits([]);
+
+    try {
+      const resposta = await apiService.get(`/locality/uf`);
+      setFederativeUnits(resposta.data);
+      setCarregando(false);
+    } catch (error) {
+      console.log({ error });
+      toast.error("Houve um erro ao buscar os UFs.");
+      setCarregando(false);
+    }
+  }
+
+  async function buscarBairros(code: string) {
+    setCarregando(true);
+    setNeighborhoods([]);
+
+    try {
+      const resposta = await apiService.get(
+        `/locality/city/${code}/neighborhoods`
+      );
+      const newNeighborhoods = resposta.data;
+      if (model && model.neighborhood) {
+        const existe = newNeighborhoods.find(
+          ({ code }: any) => code == model.neighborhood.code
+        );
+
+        if (!existe) {
+          atualizarModel("neighborhood", "");
+        }
+      }
+      setNeighborhoods(newNeighborhoods);
+      setCarregando(false);
+    } catch (error) {
+      console.log({ error });
+      toast.error("Houve um erro ao buscar os Bairros.");
+      setCarregando(false);
+    }
+  }
 
   async function buscar(modelId: string) {
     setCarregando(true);
@@ -315,14 +424,34 @@ export const ImovelPage = () => {
 
     try {
       const resposta = await apiService.get(`/property/properties/${modelId}`);
-      setModelAnt(resposta.data);
-      setModel(resposta.data);
+      const respostaImagens = await apiService.get(
+        `/property/properties/${modelId}/images/urls`
+      );
+
+      const images = respostaImagens.data.map((imagem: any, index: number) => ({
+        photo: imagem,
+        order: index + 1,
+      }));
+
+      const newModel = Object.assign({}, resposta.data);
+      newModel.images = images;
+
+      setModelAnt(newModel);
+      setModel(newModel);
+
       setCarregando(false);
     } catch (error) {
       console.log({ error });
+      toast.error("Houve um erro ao buscar o Imovel.");
       setCarregando(false);
     }
   }
+
+  useEffect(() => {
+    if (model.city && model.city.code) {
+      buscarBairros(model.city.code);
+    }
+  }, [model.city]);
 
   useEffect(() => {
     buscarAgenciadores();
@@ -333,7 +462,8 @@ export const ImovelPage = () => {
     buscarZonas();
     buscarSituacoes();
     buscarTransacoes();
-    // buscarFinalidades();
+    buscarCidades();
+    buscarUfs();
   }, []);
 
   useEffect(() => {
@@ -583,7 +713,12 @@ export const ImovelPage = () => {
                     placeholder="Estado de Conservação"
                     value={model?.conservationState?.code || ""}
                     onChange={(event) =>
-                      atualizarModel("conservationState", event.target.value)
+                      atualizarModel(
+                        "conservationState",
+                        conservationStates.find(
+                          ({ code }) => code == event.target.value
+                        ) || null
+                      )
                     }
                   >
                     <option value={""} disabled>
@@ -616,10 +751,201 @@ export const ImovelPage = () => {
         </div>
 
         <div className="card mb-4">
+          <div className="card-header">Galeria de Imagens</div>
+          <div className="card body">
+            <GaleriaDeImagens
+              imagens={model.images || []}
+              onChange={(images) => atualizarModel("images", images || [])}
+            />
+          </div>
+        </div>
+
+        <div className="card mb-4">
           <div className="card-header">Endereço</div>
           <div className="card-body">
             <div className="row">
-              <div className="col-sm-6"></div>
+              <div className="col-md-4">
+                <div className="form-floating mb-3">
+                  <select
+                    className="form-control"
+                    id="input-federativeUnit"
+                    placeholder="UF"
+                    value={model?.federativeUnit?.code || ""}
+                    onChange={(event) =>
+                      atualizarModel(
+                        "federativeUnit",
+                        federativeUnits.find(
+                          ({ code }) => code == event.target.value
+                        ) || null
+                      )
+                    }
+                  >
+                    <option value={""} disabled>
+                      Selecione...
+                    </option>
+                    {federativeUnits.map((federativeUnit: any) => (
+                      <option
+                        key={federativeUnit.code}
+                        value={federativeUnit.code}
+                      >
+                        {federativeUnit.description}
+                      </option>
+                    ))}
+                  </select>
+                  <label htmlFor="input-federativeUnit">UF</label>
+                </div>
+              </div>
+              <div className="col-md-4">
+                <div className="form-floating mb-3">
+                  <select
+                    className="form-control"
+                    id="input-city"
+                    placeholder="Cidade"
+                    value={model?.city?.code || ""}
+                    onChange={(event) =>
+                      atualizarModel(
+                        "city",
+                        cities.find(({ code }) => code == event.target.value) ||
+                          null
+                      )
+                    }
+                  >
+                    <option value={""} disabled>
+                      Selecione...
+                    </option>
+                    {cities.map((city: any) => (
+                      <option key={city.code} value={city.code}>
+                        {city.description}
+                      </option>
+                    ))}
+                  </select>
+                  <label htmlFor="input-city">Cidade</label>
+                </div>
+              </div>
+              <div className="col-md-4">
+                <div className="form-floating mb-3">
+                  <select
+                    className="form-control"
+                    id="input-neighborhood"
+                    placeholder="Bairro"
+                    value={model?.neighborhood?.code || ""}
+                    onChange={(event) =>
+                      atualizarModel(
+                        "neighborhood",
+                        neighborhoods.find(
+                          ({ code }) => code == event.target.value
+                        ) || null
+                      )
+                    }
+                  >
+                    <option value={""} disabled>
+                      Selecione...
+                    </option>
+                    {neighborhoods.map((neighborhood: any) => (
+                      <option key={neighborhood.code} value={neighborhood.code}>
+                        {neighborhood.description}
+                      </option>
+                    ))}
+                  </select>
+                  <label htmlFor="input-neighborhood">Bairro</label>
+                </div>
+              </div>
+
+              <div className="col-md-4">
+                <div className="form-floating mb-3">
+                  <input
+                    className="form-control"
+                    id="input-zipCode"
+                    type="text"
+                    placeholder="CEP"
+                    value={model.zipCode || ""}
+                    onChange={(event) =>
+                      atualizarModel("zipCode", event.target.value)
+                    }
+                  />
+                  <label htmlFor="input-zipCode">CEP</label>
+                </div>
+              </div>
+
+              <div className="col-md-8">
+                <div className="form-floating mb-3">
+                  <input
+                    className="form-control"
+                    id="input-street"
+                    type="text"
+                    placeholder="Logradouro"
+                    value={model.street || ""}
+                    onChange={(event) =>
+                      atualizarModel("street", event.target.value)
+                    }
+                  />
+                  <label htmlFor="input-street">Logradouro</label>
+                </div>
+              </div>
+
+              <div className="col-md-4">
+                <div className="form-floating mb-3">
+                  <input
+                    className="form-control"
+                    id="input-number"
+                    type="text"
+                    placeholder="Número"
+                    value={model.number || ""}
+                    onChange={(event) =>
+                      atualizarModel("number", event.target.value)
+                    }
+                  />
+                  <label htmlFor="input-number">Número</label>
+                </div>
+              </div>
+
+              <div className="col-md-4">
+                <div className="form-floating mb-3">
+                  <input
+                    className="form-control"
+                    id="input-complement"
+                    type="text"
+                    placeholder="Complemento"
+                    value={model.complement || ""}
+                    onChange={(event) =>
+                      atualizarModel("complement", event.target.value)
+                    }
+                  />
+                  <label htmlFor="input-complement">Complemento</label>
+                </div>
+              </div>
+
+              <div className="col-md-4">
+                <div className="form-floating mb-3">
+                  <input
+                    className="form-control"
+                    id="input-latitude"
+                    type="text"
+                    placeholder="Latitude"
+                    value={model.latitude || ""}
+                    onChange={(event) =>
+                      atualizarModel("latitude", event.target.value)
+                    }
+                  />
+                  <label htmlFor="input-latitude">Latitude</label>
+                </div>
+              </div>
+
+              <div className="col-md-4">
+                <div className="form-floating mb-3">
+                  <input
+                    className="form-control"
+                    id="input-longitude"
+                    type="text"
+                    placeholder="Longitude"
+                    value={model.longitude || ""}
+                    onChange={(event) =>
+                      atualizarModel("longitude", event.target.value)
+                    }
+                  />
+                  <label htmlFor="input-longitude">Longitude</label>
+                </div>
+              </div>
             </div>
           </div>
         </div>

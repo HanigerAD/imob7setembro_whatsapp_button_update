@@ -16,7 +16,10 @@ export const ImoveisPage = () => {
     setModels([]);
 
     try {
-      const resposta = await apiService.get("/property/properties");
+      const filters = {};
+      const resposta = await apiService.get("/property/properties", {
+        params: filters,
+      });
       setModels(resposta.data);
       setCarregando(false);
     } catch (error) {
@@ -77,6 +80,7 @@ export const ImoveisPage = () => {
                   <thead>
                     <tr>
                       <th scope="col">#</th>
+                      <th scope="col"># Interno</th>
                       <th scope="col">Foto</th>
                       <th scope="col">Titulo</th>
                       <th scope="col">Categoria</th>
@@ -99,6 +103,7 @@ export const ImoveisPage = () => {
                       currentItems.map((model: any) => (
                         <tr key={model.code}>
                           <th scope="row">{model.code}</th>
+                          <th scope="row">{model.internalCode}</th>
                           <td>
                             <img
                               width={80}
@@ -145,16 +150,16 @@ export const ImoveisPage = () => {
                     )}
                   </tbody>
                 </table>
-              </div>
 
-              <Pagination
-                itemsPerPage={itemsPerPage}
-                totalItems={models.length}
-                currentPage={currentPage}
-                paginate={paginate}
-                nextPage={nextPage}
-                prevPage={prevPage}
-              />
+                <Pagination
+                  itemsPerPage={itemsPerPage}
+                  totalItems={models.length}
+                  currentPage={currentPage}
+                  paginate={paginate}
+                  nextPage={nextPage}
+                  prevPage={prevPage}
+                />
+              </div>
             </>
           )}
         </div>

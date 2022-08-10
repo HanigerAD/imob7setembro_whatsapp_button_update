@@ -116,7 +116,7 @@ export class PropertyRepository {
             .joinRaw('JOIN municipio on imovel.municipio = municipio.codigo')
             .joinRaw('JOIN unidade_federativa ON municipio.unidade_federativa = unidade_federativa.codigo')
             .joinRaw('JOIN transacao_imovel ON imovel.transacao = transacao_imovel.codigo')
-            .joinRaw('JOIN foto_imovel ON imovel.codigo = foto_imovel.imovel AND foto_imovel.ordem = 1')
+            .joinRaw('LEFT JOIN foto_imovel ON imovel.codigo = foto_imovel.imovel AND foto_imovel.ordem = 1')
             .modify(queryBuilder => {
                 Object.keys(filters).forEach(filter => {
                     if (filters[filter]) {

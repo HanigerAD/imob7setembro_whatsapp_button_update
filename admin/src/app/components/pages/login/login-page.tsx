@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 import { apiService } from "../../../services/api.service";
 import { login } from "../../../services/auth.service";
 
@@ -18,6 +19,7 @@ export const LoginPage = () => {
 
     if (!model.email || !model.password) {
       setMessage("Preencha todos os dados do formulário");
+      toast.error("Preencha todos os dados do formulário");
     } else {
       entrar();
     }
@@ -31,9 +33,11 @@ export const LoginPage = () => {
       });
 
       login(resposta.data.token, resposta.data.user);
+      toast.success("Usuário autenticado");
       navigate("/admin", { replace: true });
     } catch (error) {
       setMessage("Houve um problema com o login, verifique suas credenciais.");
+      toast.error("Houve um problema com o login, verifique suas credenciais.");
     }
   }
 

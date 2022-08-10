@@ -37,14 +37,14 @@ export class PropertyDetailResponse {
     public rented?: boolean;//ok
     public condominiumPrice?: string;//ok
     public showValue?: boolean;//ok
-    public city?: CityResponse;
-    public neighborhood?: NeighborhoodResponse;
-    public zipCode?: string;
-    public street?: string;
-    public number?: string;
-    public complement?: string;
-    public latitude?: string;
-    public longitude?: string;
+    public city?: CityResponse;//ok
+    public neighborhood?: NeighborhoodResponse;//ok
+    public zipCode?: string;//OK
+    public street?: string;//ok
+    public number?: string;//ok
+    public complement?: string;//ok
+    public latitude?: string;//ok
+    public longitude?: string;//ok
     public mainPhoto: string;
     public category?: CategoryResponse;//ok
     public type?: TypeResponse;//ok
