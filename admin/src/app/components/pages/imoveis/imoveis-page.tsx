@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import { imageFallback } from "../../../helpers/image-fallback";
 import { apiService } from "../../../services/api.service";
+import { CDN_URL } from "../../../services/cdn.service";
 import { Pagination } from "../../layouts/admin/components/pagination";
 
 export const ImoveisPage = () => {
@@ -101,7 +102,7 @@ export const ImoveisPage = () => {
                           <td>
                             <img
                               width={80}
-                              src={model.photo}
+                              src={`${CDN_URL}/${model.photo}`}
                               alt={model.title}
                               onError={imageFallback}
                             />
