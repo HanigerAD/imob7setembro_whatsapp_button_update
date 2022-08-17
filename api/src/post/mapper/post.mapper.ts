@@ -22,7 +22,7 @@ export class PostMapper {
             .text(entity.texto)
             .createDate(entity.data_cadastro)
             .keywords(entity.keywords)
-            .image(process.env.CDN_URL + `/` + entity.imagem)
+            .image(entity.imagem)
             .build()
     }
 

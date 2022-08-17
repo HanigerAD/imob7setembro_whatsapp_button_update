@@ -6,6 +6,8 @@ import { ImoveisPage } from "../components/pages/imoveis/imoveis-page";
 import { ImovelPage } from "../components/pages/imoveis/imovel-page";
 import { LoginPage } from "../components/pages/login/login-page";
 import { PerfilPage } from "../components/pages/perfil/perfil-page";
+import { PostagemPage } from "../components/pages/postagens/postagem-page";
+import { PostagensPage } from "../components/pages/postagens/postagens-page";
 
 export const Routes = () => (
   <RrdRoutes>
@@ -18,6 +20,9 @@ export const Routes = () => (
       <Route path="imoveis/cadastrar" element={<ImovelPage />} />
       <Route path="imoveis/:code" element={<ImovelPage />} />
       <Route path="imoveis" element={<ImoveisPage />} />
+      <Route path="postagens/cadastrar" element={<PostagemPage />} />
+      <Route path="postagens/:code" element={<PostagemPage />} />
+      <Route path="postagens" element={<PostagensPage />} />
       <Route path="perfil" element={<PerfilPage />} />
     </Route>
   </RrdRoutes>

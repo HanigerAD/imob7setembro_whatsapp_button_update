@@ -31,11 +31,11 @@ export const Sidenav = () => {
               Mensagens
             </Link>
 
-            <Link className="nav-link" to="/admin/blog">
+            <Link className="nav-link" to="/admin/postagens">
               <div className="sb-nav-link-icon">
                 <i className="fas fa-table"></i>
               </div>
-              Blog
+              Postagens
             </Link>
 
             <button
