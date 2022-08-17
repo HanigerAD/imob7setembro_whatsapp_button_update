@@ -42,14 +42,14 @@ export const Navbar = () => {
             className="dropdown-menu dropdown-menu-end"
             aria-labelledby="navbarDropdown"
           >
-            <li>
+            {/* <li>
               <Link className="dropdown-item" to="/admin/perfil">
                 Perfil
               </Link>
             </li>
             <li>
               <hr className="dropdown-divider" />
-            </li>
+            </li> */}
             <li>
               <button
                 className="dropdown-item"

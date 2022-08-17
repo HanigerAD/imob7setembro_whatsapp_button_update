@@ -24,12 +24,19 @@ export const Sidenav = () => {
               Imóveis
             </Link>
 
-            <Link className="nav-link" to="/admin/mensagens">
+            <Link className="nav-link" to="/admin/cidades">
+              <div className="sb-nav-link-icon">
+                <i className="fas fa-table"></i>
+              </div>
+              Cidades
+            </Link>
+
+            {/* <Link className="nav-link" to="/admin/mensagens">
               <div className="sb-nav-link-icon">
                 <i className="fas fa-table"></i>
               </div>
               Mensagens
-            </Link>
+            </Link> */}
 
             <Link className="nav-link" to="/admin/postagens">
               <div className="sb-nav-link-icon">
@@ -38,7 +45,7 @@ export const Sidenav = () => {
               Postagens
             </Link>
 
-            <button
+            {/* <button
               className="btn btn-link nav-link collapsed"
               type="button"
               data-bs-toggle="collapse"
@@ -71,7 +78,7 @@ export const Sidenav = () => {
                   Usuários
                 </Link>
               </nav>
-            </div>
+            </div> */}
           </div>
         </div>
 
