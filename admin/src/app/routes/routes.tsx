@@ -1,6 +1,8 @@
 import { Routes as RrdRoutes, Route } from "react-router-dom";
 import { AdminLayout } from "../components/layouts/admin/admin-layout";
 import { GuestLayout } from "../components/layouts/guest/guest-layout";
+import { BairroPage } from "../components/pages/bairros/bairro-page";
+import { BairrosPage } from "../components/pages/bairros/bairros-page";
 import { CidadePage } from "../components/pages/cidades/cidade-page";
 import { CidadesPage } from "../components/pages/cidades/cidades-page";
 import { DashboardPage } from "../components/pages/dashboard/dashboard-page";
@@ -28,6 +30,9 @@ export const Routes = () => (
       <Route path="cidades/cadastrar" element={<CidadePage />} />
       <Route path="cidades/:code" element={<CidadePage />} />
       <Route path="cidades" element={<CidadesPage />} />
+      <Route path="bairros/cadastrar" element={<BairroPage />} />
+      <Route path="bairros/:code" element={<BairroPage />} />
+      <Route path="bairros" element={<BairrosPage />} />
       <Route path="perfil" element={<PerfilPage />} />
     </Route>
   </RrdRoutes>

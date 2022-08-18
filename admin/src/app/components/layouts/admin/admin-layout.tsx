@@ -1,4 +1,3 @@
-import { useEffect } from "react";
 import { Navigate, Outlet } from "react-router-dom";
 import { isAuthenticated } from "../../../services/auth.service";
 import { Navbar } from "./components/navbar";
@@ -7,10 +6,6 @@ import { SidebarProvider, useSidebar } from "./hooks/useSidebar";
 
 const Layout = () => {
   const { toggled } = useSidebar();
-
-  useEffect(() => {
-    console.log(toggled);
-  }, [toggled]);
 
   return (
     <div className={`sb-nav-fixed ${toggled ? "sb-sidenav-toggled" : ""}`}>

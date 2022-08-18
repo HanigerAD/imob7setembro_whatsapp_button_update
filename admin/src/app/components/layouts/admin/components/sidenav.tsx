@@ -31,6 +31,13 @@ export const Sidenav = () => {
               Cidades
             </Link>
 
+            <Link className="nav-link" to="/admin/bairros">
+              <div className="sb-nav-link-icon">
+                <i className="fas fa-table"></i>
+              </div>
+              Bairros
+            </Link>
+
             {/* <Link className="nav-link" to="/admin/mensagens">
               <div className="sb-nav-link-icon">
                 <i className="fas fa-table"></i>
