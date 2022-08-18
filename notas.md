@@ -5,9 +5,8 @@
 - - - [FEITO] Bairros
 - - - [] Imóvel
 - - - - [] Adicionar campo "Motivo Exclusão do Imóvel" só será permitido a exclusão após colocar esse motivo.
-- - - - [] Imóvel só será exibido no site se upar o documento em PDF de "Autorização para a Venda"
 - - - - [] CEP para a Longitude e Latitude
-- - - - [] Campo Link para vídeo do Youtube
+- - - - [FEITO] Campo Link para vídeo do Youtube
 - - - - [] Imagens
 - - - - - [FEITO] Cadastrar várias imagens ao mesmo tempo.
 - - - - - [] definir logo marca d'água nas fotos por padrão centralizado na "Direita" ou na "Esquerda"
@@ -23,6 +22,8 @@
 - [] Fazer o Carrossel para as logos de parceiros
 - [] Adicionar a aba para o Filtro de Imóveis Financiáveis.
 - [] Ajustar os links de compartilhamento do imóvel. Face e no Whats já com a mensagem incluíndo o ID e título do imóvel a ser compartilhado.
+- [] Imóveis
+- - [] exibir no site somente se upar o documento em PDF de "Autorização para a Venda"
 - [] Buscar por imovel
 - - [] valor de Compra (10.000 até 10.000.000)
 - - [] valor de Alguel (300 até 50.000)
