@@ -73,10 +73,12 @@ export const GaleriaDeImagens = ({
 
     let newImagens = [...imagens];
 
-    newImagens.push({
-      photo: event.target.files[0],
-      upload: true,
-    });
+    for (const file of event.target.files) {
+      newImagens.push({
+        photo: file,
+        upload: true,
+      });
+    }
 
     newImagens = newImagens.map(ajustarOrdem);
 
@@ -158,6 +160,7 @@ export const GaleriaDeImagens = ({
           className="d-none"
           id="add-file"
           accept="image/*"
+          multiple
           onChange={onImageChange}
         />
 
@@ -168,7 +171,7 @@ export const GaleriaDeImagens = ({
             alt={"Adicionar Imagem"}
             onError={imageFallback}
           />
-          <div className="card-body text-center">Adicionar Imagem</div>
+          <div className="card-body text-center">Adicionar Imagens</div>
         </label>
       </div>
     </div>
