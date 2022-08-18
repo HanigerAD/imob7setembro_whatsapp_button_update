@@ -92,6 +92,7 @@ export const ImovelPage = () => {
       "longitude",
       "transaction",
       "situation",
+      "linkYoutube",
     ]);
 
     newModel.city = newModel.city
@@ -751,8 +752,26 @@ export const ImovelPage = () => {
         </div>
 
         <div className="card mb-4">
-          <div className="card-header">Galeria de Imagens</div>
-          <div className="card body">
+          <div className="card-header">Apresentação</div>
+          <div className="card-body">
+            <div className="row">
+              <div className="col-md-12">
+                <div className="form-floating mb-3">
+                  <input
+                    className="form-control"
+                    id="input-linkYoutube"
+                    type="text"
+                    placeholder="Link Youtube"
+                    value={model.linkYoutube || ""}
+                    onChange={(event) =>
+                      atualizarModel("linkYoutube", event.target.value)
+                    }
+                  />
+                  <label htmlFor="input-linkYoutube">Link Youtube</label>
+                </div>
+              </div>
+            </div>
+
             <GaleriaDeImagens
               imagens={model.images || []}
               onChange={(images) => atualizarModel("images", images || [])}

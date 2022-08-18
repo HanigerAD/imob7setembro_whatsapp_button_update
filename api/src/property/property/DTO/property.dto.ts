@@ -39,5 +39,6 @@ export class PropertyDTO {
     public complement?: string;
     public latitude?: string;
     public longitude?: string;
-    public situation?: number;    
+    public situation?: number;
+    public linkYoutube?: string;
 }

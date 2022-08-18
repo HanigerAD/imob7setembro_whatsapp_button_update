@@ -39,5 +39,6 @@ export class PropertyDetailEntity {
     public complemento?: string;
     public latitude?: string;
     public longitude?: string;
-    public situacao?: number;    
+    public situacao?: number;
+    public link_youtube?: string;
 }

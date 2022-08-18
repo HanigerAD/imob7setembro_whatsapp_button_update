@@ -39,4 +39,5 @@ export class PropertyRequest {
     public longitude?: string;
     public transaction: number;
     public situation: number;
+    public linkYoutube?: string;
 }

@@ -50,6 +50,7 @@ export class PropertyMapper {
             .latitude(request.latitude)
             .longitude(request.longitude)
             .situacao(request.situation)
+            .link_youtube(request.linkYoutube)
             .build();
     }
 
@@ -89,6 +90,7 @@ export class PropertyMapper {
             .neighborhood(entity.bairro)
             .city(entity.municipio)
             .situation(entity.situacao)
+            .linkYoutube(entity.link_youtube)
             .build()
     }
 
@@ -129,6 +131,7 @@ export class PropertyMapper {
             .complement(dto.complement)
             .latitude(dto.latitude)
             .longitude(dto.longitude)
+            .linkYoutube(dto.linkYoutube)
             .build();
     }
 

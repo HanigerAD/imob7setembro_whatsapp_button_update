@@ -46,6 +46,7 @@ export class PropertyDetailResponse {
     public latitude?: string;//ok
     public longitude?: string;//ok
     public mainPhoto: string;
+    public linkYoutube?: string;
     public category?: CategoryResponse;//ok
     public type?: TypeResponse;//ok
     public conservationState?: ConservationStateResponse;//ok
