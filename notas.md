@@ -1,3 +1,5 @@
+Status Imob7 - 11:30
+
 [] Painel Administrativo
 - [FEITO] Adicionar a imagem \/ de Select nos campos.
 - - [] Cadastros
@@ -10,7 +12,7 @@
 - - - - [] Imagens
 - - - - - [FEITO] Cadastrar várias imagens ao mesmo tempo.
 - - - - - [] definir logo marca d'água nas fotos por padrão centralizado na "Direita" ou na "Esquerda"
-- - - [] Usuarios
+- - - [EM-ANDAMENTO] Usuarios
 - - - [] Permissões de Usuarios
 - - - [] Corretores - (cadastrar os corretores para aparecer o card deles no site)
 - - - [] Logos Parceiros
