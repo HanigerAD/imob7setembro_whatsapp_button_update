@@ -24,26 +24,47 @@ export const Sidenav = () => {
               Imóveis
             </Link>
 
-            <Link className="nav-link" to="/admin/cidades">
+            <button
+              className="btn btn-link nav-link collapsed"
+              type="button"
+              data-bs-toggle="collapse"
+              data-bs-target="#collapseLocalizacoes"
+              aria-expanded="false"
+              aria-controls="collapseLocalizacoes"
+            >
               <div className="sb-nav-link-icon">
-                <i className="fas fa-table"></i>
+                <i className="fas fa-book-open"></i>
               </div>
-              Cidades
-            </Link>
+              Localizações
+              <div className="sb-sidenav-collapse-arrow">
+                <i className="fas fa-angle-down"></i>
+              </div>
+            </button>
+            <div
+              className="collapse"
+              id="collapseLocalizacoes"
+              aria-labelledby="headingTwo"
+              data-bs-parent="#sidenavAccordion"
+            >
+              <nav
+                className="sb-sidenav-menu-nested nav"
+                id="sidenavAccordionLocalizacoes"
+              >
+                <Link className="nav-link" to="/admin/cidades">
+                  <div className="sb-nav-link-icon">
+                    <i className="fas fa-table"></i>
+                  </div>
+                  Cidades
+                </Link>
 
-            <Link className="nav-link" to="/admin/bairros">
-              <div className="sb-nav-link-icon">
-                <i className="fas fa-table"></i>
-              </div>
-              Bairros
-            </Link>
-
-            {/* <Link className="nav-link" to="/admin/mensagens">
-              <div className="sb-nav-link-icon">
-                <i className="fas fa-table"></i>
-              </div>
-              Mensagens
-            </Link> */}
+                <Link className="nav-link" to="/admin/bairros">
+                  <div className="sb-nav-link-icon">
+                    <i className="fas fa-table"></i>
+                  </div>
+                  Bairros
+                </Link>
+              </nav>
+            </div>
 
             <Link className="nav-link" to="/admin/postagens">
               <div className="sb-nav-link-icon">
@@ -51,41 +72,6 @@ export const Sidenav = () => {
               </div>
               Postagens
             </Link>
-
-            {/* <button
-              className="btn btn-link nav-link collapsed"
-              type="button"
-              data-bs-toggle="collapse"
-              data-bs-target="#collapseConfiguracoes"
-              aria-expanded="false"
-              aria-controls="collapseConfiguracoes"
-            >
-              <div className="sb-nav-link-icon">
-                <i className="fas fa-book-open"></i>
-              </div>
-              Configurações
-              <div className="sb-sidenav-collapse-arrow">
-                <i className="fas fa-angle-down"></i>
-              </div>
-            </button>
-            <div
-              className="collapse"
-              id="collapseConfiguracoes"
-              aria-labelledby="headingTwo"
-              data-bs-parent="#sidenavAccordion"
-            >
-              <nav
-                className="sb-sidenav-menu-nested nav"
-                id="sidenavAccordionConfiguracoes"
-              >
-                <Link className="nav-link" to="/admin/configuracoes-site">
-                  Site
-                </Link>
-                <Link className="nav-link" to="/admin/usuarios">
-                  Usuários
-                </Link>
-              </nav>
-            </div> */}
           </div>
         </div>
 
