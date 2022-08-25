@@ -6,12 +6,12 @@ import { toast } from "react-toastify";
 import { apiService } from "../../../services/api.service";
 import { ObjectHelper } from "../../../helpers/object.helper";
 import { GaleriaDeImagens } from "./galeria-de-imagens";
+import { GaleriaDeDocumentos } from "./galeria-de-documentos";
 
 export const ImovelPage = () => {
   const navigate = useNavigate();
   const params = useParams();
   const [model, setModel] = useState({} as any);
-  const [modelAnt, setModelAnt] = useState({} as any);
   const [agents, setAgents] = useState([]);
   const [categories, setCategories] = useState([]);
   const [conservationStates, setConservationStates] = useState([]);
@@ -28,7 +28,10 @@ export const ImovelPage = () => {
   const modelId = params.code || null;
 
   function atualizarModel(chave: string, valor: any) {
-    setModel((modelAnt: any) => ({ ...modelAnt, [chave]: valor }));
+    setModel((modelAnt: any) => {
+      const newModel = { ...modelAnt, [chave]: valor };
+      return newModel;
+    });
   }
 
   async function cancelar(event: any) {
@@ -170,15 +173,13 @@ export const ImovelPage = () => {
     } else {
       const resposta = await apiService.post(`/property/properties`, newModel);
 
-      code = resposta.data.code;
+      code = resposta.data[0];
     }
 
     return code;
   }
 
   async function salvarImagensDoImovel(code: string, images: any[]) {
-    console.log({ code, images });
-
     const deletedImages = images
       .filter((image) => !!image.remove)
       .map((image) => image.photo);
@@ -218,12 +219,38 @@ export const ImovelPage = () => {
     }
   }
 
+  async function salvarDocumentosDoImovel(code: string, documents: any[]) {
+    const deletedDocuments = documents
+      .filter((document) => !!document.remove)
+      .map((document) => document.document);
+
+    if (deletedDocuments.length) {
+      await apiService.patch(
+        `/property/properties/${code}/delete-documents`,
+        deletedDocuments
+      );
+    }
+
+    const newDocuments = documents.filter((document) => !!document.upload);
+
+    if (newDocuments.length) {
+      for (const document of newDocuments) {
+        const data = new FormData();
+
+        data.append("file", document.document);
+
+        await apiService.post(`/property/properties/${code}/document`, data);
+      }
+    }
+  }
+
   async function salvar(data: any) {
     setCarregando(true);
 
     try {
       let code = await salvarImovel(data);
       await salvarImagensDoImovel(code, data.images);
+      await salvarDocumentosDoImovel(code, data.documents);
 
       toast.success("Registro salvo com sucesso");
       setCarregando(false);
@@ -419,25 +446,38 @@ export const ImovelPage = () => {
     }
   }
 
+  async function buscarImagensDoImovel(imovelId: string) {
+    const respostaImagens = await apiService.get(
+      `/property/properties/${imovelId}/images/urls`
+    );
+
+    return respostaImagens.data.map((imagem: any, index: number) => ({
+      photo: imagem,
+      order: index + 1,
+    }));
+  }
+
+  async function buscarDocumentosDoImovel(imovelId: string) {
+    const respostaDocumentos = await apiService.get(
+      `/property/properties/${imovelId}/documents`
+    );
+
+    return respostaDocumentos.data;
+  }
+
   async function buscar(modelId: string) {
     setCarregando(true);
     setModel({});
 
     try {
       const resposta = await apiService.get(`/property/properties/${modelId}`);
-      const respostaImagens = await apiService.get(
-        `/property/properties/${modelId}/images/urls`
-      );
-
-      const images = respostaImagens.data.map((imagem: any, index: number) => ({
-        photo: imagem,
-        order: index + 1,
-      }));
+      const images = await buscarImagensDoImovel(modelId);
+      const documents = await buscarDocumentosDoImovel(modelId);
 
       const newModel = Object.assign({}, resposta.data);
       newModel.images = images;
+      newModel.documents = documents;
 
-      setModelAnt(newModel);
       setModel(newModel);
 
       setCarregando(false);
@@ -468,8 +508,6 @@ export const ImovelPage = () => {
   }, []);
 
   useEffect(() => {
-    setModelAnt({});
-
     if (modelId) {
       buscar(modelId);
     }
@@ -775,6 +813,18 @@ export const ImovelPage = () => {
             <GaleriaDeImagens
               imagens={model.images || []}
               onChange={(images) => atualizarModel("images", images || [])}
+            />
+          </div>
+        </div>
+
+        <div className="card mb-4">
+          <div className="card-header">Documentos</div>
+          <div className="card-body">
+            <GaleriaDeDocumentos
+              documentos={model.documents || []}
+              onChange={(documents) =>
+                atualizarModel("documents", documents || [])
+              }
             />
           </div>
         </div>
