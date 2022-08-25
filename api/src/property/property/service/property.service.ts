@@ -197,9 +197,19 @@ export class PropertyService {
         Promise.all(imagesSort.map(image => this.repository.updateImagesSort(image)));
     }
 
+    public async insertPropertyDocument(file: Express.Multer.File, propertyCode: number): Promise<void> {
+      const newFile = this.buildPropertyDocument(file);
+      await this.documentService.saveDocument(newFile);
+      await this.repository.insertPropertyDocument(newFile.filename, newFile.originalname, propertyCode);
+    }
+
     public insertDocuments(files: Express.Multer.File[], propertyCode: number, res: Response): void {
-        Promise.all(files.map(file => this.documentService.saveDocument(file, res)));
+        Promise.all(files.map(file => this.documentService.saveDocument(file)));
         Promise.all(files.map(file => this.repository.insertPropertyDocument(file.filename, file.originalname, propertyCode)));
+    }
+
+    public buildPropertyDocument(file: Express.Multer.File): Express.Multer.File {
+        return file[0];
     }
 
     public buildPropertyImage(files: Express.Multer.File[]): ImageRequest[] {

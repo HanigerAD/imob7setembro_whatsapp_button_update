@@ -52,27 +52,28 @@ export class CdnService {
         });
     }
 
-    public sendSingleDocumentToFTP(file: Express.Multer.File, res: Response): void {
+    public sendSingleDocumentToFTP(file: Express.Multer.File): Promise<void> {
+      return new Promise((resolve, reject) => {
         const ftpClient = new client();
 
-        // FTP EVENTS
         ftpClient.on('ready', () => {
             ftpClient.put(file.buffer, process.env.CDN_DIRECTORY + file.filename, (err) => {
-                if (err) throw new InternalServerErrorException('Erro ao enviar arquivo para o CDN')
+                if (err) reject(new InternalServerErrorException('Erro ao enviar arquivo para o CDN'));
             })
 
             ftpClient.end();
         });
+
         ftpClient.on('close', () => {
-            res.status(200).send({ok: 'ok'});
+            resolve()
         });
 
-        // FTP CONNECTION
         ftpClient.connect({
             host: process.env.CDN_HOST,
             user: process.env.CDN_USER,
             password: process.env.CDN_PASS,
             secure: false,
         });
+      });
     }
 }
