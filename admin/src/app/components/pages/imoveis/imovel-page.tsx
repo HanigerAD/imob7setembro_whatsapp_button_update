@@ -7,6 +7,10 @@ import { apiService } from "../../../services/api.service";
 import { ObjectHelper } from "../../../helpers/object.helper";
 import { GaleriaDeImagens } from "./galeria-de-imagens";
 import { GaleriaDeDocumentos } from "./galeria-de-documentos";
+import {
+  converterBooleanParaString,
+  converterStringParaBoolean,
+} from "../../../utils/parser.utils";
 
 export const ImovelPage = () => {
   const navigate = useNavigate();
@@ -40,8 +44,17 @@ export const ImovelPage = () => {
     navigate(`/admin/imoveis`);
   }
 
+  function validarImagens(images: any[]): Boolean {
+    return images && images.length > 0;
+  }
+
   async function manipularEnvio(event: any) {
     event.preventDefault();
+
+    if (!validarImagens(model.images)) {
+      toast.error("Você deve informar ao menos 1 imagem");
+      return;
+    }
 
     try {
       await salvar(model);
@@ -180,66 +193,70 @@ export const ImovelPage = () => {
   }
 
   async function salvarImagensDoImovel(code: string, images: any[]) {
-    const deletedImages = images
-      .filter((image) => !!image.remove)
-      .map((image) => image.photo);
+    if (code && images && images.length > 0) {
+      const deletedImages = images
+        .filter((image) => !!image.remove)
+        .map((image) => image.photo);
 
-    if (deletedImages.length) {
-      await apiService.patch(
-        `/property/properties/${code}/delete-images`,
-        deletedImages
-      );
-    }
-
-    const newImages = images.filter((image) => !!image.upload);
-
-    if (newImages.length) {
-      for (const image of newImages) {
-        const data = new FormData();
-
-        data.append("file", image.photo);
-
-        await apiService.post(`/property/properties/${code}/image`, data, {
-          params: { order: image.order },
-        });
+      if (deletedImages.length) {
+        await apiService.patch(
+          `/property/properties/${code}/delete-images`,
+          deletedImages
+        );
       }
-    }
 
-    const updatedOrderImages = images.filter(
-      (image) => !image.remove && !image.upload
-    );
+      const newImages = images.filter((image) => !!image.upload);
 
-    if (updatedOrderImages.length) {
-      const data = updatedOrderImages.map((image) => ({
-        path: image.photo,
-        index: image.order,
-      }));
+      if (newImages.length) {
+        for (const image of newImages) {
+          const data = new FormData();
 
-      await apiService.put(`/property/properties/images-sort`, data);
+          data.append("file", image.photo);
+
+          await apiService.post(`/property/properties/${code}/image`, data, {
+            params: { order: image.order },
+          });
+        }
+      }
+
+      const updatedOrderImages = images.filter(
+        (image) => !image.remove && !image.upload
+      );
+
+      if (updatedOrderImages.length) {
+        const data = updatedOrderImages.map((image) => ({
+          path: image.photo,
+          index: image.order,
+        }));
+
+        await apiService.put(`/property/properties/images-sort`, data);
+      }
     }
   }
 
   async function salvarDocumentosDoImovel(code: string, documents: any[]) {
-    const deletedDocuments = documents
-      .filter((document) => !!document.remove)
-      .map((document) => document.document);
+    if (code && documents && documents.length > 0) {
+      const deletedDocuments = documents
+        .filter((document) => !!document.remove)
+        .map((document) => document.document);
 
-    if (deletedDocuments.length) {
-      await apiService.patch(
-        `/property/properties/${code}/delete-documents`,
-        deletedDocuments
-      );
-    }
+      if (deletedDocuments.length) {
+        await apiService.patch(
+          `/property/properties/${code}/delete-documents`,
+          deletedDocuments
+        );
+      }
 
-    const newDocuments = documents.filter((document) => !!document.upload);
+      const newDocuments = documents.filter((document) => !!document.upload);
 
-    if (newDocuments.length) {
-      for (const document of newDocuments) {
-        const data = new FormData();
+      if (newDocuments.length) {
+        for (const document of newDocuments) {
+          const data = new FormData();
 
-        data.append("file", document.document);
+          data.append("file", document.document);
 
-        await apiService.post(`/property/properties/${code}/document`, data);
+          await apiService.post(`/property/properties/${code}/document`, data);
+        }
       }
     }
   }
@@ -536,6 +553,7 @@ export const ImovelPage = () => {
                     className="form-control"
                     id="input-title"
                     type="text"
+                    required
                     placeholder="Titulo"
                     value={model.title || ""}
                     onChange={(event) =>
@@ -552,6 +570,7 @@ export const ImovelPage = () => {
                     className="form-control"
                     id="input-type"
                     placeholder="Tipo"
+                    required
                     value={model?.type?.code || ""}
                     onChange={(event) =>
                       atualizarModel(
@@ -580,6 +599,7 @@ export const ImovelPage = () => {
                     className="form-control"
                     id="input-category"
                     placeholder="Categoria"
+                    required
                     value={model?.category?.code || ""}
                     onChange={(event) =>
                       atualizarModel(
@@ -609,6 +629,7 @@ export const ImovelPage = () => {
                     className="form-control"
                     id="input-profile"
                     placeholder="Perfil"
+                    required
                     value={model?.profile?.code || ""}
                     onChange={(event) =>
                       atualizarModel(
@@ -638,6 +659,7 @@ export const ImovelPage = () => {
                     className="form-control"
                     id="input-zone"
                     placeholder="Zona"
+                    required
                     value={model?.zone?.code || ""}
                     onChange={(event) =>
                       atualizarModel(
@@ -666,6 +688,7 @@ export const ImovelPage = () => {
                     className="form-control"
                     id="input-situation"
                     placeholder="Situação"
+                    required
                     value={model?.situation?.code || ""}
                     onChange={(event) =>
                       atualizarModel(
@@ -695,6 +718,7 @@ export const ImovelPage = () => {
                     className="form-control"
                     id="input-transaction"
                     placeholder="Transação"
+                    required
                     value={model?.transaction?.code || ""}
                     onChange={(event) =>
                       atualizarModel(
@@ -750,6 +774,7 @@ export const ImovelPage = () => {
                     className="form-control"
                     id="input-conservationState"
                     placeholder="Estado de Conservação"
+                    required
                     value={model?.conservationState?.code || ""}
                     onChange={(event) =>
                       atualizarModel(
@@ -870,6 +895,7 @@ export const ImovelPage = () => {
                     className="form-control"
                     id="input-city"
                     placeholder="Cidade"
+                    required
                     value={model?.city?.code || ""}
                     onChange={(event) =>
                       atualizarModel(
@@ -897,6 +923,7 @@ export const ImovelPage = () => {
                     className="form-control"
                     id="input-neighborhood"
                     placeholder="Bairro"
+                    required
                     value={model?.neighborhood?.code || ""}
                     onChange={(event) =>
                       atualizarModel(
@@ -943,6 +970,7 @@ export const ImovelPage = () => {
                     id="input-street"
                     type="text"
                     placeholder="Logradouro"
+                    required
                     value={model.street || ""}
                     onChange={(event) =>
                       atualizarModel("street", event.target.value)
@@ -991,6 +1019,7 @@ export const ImovelPage = () => {
                     id="input-latitude"
                     type="text"
                     placeholder="Latitude"
+                    required
                     value={model.latitude || ""}
                     onChange={(event) =>
                       atualizarModel("latitude", event.target.value)
@@ -1007,6 +1036,7 @@ export const ImovelPage = () => {
                     id="input-longitude"
                     type="text"
                     placeholder="Longitude"
+                    required
                     value={model.longitude || ""}
                     onChange={(event) =>
                       atualizarModel("longitude", event.target.value)
@@ -1152,9 +1182,12 @@ export const ImovelPage = () => {
                     className="form-control"
                     id="input-pavement"
                     placeholder="Rua Pavimentada"
-                    value={model?.pavement || ""}
+                    value={converterBooleanParaString(model?.pavement)}
                     onChange={(event) =>
-                      atualizarModel("pavement", event.target.value)
+                      atualizarModel(
+                        "pavement",
+                        converterStringParaBoolean(event.target.value)
+                      )
                     }
                   >
                     <option value={""} disabled>
@@ -1214,9 +1247,12 @@ export const ImovelPage = () => {
                     className="form-control"
                     id="input-financeable"
                     placeholder="Financiável"
-                    value={model?.financeable || ""}
+                    value={converterBooleanParaString(model?.financeable)}
                     onChange={(event) =>
-                      atualizarModel("financeable", event.target.value)
+                      atualizarModel(
+                        "financeable",
+                        converterStringParaBoolean(event.target.value)
+                      )
                     }
                   >
                     <option value={""} disabled>
@@ -1242,9 +1278,12 @@ export const ImovelPage = () => {
                     className="form-control"
                     id="input-show"
                     placeholder="Exibir"
-                    value={model?.show || ""}
+                    value={converterBooleanParaString(model?.show)}
                     onChange={(event) =>
-                      atualizarModel("show", event.target.value)
+                      atualizarModel(
+                        "show",
+                        converterStringParaBoolean(event.target.value)
+                      )
                     }
                   >
                     <option value={""} disabled>
@@ -1262,9 +1301,12 @@ export const ImovelPage = () => {
                     className="form-control"
                     id="input-showValue"
                     placeholder="Exibir Valor"
-                    value={model?.showValue || ""}
+                    value={converterBooleanParaString(model?.showValue)}
                     onChange={(event) =>
-                      atualizarModel("showValue", event.target.value)
+                      atualizarModel(
+                        "showValue",
+                        converterStringParaBoolean(event.target.value)
+                      )
                     }
                   >
                     <option value={""} disabled>
@@ -1283,9 +1325,12 @@ export const ImovelPage = () => {
                     className="form-control"
                     id="input-featured"
                     placeholder="Destaque"
-                    value={model?.featured || ""}
+                    value={converterBooleanParaString(model?.featured)}
                     onChange={(event) =>
-                      atualizarModel("featured", event.target.value)
+                      atualizarModel(
+                        "featured",
+                        converterStringParaBoolean(event.target.value)
+                      )
                     }
                   >
                     <option value={""} disabled>
@@ -1304,9 +1349,12 @@ export const ImovelPage = () => {
                     className="form-control"
                     id="input-superFeatured"
                     placeholder="Super Destaque"
-                    value={model?.superFeatured || ""}
+                    value={converterBooleanParaString(model?.superFeatured)}
                     onChange={(event) =>
-                      atualizarModel("superFeatured", event.target.value)
+                      atualizarModel(
+                        "superFeatured",
+                        converterStringParaBoolean(event.target.value)
+                      )
                     }
                   >
                     <option value={""} disabled>
@@ -1325,9 +1373,12 @@ export const ImovelPage = () => {
                     className="form-control"
                     id="input-rented"
                     placeholder="Alugado"
-                    value={model?.rented || ""}
+                    value={converterBooleanParaString(model?.rented)}
                     onChange={(event) =>
-                      atualizarModel("rented", event.target.value)
+                      atualizarModel(
+                        "rented",
+                        converterStringParaBoolean(event.target.value)
+                      )
                     }
                   >
                     <option value={""} disabled>
@@ -1346,9 +1397,12 @@ export const ImovelPage = () => {
                     className="form-control"
                     id="input-reserved"
                     placeholder="Reservado"
-                    value={model?.reserved || ""}
+                    value={converterBooleanParaString(model?.reserved)}
                     onChange={(event) =>
-                      atualizarModel("reserved", event.target.value)
+                      atualizarModel(
+                        "reserved",
+                        converterStringParaBoolean(event.target.value)
+                      )
                     }
                   >
                     <option value={""} disabled>
@@ -1406,6 +1460,7 @@ export const ImovelPage = () => {
                     id="input-internalCode"
                     type="text"
                     placeholder="Código Interno"
+                    required
                     value={model.internalCode || ""}
                     onChange={(event) =>
                       atualizarModel("internalCode", event.target.value)
@@ -1420,6 +1475,7 @@ export const ImovelPage = () => {
                     className="form-control"
                     id="input-agent"
                     placeholder="Agenciador"
+                    required
                     value={model?.agent?.code || ""}
                     onChange={(event) =>
                       atualizarModel(
@@ -1447,9 +1503,12 @@ export const ImovelPage = () => {
                     className="form-control"
                     id="input-unitAvailable"
                     placeholder="Unidade Disponível"
-                    value={model?.unitAvailable || ""}
+                    value={converterBooleanParaString(model?.unitAvailable)}
                     onChange={(event) =>
-                      atualizarModel("unitAvailable", event.target.value)
+                      atualizarModel(
+                        "unitAvailable",
+                        converterStringParaBoolean(event.target.value)
+                      )
                     }
                   >
                     <option value={""} disabled>
