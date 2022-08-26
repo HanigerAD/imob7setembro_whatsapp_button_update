@@ -6,6 +6,7 @@ Status Imob7 - 11:30
 - - - [FEITO] Cidade
 - - - [FEITO] Bairros
 - - - [] Imóvel
+- - - - [FEITO] Cadastro de Documentos
 - - - - [] Adicionar campo "Motivo Exclusão do Imóvel" só será permitido a exclusão após colocar esse motivo.
 - - - - [] CEP para a Longitude e Latitude
 - - - - [FEITO] Campo Link para vídeo do Youtube

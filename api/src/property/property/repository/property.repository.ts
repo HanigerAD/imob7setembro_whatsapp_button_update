@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Catch, Injectable } from '@nestjs/common';
 import { InjectKnex, Knex } from 'nestjs-knex';
 
 import { TransactionEnum } from '../../../common/enum/transaction.enum';
@@ -18,6 +18,7 @@ import {log} from "util";
 import {LogEntity} from "../entity/log.entity";
 import {LogResponse} from "../integration/response/log.response";
 import {SituationEntity} from "../../../user/entity/situation.entity";
+import { RepositoryException } from "src/common/exceptions/repository-exception";
 
 @Injectable()
 export class PropertyRepository {
@@ -326,8 +327,8 @@ export class PropertyRepository {
 
     public insertPropertyDocument(filename: string, originalName: string, propertyCode: number): Promise<number> {
         return this.knex
-            .insert({ imovel: propertyCode, documento: filename, nome_arquivo: originalName })
-            .into('documento_imovel');
+              .insert({ imovel: propertyCode, documento: filename, nome_arquivo: originalName })
+              .into('documento_imovel');
     }
 
     public rentPropertyCounter(): Promise<number> {

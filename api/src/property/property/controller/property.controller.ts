@@ -1,5 +1,6 @@
 import {
   Body,
+  Catch,
   Controller,
   Delete,
   Get,
@@ -12,6 +13,7 @@ import {
   Query,
   Res,
   UploadedFiles,
+  UseFilters,
   UseGuards,
   UseInterceptors,
 } from "@nestjs/common";
@@ -105,9 +107,9 @@ export class PropertyController {
   @HttpCode(HttpStatus.OK)
   public deleteDocuments(
     @Param("code") code: number,
-    @Body() deletedImages: string[]
+    @Body() deletedDocuments: string[]
   ): void {
-    this.service.deleteDocuments(deletedImages);
+    this.service.deleteDocuments(deletedDocuments);
   }
 
   @Get("properties")
@@ -133,6 +135,16 @@ export class PropertyController {
     @Body() request: PropertyRequest
   ): Promise<number> {
     return this.service.update(code, request);
+  }
+
+  @Post("properties/:code/document")
+  @UseInterceptors(FilesInterceptor("file"))
+  @HttpCode(HttpStatus.OK)
+  public insertDocument(
+    @Param("code") code: number,
+    @UploadedFiles() file: Express.Multer.File
+  ): Promise<void> {
+    return this.service.insertPropertyDocument(file, code);
   }
 
   @Post("properties/:code/documents")
@@ -177,8 +189,8 @@ export class PropertyController {
     @Param("code") code: number,
     @Res() res
   ): Promise<PropertyDocumentResponse[]> {
-    const images = await this.service.getPropertyDocuments(code);
-    return res.send(images);
+    const documents = await this.service.getPropertyDocuments(code);
+    return res.send(documents);
   }
 
   @Get("/transactions")

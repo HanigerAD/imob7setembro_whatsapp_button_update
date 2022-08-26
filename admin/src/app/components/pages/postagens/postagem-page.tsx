@@ -75,8 +75,6 @@ export const PostagemPage = () => {
   }
 
   async function salvarImagemDaPostagem(code: string, image: any) {
-    console.log({ code, image });
-
     if (image && typeof image != "string") {
       const data = new FormData();
 

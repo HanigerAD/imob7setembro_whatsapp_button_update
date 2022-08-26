@@ -164,14 +164,15 @@ export const GaleriaDeImagens = ({
           onChange={onImageChange}
         />
 
-        <label className="card btn" htmlFor="add-file">
-          <img
-            className="card-img-top"
-            src={AddImage}
-            alt={"Adicionar Imagem"}
-            onError={imageFallback}
-          />
-          <div className="card-body text-center">Adicionar Imagens</div>
+        <label
+          className="card text-center"
+          style={{ cursor: "pointer" }}
+          htmlFor="add-file"
+        >
+          <div className="card-body">
+            <i className="fa-regular fa-square-plus fa-10x"></i>
+            <p>Adicionar Imagens</p>
+          </div>
         </label>
       </div>
     </div>
