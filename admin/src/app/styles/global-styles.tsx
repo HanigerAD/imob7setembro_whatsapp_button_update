@@ -21,6 +21,13 @@ export const GlobalStyles = createGlobalStyle`
   .btn-block + .btn-block {
     margin-top: 0.5rem;
   }
+
+  input:required + label:before,
+  select:required + label:before {
+    content: '*';
+    margin-right: 4px;
+    color: red;
+  }
   
   .form-floating > select {
     -webkit-appearance: none;
