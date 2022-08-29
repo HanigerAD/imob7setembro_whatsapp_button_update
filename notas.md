@@ -9,6 +9,7 @@ Status Imob7 - 11:30
 - - - - [FEITO] Cadastro de Documentos
 - - - - [] Adicionar campo "Motivo Exclusão do Imóvel" só será permitido a exclusão após colocar esse motivo.
 - - - - [] CEP para a Longitude e Latitude
+- - - - [FEITO] Remover obrigatoriedade dos campos Longitude e Latitude
 - - - - [FEITO] Campo Link para vídeo do Youtube
 - - - - [] Imagens
 - - - - - [FEITO] Cadastrar várias imagens ao mesmo tempo.

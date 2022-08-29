@@ -1019,7 +1019,6 @@ export const ImovelPage = () => {
                     id="input-latitude"
                     type="text"
                     placeholder="Latitude"
-                    required
                     value={model.latitude || ""}
                     onChange={(event) =>
                       atualizarModel("latitude", event.target.value)
@@ -1036,7 +1035,6 @@ export const ImovelPage = () => {
                     id="input-longitude"
                     type="text"
                     placeholder="Longitude"
-                    required
                     value={model.longitude || ""}
                     onChange={(event) =>
                       atualizarModel("longitude", event.target.value)
