@@ -2,8 +2,10 @@ import axios from "axios";
 import { getToken } from "./auth.service";
 
 const apiService = axios.create({
-  baseURL: "http://xbcopu.hospedagemelastica.com.br",
-  // baseURL: "http://localhost:3000",
+  baseURL:
+    process.env.NODE_ENV === "development"
+      ? "http://localhost:3000"
+      : "http://xbcopu.hospedagemelastica.com.br",
   headers: {
     "Content-type": "application/json",
   },

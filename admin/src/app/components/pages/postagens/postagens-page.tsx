@@ -6,12 +6,12 @@ import { apiService } from "../../../services/api.service";
 import { CDN_URL } from "../../../services/cdn.service";
 import { Pagination } from "../../layouts/admin/components/pagination";
 import { toast } from "react-toastify";
+import { usePagination } from "../../../hooks/usePagination";
 
 export const PostagensPage = () => {
   const [models, setModels] = useState([]);
   const [carregando, setCarregando] = useState(false);
-  const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 8;
+  const paginationProps = usePagination({ currentPage: 1, itemsPerPage: 5 });
 
   async function deletar(model: any) {
     confirmAlert({
@@ -57,26 +57,14 @@ export const PostagensPage = () => {
     }
   }
 
-  const indexOfLastItem = useMemo(
-    () => currentPage * itemsPerPage,
-    [currentPage, itemsPerPage]
-  );
-
-  const indexOfFirstItem = useMemo(
-    () => indexOfLastItem - itemsPerPage,
-    [indexOfLastItem, itemsPerPage]
-  );
-
   const currentItems = useMemo(
-    () => models.slice(indexOfFirstItem, indexOfLastItem),
-    [models, indexOfFirstItem, indexOfLastItem]
+    () =>
+      models.slice(
+        paginationProps.indexOfFirstItem,
+        paginationProps.indexOfLastItem
+      ),
+    [models, paginationProps.indexOfFirstItem, paginationProps.indexOfLastItem]
   );
-
-  const paginate = (pageNum: number) => setCurrentPage(pageNum);
-
-  const nextPage = () => setCurrentPage(currentPage + 1);
-
-  const prevPage = () => setCurrentPage(currentPage - 1);
 
   useEffect(() => {
     buscar();
@@ -131,7 +119,7 @@ export const PostagensPage = () => {
                             <img
                               width={50}
                               height={50}
-                              style={{ borderRadius: '50%' }}
+                              style={{ borderRadius: "50%" }}
                               src={`${CDN_URL}/${model.image}`}
                               alt={model.title}
                               onError={imageFallback}
@@ -166,7 +154,7 @@ export const PostagensPage = () => {
                       ))
                     ) : (
                       <tr>
-                        <td colSpan={4} className="text-center">
+                        <td colSpan={7} className="text-center">
                           Nenhum registro encontrado
                         </td>
                       </tr>
@@ -174,14 +162,7 @@ export const PostagensPage = () => {
                   </tbody>
                 </table>
 
-                <Pagination
-                  itemsPerPage={itemsPerPage}
-                  totalItems={models.length}
-                  currentPage={currentPage}
-                  paginate={paginate}
-                  nextPage={nextPage}
-                  prevPage={prevPage}
-                />
+                <Pagination totalItems={models.length} {...paginationProps} />
               </div>
             </>
           )}

@@ -4,12 +4,12 @@ import { confirmAlert } from "react-confirm-alert";
 import { apiService } from "../../../services/api.service";
 import { Pagination } from "../../layouts/admin/components/pagination";
 import { toast } from "react-toastify";
+import { usePagination } from "../../../hooks/usePagination";
 
 export const BairrosPage = () => {
   const [models, setModels] = useState([]);
   const [carregando, setCarregando] = useState(false);
-  const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 8;
+  const paginationProps = usePagination({ currentPage: 1, itemsPerPage: 5 });
 
   async function deletar(model: any) {
     confirmAlert({
@@ -21,7 +21,9 @@ export const BairrosPage = () => {
           onClick: async () => {
             try {
               setCarregando(true);
-              await apiService.delete(`/neighborhood/neighborhoods/${model.code}`);
+              await apiService.delete(
+                `/neighborhood/neighborhoods/${model.code}`
+              );
               toast.success("Registro removido com sucesso");
               buscar();
             } catch (error) {
@@ -55,26 +57,14 @@ export const BairrosPage = () => {
     }
   }
 
-  const indexOfLastItem = useMemo(
-    () => currentPage * itemsPerPage,
-    [currentPage, itemsPerPage]
-  );
-
-  const indexOfFirstItem = useMemo(
-    () => indexOfLastItem - itemsPerPage,
-    [indexOfLastItem, itemsPerPage]
-  );
-
   const currentItems = useMemo(
-    () => models.slice(indexOfFirstItem, indexOfLastItem),
-    [models, indexOfFirstItem, indexOfLastItem]
+    () =>
+      models.slice(
+        paginationProps.indexOfFirstItem,
+        paginationProps.indexOfLastItem
+      ),
+    [models, paginationProps.indexOfFirstItem, paginationProps.indexOfLastItem]
   );
-
-  const paginate = (pageNum: number) => setCurrentPage(pageNum);
-
-  const nextPage = () => setCurrentPage(currentPage + 1);
-
-  const prevPage = () => setCurrentPage(currentPage - 1);
 
   useEffect(() => {
     buscar();
@@ -150,14 +140,7 @@ export const BairrosPage = () => {
                   </tbody>
                 </table>
 
-                <Pagination
-                  itemsPerPage={itemsPerPage}
-                  totalItems={models.length}
-                  currentPage={currentPage}
-                  paginate={paginate}
-                  nextPage={nextPage}
-                  prevPage={prevPage}
-                />
+                <Pagination totalItems={models.length} {...paginationProps} />
               </div>
             </>
           )}

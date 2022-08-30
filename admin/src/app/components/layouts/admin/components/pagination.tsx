@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 
 export const Pagination = ({
   itemsPerPage,
@@ -21,46 +21,85 @@ export const Pagination = ({
     pageNumbers.push(i);
   }
 
-  useEffect(() => {
+  const indexOfLastItem = useMemo(
+    () => Math.ceil(currentPage * itemsPerPage),
+    [currentPage, itemsPerPage]
+  );
 
+  const indexOfFirstItem = useMemo(
+    () => Math.ceil(indexOfLastItem - itemsPerPage),
+    [indexOfLastItem, itemsPerPage]
+  );
+
+  const lastPage = useMemo(() => {
+    return Math.ceil(totalItems / itemsPerPage);
   }, [totalItems, itemsPerPage]);
 
-  return (
-    <nav>
-      <ul className="pagination justify-content-center">
-        <li className="page-item">
-          <button
-            className="page-link text-dark"
-            type="button"
-            onClick={() => prevPage()}
-          >
-            <i className="fas fa-angle-left"></i>
-          </button>
-        </li>
-        {pageNumbers.map((num) => (
-          <li
-            className={`page-item ${currentPage == num ? "active" : ""}`}
-            key={num}
-          >
+  useEffect(() => {}, [totalItems, itemsPerPage]);
+
+  return totalItems > 0 ? (
+    <div className="d-flex justify-content-end align-items-center">
+      <div style={{ marginRight: "10px" }}>
+        {indexOfFirstItem + 1} -{" "}
+        {indexOfLastItem + 1 > totalItems ? totalItems : indexOfLastItem} de{" "}
+        {totalItems}
+      </div>
+
+      <nav className="text-right">
+        <ul className="pagination mb-0">
+          <li className={`page-item ${currentPage === 1 ? "disabled" : ""}`}>
             <button
-              className={`page-link ${currentPage == num ? "bg-dark" : "text-dark"}`}
+              className="page-link"
               type="button"
-              onClick={() => paginate(num)}
+              disabled={currentPage === 1}
+              onClick={() => paginate(1)}
             >
-              {num}
+              <i className="fas fa-solid fa-angles-left"></i>
             </button>
           </li>
-        ))}
-        <li className="page-item">
-          <button
-            className="page-link text-dark"
-            type="button"
-            onClick={() => nextPage()}
+
+          <li className={`page-item ${currentPage === 1 ? "disabled" : ""}`}>
+            <button
+              className="page-link"
+              type="button"
+              disabled={currentPage === 1}
+              onClick={() => prevPage()}
+            >
+              <i className="fas fa-solid fa-angle-left"></i>
+            </button>
+          </li>
+
+          <li
+            className={`page-item ${
+              currentPage + 1 >= lastPage ? "disabled" : ""
+            }`}
           >
-            <i className="fas fa-angle-right"></i>
-          </button>
-        </li>
-      </ul>
-    </nav>
-  );
+            <button
+              className="page-link"
+              type="button"
+              disabled={currentPage + 1 >= lastPage}
+              onClick={() => nextPage()}
+            >
+              <i className="fas fa-angle-right"></i>
+            </button>
+          </li>
+
+          <li
+            className={`page-item ${
+              currentPage + 1 >= lastPage ? "disabled" : ""
+            }`}
+          >
+            <button
+              className="page-link"
+              type="button"
+              disabled={currentPage + 1 >= lastPage}
+              onClick={() => paginate(lastPage)}
+            >
+              <i className="fas fa-solid fa-angles-right"></i>
+            </button>
+          </li>
+        </ul>
+      </nav>
+    </div>
+  ) : null;
 };
