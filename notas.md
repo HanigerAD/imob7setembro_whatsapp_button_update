@@ -21,7 +21,7 @@ Status Imob7 - 11:30
 - - - [] Banner Topo - Posicionamento exato mesmo que a imagem seja maior que os 1920px de largura.
 
 [] site
-- [] Centralizar o Texto "Encontre o imóvel..."
+- [FEITO] Centralizar o Texto "Encontre o imóvel..."
 - [] Colocar os cards do corretores na página "Sobre nós".
 - [] Fazer o Carrossel para as logos de parceiros
 - [] Adicionar a aba para o Filtro de Imóveis Financiáveis.
