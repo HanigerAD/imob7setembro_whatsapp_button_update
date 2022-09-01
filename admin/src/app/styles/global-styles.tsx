@@ -28,6 +28,10 @@ export const GlobalStyles = createGlobalStyle`
     margin-right: 4px;
     color: red;
   }
+
+  .pagination .page-item.disabled > button {
+    background-color: #eee;
+  }
   
   .form-floating > select {
     -webkit-appearance: none;
