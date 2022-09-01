@@ -49,7 +49,7 @@ export const Pagination = ({
         <ul className="pagination mb-0">
           <li className={`page-item ${currentPage === 1 ? "disabled" : ""}`}>
             <button
-              className="page-link"
+              className="page-link btn-sm"
               type="button"
               disabled={currentPage === 1}
               onClick={() => paginate(1)}
@@ -60,7 +60,7 @@ export const Pagination = ({
 
           <li className={`page-item ${currentPage === 1 ? "disabled" : ""}`}>
             <button
-              className="page-link"
+              className="page-link btn-sm"
               type="button"
               disabled={currentPage === 1}
               onClick={() => prevPage()}
@@ -75,7 +75,7 @@ export const Pagination = ({
             }`}
           >
             <button
-              className="page-link"
+              className="page-link btn-sm"
               type="button"
               disabled={currentPage + 1 >= lastPage}
               onClick={() => nextPage()}
@@ -90,7 +90,7 @@ export const Pagination = ({
             }`}
           >
             <button
-              className="page-link"
+              className="page-link btn-sm"
               type="button"
               disabled={currentPage + 1 >= lastPage}
               onClick={() => paginate(lastPage)}

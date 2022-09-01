@@ -5,6 +5,7 @@ import { apiService } from "../../../services/api.service";
 import { CDN_URL } from "../../../services/cdn.service";
 import { Pagination } from "../../layouts/admin/components/pagination";
 import { usePagination } from "../../../hooks/usePagination";
+import { CurrencyHelper } from "../../../helpers/currency.helper";
 
 export const ImoveisPage = () => {
   const [models, setModels] = useState([]);
@@ -63,79 +64,121 @@ export const ImoveisPage = () => {
             <div className="text-center">Carregando...</div>
           ) : (
             <>
-              <div className="table-responsive">
-                <table className="table table-sm">
-                  <thead>
-                    <tr>
-                      <th scope="col">#</th>
-                      <th scope="col"># Interno</th>
-                      <th scope="col">Foto</th>
-                      <th scope="col">Titulo</th>
-                      <th scope="col">Categoria</th>
-                      <th scope="col">Cidade</th>
-                      <th scope="col">Financiavel</th>
-                      <th scope="col">Bairro</th>
-                      <th scope="col">Quartos</th>
-                      <th scope="col">Vagas de Garagem</th>
-                      <th scope="col">Preço</th>
-                      <th scope="col">Area Total</th>
-                      <th scope="col">Tipo</th>
-                      <th scope="col">Zona</th>
-                      <th scope="col" style={{ minWidth: 60 }}>
-                        Opções
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {currentItems.length ? (
-                      currentItems.map((model: any) => (
-                        <tr key={model.code}>
-                          <th scope="row">{model.code}</th>
-                          <th scope="row">{model.internalCode}</th>
-                          <td>
-                            <img
-                              width={50}
-                              height={50}
-                              style={{ borderRadius: "50%" }}
-                              src={`${CDN_URL}/${model.photo}`}
-                              alt={model.title}
-                              onError={imageFallback}
-                            />
-                          </td>
-                          <td>{model.title}</td>
-                          <td>{model.category}</td>
-                          <td>{model.city}</td>
-                          <td>{model.financeable ? "Sim" : "Não"}</td>
-                          <td>{model.neighborhood}</td>
-                          <td>{model.bedroom || 0}</td>
-                          <td>{model.parkingVacancy || 0}</td>
-                          <td>{model.price || 0}</td>
-                          <td>{model.totalArea || 0} m2</td>
-                          <td>{model.transaction}</td>
-                          <td>{model.zone}</td>
-                          <td>
-                            <Link
-                              className="btn btn-link text-dark p-0"
-                              title="Editar"
-                              to={`/admin/imoveis/${model.code}`}
-                            >
-                              <i className="fas fa-pen-to-square fa-fw"></i>
-                            </Link>
-                          </td>
-                        </tr>
-                      ))
-                    ) : (
-                      <tr>
-                        <td colSpan={4} className="text-center">
-                          Nenhum registro encontrado
-                        </td>
-                      </tr>
-                    )}
-                  </tbody>
-                </table>
+              {currentItems.length ? (
+                <>
+                  {currentItems.map((model: any) => (
+                    <div
+                      key={`imoveis-${model.code}`}
+                      className="row p-2 bg-white border rounded mb-2"
+                    >
+                      <div className="col-md-3 mt-1">
+                        <img
+                          className="img-fluid img-responsive rounded product-image"
+                          src={`${CDN_URL}/${model.photo}`}
+                          alt={model.title}
+                          onError={imageFallback}
+                        />
+                      </div>
 
-                <Pagination totalItems={models.length} {...paginationProps} />
-              </div>
+                      <div className="col-md-6 mt-1">
+                        <h5>{model.title}</h5>
+
+                        <div className="mt-1 mb-1 spec-1">
+                          <p className="text-justify text-truncate para mb-0">
+                            <b>Código:</b>
+                            &nbsp;
+                            <span>{model.code}</span>
+                          </p>
+                          <p className="text-justify text-truncate para mb-0">
+                            <b>Código Interno:</b>
+                            &nbsp;
+                            <span>{model.internalCode}</span>
+                          </p>
+                          <p className="text-justify text-truncate para mb-0">
+                            <b>Categoria:</b>
+                            &nbsp;
+                            <span>{model.category}</span>
+                          </p>
+                          <p className="text-justify text-truncate para mb-0">
+                            <b>Cidade:</b>
+                            &nbsp;
+                            <span>{model.city}</span>
+                          </p>
+                          <p className="text-justify text-truncate para mb-0">
+                            <b>Bairro:</b>
+                            &nbsp;
+                            <span>{model.neighborhood}</span>
+                          </p>
+                          <p className="text-justify text-truncate para mb-0">
+                            <b>Quartos:</b>
+                            &nbsp;
+                            <span>{model.bedroom || 0}</span>
+                          </p>
+                          <p className="text-justify text-truncate para mb-0">
+                            <b>Vagas de Garagem:</b>
+                            &nbsp;
+                            <span>{model.parkingVacancy || 0}</span>
+                          </p>
+                          <p className="text-justify text-truncate para mb-0">
+                            <b>Area Total:</b>
+                            &nbsp;
+                            <span>{model.totalArea || 0} m2</span>
+                          </p>
+                          <p className="text-justify text-truncate para mb-0">
+                            <b>Zona:</b>
+                            &nbsp;
+                            <span>{model.zone}</span>
+                          </p>
+                        </div>
+                      </div>
+                      <div className="align-items-center align-content-center col-md-3 border-left mt-1">
+                        <div className="d-flex flex-row align-items-center">
+                          <h4 className="mr-1">
+                            R${" "}
+                            {CurrencyHelper.numberToCurrency(model.price || 0)}
+                          </h4>
+                        </div>
+
+                        <p className="text-justify text-truncate para mb-0">
+                          <b>Tipo:</b>
+                          &nbsp;
+                          <span>{model.transaction}</span>
+                        </p>
+
+                        <p className="text-justify text-truncate para mb-0">
+                          <b>Financiavel:</b>
+                          &nbsp;
+                          <span>{model.financeable ? "Sim" : "Não"}</span>
+                        </p>
+
+                        <div className="d-flex flex-column mt-4">
+                          <Link
+                            className="btn btn-warning btn-sm"
+                            title="Editar"
+                            to={`/admin/imoveis/${model.code}`}
+                          >
+                            <i className="fas fa-pen-to-square fa-fw"></i>
+                            <span>Editar</span>
+                          </Link>
+
+                          {/* <Link
+                          className="btn btn-danger btn-sm mt-2"
+                          title="Deletar"
+                          to={`/admin/imoveis/${model.code}`}
+                        >
+                          <i className="fas fa-pen-to-square fa-fw"></i>
+                          <span>Deletar</span>
+                        </Link> */}
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+
+                  <Pagination totalItems={models.length} {...paginationProps} />
+                </>
+              ) : (
+                <p>Nenhum registro encontrado</p>
+              )}
             </>
           )}
         </div>
