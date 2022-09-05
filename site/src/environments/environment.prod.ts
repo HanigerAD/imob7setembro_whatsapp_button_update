@@ -1,21 +1,20 @@
 export const environment = {
   production: true,
   endpoint: {
-    locality: 'http://api.imobiliaria7setembro.com.br/locality',
-    viaCep: 'https://viacep.com.br',
-    auth: 'http://api.imobiliaria7setembro.com.br/auth',
-    user: 'http://api.imobiliaria7setembro.com.br/user',
-    configuration: 'http://api.imobiliaria7setembro.com.br/configuration',
-    banner: 'http://api.imobiliaria7setembro.com.br/banner',
-    blog: 'http://api.imobiliaria7setembro.com.br/blog',
-    neighborhood: 'http://api.imobiliaria7setembro.com.br/neighborhood',
-    city: 'http://api.imobiliaria7setembro.com.br/locality/city',
-    uf: 'http://api.imobiliaria7setembro.com.br/locality/uf',
-    agent: 'http://api.imobiliaria7setembro.com.br/agent',
-    property: 'http://api.imobiliaria7setembro.com.br/property',
-    contact: 'http://api.imobiliaria7setembro.com.br/contact',
-    cdn: 'http://cdn.imobiliaria7setembro.com.br/'
-
+    viaCep: "https://viacep.com.br",
+    user: "http://xbcopu.hospedagemelastica.com.br/user",
+    neighborhood: "http://xbcopu.hospedagemelastica.com.br/neighborhood",
+    city: "http://xbcopu.hospedagemelastica.com.br/locality/city",
+    uf: "http://xbcopu.hospedagemelastica.com.br/locality/uf",
+    agent: "http://xbcopu.hospedagemelastica.com.br/agent",
+    auth: "http://xbcopu.hospedagemelastica.com.br/auth",
+    blog: "http://xbcopu.hospedagemelastica.com.br/blog",
+    configuration: "http://xbcopu.hospedagemelastica.com.br/configuration",
+    banner: "http://xbcopu.hospedagemelastica.com.br/banner",
+    locality: "http://xbcopu.hospedagemelastica.com.br/locality",
+    property: "http://xbcopu.hospedagemelastica.com.br/property",
+    contact: "http://xbcopu.hospedagemelastica.com.br/contact",
+    cdn: "http://cdn.imobiliaria7setembro.com.br/",
   },
-  cdn: 'http://cdn.imobiliaria7setembro.com.br'
+  cdn: "http://cdn.imobiliaria7setembro.com.br",
 };
