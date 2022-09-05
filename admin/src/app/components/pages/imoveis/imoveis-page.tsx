@@ -6,18 +6,18 @@ import { CDN_URL } from "../../../services/cdn.service";
 import { Pagination } from "../../layouts/admin/components/pagination";
 import { usePagination } from "../../../hooks/usePagination";
 import { CurrencyHelper } from "../../../helpers/currency.helper";
+import { ImoveisFiltros } from "./imoveis-filtros";
 
 export const ImoveisPage = () => {
   const [models, setModels] = useState([]);
   const [carregando, setCarregando] = useState(false);
   const paginationProps = usePagination({ currentPage: 1, itemsPerPage: 5 });
 
-  async function buscar() {
+  async function buscar(filters = {}) {
     setCarregando(true);
     setModels([]);
 
     try {
-      const filters = {};
       const resposta = await apiService.get("/property/properties", {
         params: filters,
       });
@@ -55,6 +55,8 @@ export const ImoveisPage = () => {
       <ol className="breadcrumb mb-4">
         <li className="breadcrumb-item active">Imóveis</li>
       </ol>
+
+      <ImoveisFiltros buscar={buscar} />
 
       <div className="card mb-4">
         <div className="card-header">Imóveis</div>

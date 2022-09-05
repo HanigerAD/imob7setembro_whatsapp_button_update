@@ -11,15 +11,17 @@ import {
   converterBooleanParaString,
   converterStringParaBoolean,
 } from "../../../utils/parser.utils";
+import { useTypes } from "../../../hooks/useTypes";
+import { useCategories } from "../../../hooks/useCategories";
 
 export const ImovelPage = () => {
   const navigate = useNavigate();
   const params = useParams();
   const [model, setModel] = useState({} as any);
   const [agents, setAgents] = useState([]);
-  const [categories, setCategories] = useState([]);
+  const { categories, buscarCategorias } = useCategories([]);
   const [conservationStates, setConservationStates] = useState([]);
-  const [types, setTypes] = useState([]);
+  const { types, buscarTiposDeImovel } = useTypes();
   const [profiles, setProfiles] = useState([]);
   const [zones, setZones] = useState([]);
   const [situations, setSituations] = useState([]);
@@ -301,21 +303,6 @@ export const ImovelPage = () => {
     }
   }
 
-  async function buscarCategorias() {
-    setCarregando(true);
-    setCategories([]);
-
-    try {
-      const resposta = await apiService.get(`/property/categories`);
-      setCategories(resposta.data);
-      setCarregando(false);
-    } catch (error) {
-      console.log({ error });
-      toast.error("Houve um erro ao buscar as Categorias.");
-      setCarregando(false);
-    }
-  }
-
   async function buscarEstadosDeConservacao() {
     setCarregando(true);
     setConservationStates([]);
@@ -327,21 +314,6 @@ export const ImovelPage = () => {
     } catch (error) {
       console.log({ error });
       toast.error("Houve um erro ao buscar os Estados de Conservação.");
-      setCarregando(false);
-    }
-  }
-
-  async function buscarTiposDeImovel() {
-    setCarregando(true);
-    setTypes([]);
-
-    try {
-      const resposta = await apiService.get(`/property/types`);
-      setTypes(resposta.data);
-      setCarregando(false);
-    } catch (error) {
-      console.log({ error });
-      toast.error("Houve um erro ao buscar os Tipos de Imovel.");
       setCarregando(false);
     }
   }
