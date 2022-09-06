@@ -1,4 +1,5 @@
-Status Imob7 - 11:30
+Status Imob7
+(05/09/22 - 14:30)
 
 [] Painel Administrativo
 - [FEITO] Adicionar a imagem \/ de Select nos campos.
@@ -7,6 +8,9 @@ Status Imob7 - 11:30
 - - - [FEITO] Bairros
 - - - [] Imóvel
 - - - - [FEITO] Cadastro de Documentos
+- - - - [FEITO] Alterar Visualização da listagem de imoveis
+- - - - [FEITO] Filtros de imoveis
+- - - - [FEITO] Adicionar obrigatoriedade dos campos
 - - - - [] Adicionar campo "Motivo Exclusão do Imóvel" só será permitido a exclusão após colocar esse motivo.
 - - - - [] CEP para a Longitude e Latitude
 - - - - [FEITO] Remover obrigatoriedade dos campos Longitude e Latitude
