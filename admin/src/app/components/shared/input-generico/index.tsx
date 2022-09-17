@@ -15,6 +15,8 @@ const Input: React.FC<InputProps> = ({
   id,
   label,
   className,
+  value: defaultValue,
+  onChange,
   ...props
 }) => {
   const handleKeyUp = useCallback(
@@ -28,6 +30,10 @@ const Input: React.FC<InputProps> = ({
       if (mask === "cpf") {
         cpf(e);
       }
+
+      if (onChange) {
+        onChange(e as React.ChangeEvent<HTMLInputElement>);
+      }
     },
     [mask]
   );
@@ -39,8 +45,9 @@ const Input: React.FC<InputProps> = ({
         <div className="form-floating">
           <input
             className={`form-control ${className}`}
-            {...props}
+            defaultValue={defaultValue}
             onKeyUp={handleKeyUp}
+            {...props}
           />
           <label htmlFor={id}>{label}</label>
         </div>
