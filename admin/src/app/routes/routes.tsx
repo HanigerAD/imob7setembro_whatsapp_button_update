@@ -11,6 +11,8 @@ import { DashboardPage } from "../components/pages/dashboard/dashboard-page";
 import { ImoveisPage } from "../components/pages/imoveis/imoveis-page";
 import { ImovelPage } from "../components/pages/imoveis/imovel-page";
 import { LoginPage } from "../components/pages/login/login-page";
+import { ParceiroPage } from "../components/pages/parceiros/parceiro-page";
+import { ParceirosPage } from "../components/pages/parceiros/parceiros-page";
 import { PerfilPage } from "../components/pages/perfil/perfil-page";
 import { PostagemPage } from "../components/pages/postagens/postagem-page";
 import { PostagensPage } from "../components/pages/postagens/postagens-page";
@@ -32,6 +34,9 @@ export const Routes = () => (
       <Route path="corretores/cadastrar" element={<CorretorPage />} />
       <Route path="corretores/:code" element={<CorretorPage />} />
       <Route path="corretores" element={<CorretoresPage />} />
+      <Route path="parceiros/cadastrar" element={<ParceiroPage />} />
+      <Route path="parceiros/:code" element={<ParceiroPage />} />
+      <Route path="parceiros" element={<ParceirosPage />} />
       <Route path="cidades/cadastrar" element={<CidadePage />} />
       <Route path="cidades/:code" element={<CidadePage />} />
       <Route path="cidades" element={<CidadesPage />} />

@@ -7,5 +7,7 @@ export enum ImageSizeEnum {
     POST_HEIGHT = 1080,
     AGENT_WIDTH = 1920,
     AGENT_HEIGHT = 1080,
+    PARTNER_WIDTH = 1920,
+    PARTNER_HEIGHT = 1080,
     LOGO_WIDTH = 350
 }

@@ -21,7 +21,7 @@ Status Imob7
 - - - - [FEITO] Corretores - (cadastro de corretores com foto)
 - - - - [] Usuarios
 - - - - [] Permissões de Usuarios
-- - - - [] Parceiros (Logo e Nome)
+- - - - [FEITO] Parceiros (Logo e Nome)
 - - - - [] Banner Topo - Posicionamento exato mesmo que a imagem seja maior que os 1920px de largura.
 
 - [] site
@@ -34,5 +34,5 @@ Status Imob7
 - - - [] exibir no site somente se upar o documento em PDF de "Autorização para a Venda"
 - - [] Buscar por imovel
 - - - [] valor de Compra (10.000 até 10.000.000)
-- - - [] valor de Alguel (300 até 50.000)
+- - - [] valor de Aluguel (300 até 50.000)
 - - - [] Colocar um botão switch para Compra e Aluguel
