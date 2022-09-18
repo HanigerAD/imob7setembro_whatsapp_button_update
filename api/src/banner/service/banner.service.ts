@@ -25,8 +25,8 @@ export class BannerService {
             .then(banners => BannerMapper.entityListToResponse(banners));
     }
 
-    public delete(code: number): Promise<number> {
-        return this.repository.delete(code);
+    public delete(image: string): Promise<number> {
+        return this.repository.delete(image);
     }
 
     public buildBannerImage(file: Express.Multer.File): ImageRequest {

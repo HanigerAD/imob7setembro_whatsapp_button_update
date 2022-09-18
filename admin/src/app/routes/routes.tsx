@@ -5,6 +5,7 @@ import { BairroPage } from "../components/pages/bairros/bairro-page";
 import { BairrosPage } from "../components/pages/bairros/bairros-page";
 import { CidadePage } from "../components/pages/cidades/cidade-page";
 import { CidadesPage } from "../components/pages/cidades/cidades-page";
+import { ConfiguracoesPage } from "../components/pages/configuracoes/configuracoes-page";
 import { CorretorPage } from "../components/pages/corretores/corretor-page";
 import { CorretoresPage } from "../components/pages/corretores/corretores-page";
 import { DashboardPage } from "../components/pages/dashboard/dashboard-page";
@@ -37,6 +38,7 @@ export const Routes = () => (
       <Route path="parceiros/cadastrar" element={<ParceiroPage />} />
       <Route path="parceiros/:code" element={<ParceiroPage />} />
       <Route path="parceiros" element={<ParceirosPage />} />
+      <Route path="configuracoes" element={<ConfiguracoesPage />} />
       <Route path="cidades/cadastrar" element={<CidadePage />} />
       <Route path="cidades/:code" element={<CidadePage />} />
       <Route path="cidades" element={<CidadesPage />} />

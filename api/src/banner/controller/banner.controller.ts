@@ -1,45 +1,45 @@
 import {
-    Controller,
-    Delete,
-    Get,
-    HttpCode,
-    HttpStatus,
-    Param,
-    Post,
-    Res,
-    UploadedFile,
-    UseGuards,
-    UseInterceptors
-} from '@nestjs/common';
-import {BannerService} from "../service/banner.service";
-import {FileInterceptor} from '@nestjs/platform-express';
-import {JwtAuthGuard} from "../../authentication/config/jwt-auth.guard";
-import {BannerResponse} from "../integration/response/banner.response";
+  Controller,
+  Delete,
+  Get,
+  HttpCode,
+  HttpStatus,
+  Param,
+  Post,
+  Res,
+  UploadedFile,
+  UseGuards,
+  UseInterceptors,
+} from "@nestjs/common";
+import { BannerService } from "../service/banner.service";
+import { FileInterceptor } from "@nestjs/platform-express";
+import { JwtAuthGuard } from "../../authentication/config/jwt-auth.guard";
+import { BannerResponse } from "../integration/response/banner.response";
 
-@Controller('banner')
+@Controller("banner")
 export class BannerController {
-    constructor(
-        private service: BannerService
-    ) {
-    }
+  constructor(private service: BannerService) {}
 
-    @Post('')
-    @UseGuards(JwtAuthGuard)
-    @HttpCode(HttpStatus.OK)
-    @UseInterceptors(FileInterceptor('file'))
-    public insert(@UploadedFile() file: Express.Multer.File, @Res() res): Promise<number> {
-        return this.service.insert(file, res)
-    }
+  @Post("")
+  @UseGuards(JwtAuthGuard)
+  @HttpCode(HttpStatus.OK)
+  @UseInterceptors(FileInterceptor("file"))
+  public insert(
+    @UploadedFile() file: Express.Multer.File,
+    @Res() res
+  ): Promise<number> {
+    return this.service.insert(file, res);
+  }
 
-    @Get()
-    public getAll(): Promise<BannerResponse[]> {
-        return this.service.getAll();
-    }
+  @Get()
+  public getAll(): Promise<BannerResponse[]> {
+    return this.service.getAll();
+  }
 
-    @Delete(':code')
-    @UseGuards(JwtAuthGuard)
-    @HttpCode(HttpStatus.OK)
-    public delete(@Param('code') code: number): Promise<number> {
-        return this.service.delete(code);
-    }
+  @Delete(":image")
+  @UseGuards(JwtAuthGuard)
+  @HttpCode(HttpStatus.OK)
+  public delete(@Param("image") image: string): Promise<number> {
+    return this.service.delete(image);
+  }
 }
