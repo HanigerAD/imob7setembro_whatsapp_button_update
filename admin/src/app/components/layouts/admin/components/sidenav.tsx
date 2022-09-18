@@ -17,6 +17,13 @@ export const Sidenav = () => {
               Painel
             </Link>
 
+            <Link className="nav-link" to="/admin/corretores">
+              <div className="sb-nav-link-icon">
+                <i className="fas fa-table"></i>
+              </div>
+              Corretores
+            </Link>
+
             <Link className="nav-link" to="/admin/imoveis">
               <div className="sb-nav-link-icon">
                 <i className="fas fa-table"></i>

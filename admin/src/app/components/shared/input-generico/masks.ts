@@ -3,6 +3,7 @@ import {
   converterParaCep,
   converterParaCpf,
   converterParaMoeda,
+  converterParaTelefone,
 } from "../../../utils/parser.utils";
 
 export function cep(e: React.FormEvent<HTMLInputElement>) {
@@ -34,5 +35,14 @@ export function cpf(e: React.FormEvent<HTMLInputElement>) {
     e.currentTarget.value = value;
   }
 
+  return e;
+}
+
+export function phone(e: React.FormEvent<HTMLInputElement>) {
+  let value = e.currentTarget.value;
+
+  value = converterParaTelefone(value);
+
+  e.currentTarget.value = value;
   return e;
 }

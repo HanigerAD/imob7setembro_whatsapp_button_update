@@ -36,6 +36,13 @@ export class AgentRepository {
             .where('codigo', '=', code);
     }
 
+    public setImage(code: number, image: string): Promise<number> {
+        return this.knex
+            .update({imagem: image})
+            .from('agenciador')
+            .where('codigo', '=', code);
+    }
+
     public delete(code: number): Promise<number> {
         return this.knex
             .delete()

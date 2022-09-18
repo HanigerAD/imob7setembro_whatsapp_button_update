@@ -1,11 +1,11 @@
 import React, { InputHTMLAttributes, useCallback } from "react";
 
-import { cep, currency, cpf } from "./masks";
+import { cep, currency, cpf, phone } from "./masks";
 
 interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   id: string;
   label: string;
-  mask: "cep" | "currency" | "cpf";
+  mask: "cep" | "currency" | "cpf" | "phone";
   prefix?: string;
 }
 
@@ -29,6 +29,10 @@ const Input: React.FC<InputProps> = ({
       }
       if (mask === "cpf") {
         cpf(e);
+      }
+
+      if (mask === "phone") {
+        phone(e);
       }
 
       if (onChange) {

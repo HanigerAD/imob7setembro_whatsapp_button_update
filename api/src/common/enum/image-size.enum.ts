@@ -5,5 +5,7 @@ export enum ImageSizeEnum {
     PROPERTY_HEIGHT = 1080,
     POST_WIDTH = 1920,
     POST_HEIGHT = 1080,
+    AGENT_WIDTH = 1920,
+    AGENT_HEIGHT = 1080,
     LOGO_WIDTH = 350
 }
