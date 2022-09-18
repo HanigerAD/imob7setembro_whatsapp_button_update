@@ -10,7 +10,10 @@ import { GaleriaDeDocumentos } from "./galeria-de-documentos";
 import { AutocompleteGenerico } from "../../shared/autocomplete/autocomplete-generico";
 import { SeletorBooleanoGenerico } from "../../shared/seletor-booleano-generico";
 import Input from "../../shared/input-generico";
-import { converterParaMoeda } from "../../../utils/parser.utils";
+import {
+  converterParaCep,
+  converterParaMoeda,
+} from "../../../utils/parser.utils";
 
 export const ImovelPage = () => {
   const navigate = useNavigate();
@@ -377,6 +380,10 @@ export const ImovelPage = () => {
         );
       }
 
+      if (newModel.zipCode) {
+        newModel.zipCode = converterParaCep(String(newModel.zipCode));
+      }
+
       setModel(newModel);
 
       setCarregando(false);
@@ -684,19 +691,16 @@ export const ImovelPage = () => {
               </div>
 
               <div className="col-md-4">
-                <div className="form-floating mb-3">
-                  <input
-                    className="form-control"
-                    id="input-zipCode"
-                    type="text"
-                    placeholder="CEP"
-                    value={model.zipCode || ""}
-                    onChange={(event) =>
-                      atualizarModel("zipCode", event.target.value)
-                    }
-                  />
-                  <label htmlFor="input-zipCode">CEP</label>
-                </div>
+                <Input
+                  id="input-zipCode"
+                  label="CEP"
+                  placeholder="00000-000"
+                  mask="cep"
+                  value={model.zipCode || ""}
+                  onChange={(e) =>
+                    atualizarModel("zipCode", e.currentTarget.value)
+                  }
+                />
               </div>
 
               <div className="col-md-8">
@@ -1082,7 +1086,7 @@ export const ImovelPage = () => {
                   id="campo-agent"
                   idItem="code"
                   descricaoItem="name"
-                  label="Agenciador"
+                  label="Corretor"
                   endpoint="/agent"
                   value={model?.agent || {}}
                   onChange={(agent) => atualizarModel("agent", agent ?? {})}
