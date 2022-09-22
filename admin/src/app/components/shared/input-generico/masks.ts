@@ -39,6 +39,8 @@ export function cpf(e: React.FormEvent<HTMLInputElement>) {
 }
 
 export function phone(e: React.FormEvent<HTMLInputElement>) {
+  e.currentTarget.maxLength = 15;
+
   let value = e.currentTarget.value;
 
   value = converterParaTelefone(value);

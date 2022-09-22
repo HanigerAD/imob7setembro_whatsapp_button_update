@@ -12,6 +12,10 @@ import { DashboardPage } from "../components/pages/dashboard/dashboard-page";
 import { ImoveisPage } from "../components/pages/imoveis/imoveis-page";
 import { ImovelPage } from "../components/pages/imoveis/imovel-page";
 import { LoginPage } from "../components/pages/login/login-page";
+// import { MensagemPage } from "../components/pages/mensagens/mensagem-page";
+// import { MensagensPage } from "../components/pages/mensagens/mensagens-page";
+// import { NovoImovelPage } from "../components/pages/novos-imoveis/novo-imovel-page";
+// import { NovosImoveisPage } from "../components/pages/novos-imoveis/novos-imoveis-page";
 import { ParceiroPage } from "../components/pages/parceiros/parceiro-page";
 import { ParceirosPage } from "../components/pages/parceiros/parceiros-page";
 import { PerfilPage } from "../components/pages/perfil/perfil-page";
@@ -46,6 +50,10 @@ export const Routes = () => (
       <Route path="bairros/:code" element={<BairroPage />} />
       <Route path="bairros" element={<BairrosPage />} />
       <Route path="perfil" element={<PerfilPage />} />
+      {/* <Route path="novos-imoveis/:code" element={<NovoImovelPage />} />
+      <Route path="novos-imoveis" element={<NovosImoveisPage />} />
+      <Route path="mensagens/:code" element={<MensagemPage />} />
+      <Route path="mensagens" element={<MensagensPage />} /> */}
     </Route>
   </RrdRoutes>
 );

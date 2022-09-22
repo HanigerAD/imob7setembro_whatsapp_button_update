@@ -5,7 +5,7 @@ import { cep, currency, cpf, phone } from "./masks";
 interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   id: string;
   label: string;
-  mask: "cep" | "currency" | "cpf" | "phone";
+  mask?: "cep" | "currency" | "cpf" | "phone";
   prefix?: string;
 }
 
@@ -21,25 +21,35 @@ const Input: React.FC<InputProps> = ({
 }) => {
   const handleKeyUp = useCallback(
     (e: React.FormEvent<HTMLInputElement>) => {
-      if (mask === "cep") {
-        cep(e);
-      }
-      if (mask === "currency") {
-        currency(e);
-      }
-      if (mask === "cpf") {
-        cpf(e);
-      }
+      switch (mask) {
+        case "cep": {
+          cep(e);
+          break;
+        }
+        case "currency": {
+          currency(e);
+          break;
+        }
+        case "cpf": {
+          cpf(e);
+          break;
+        }
 
-      if (mask === "phone") {
-        phone(e);
+        case "phone": {
+          phone(e);
+          break;
+        }
+
+        default: {
+          break;
+        }
       }
 
       if (onChange) {
         onChange(e as React.ChangeEvent<HTMLInputElement>);
       }
     },
-    [mask]
+    [mask, onChange]
   );
 
   return (
