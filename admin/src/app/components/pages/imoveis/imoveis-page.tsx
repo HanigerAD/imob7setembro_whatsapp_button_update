@@ -5,8 +5,8 @@ import { apiService } from "../../../services/api.service";
 import { CDN_URL } from "../../../services/cdn.service";
 import { Pagination } from "../../layouts/admin/components/pagination";
 import { usePagination } from "../../../hooks/usePagination";
-import { CurrencyHelper } from "../../../helpers/currency.helper";
 import { ImoveisFiltros } from "./imoveis-filtros";
+import { converterParaMoeda } from "../../../utils/parser.utils";
 
 export const ImoveisPage = () => {
   const [models, setModels] = useState([]);
@@ -136,8 +136,7 @@ export const ImoveisPage = () => {
                       <div className="align-items-center align-content-center col-md-3 border-left mt-1">
                         <div className="d-flex flex-row align-items-center">
                           <h4 className="mr-1">
-                            R${" "}
-                            {CurrencyHelper.numberToCurrency(model.price || 0)}
+                            R$ {converterParaMoeda(model.price || 0)}
                           </h4>
                         </div>
 

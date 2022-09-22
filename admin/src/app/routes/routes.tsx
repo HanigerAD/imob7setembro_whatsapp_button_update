@@ -5,10 +5,19 @@ import { BairroPage } from "../components/pages/bairros/bairro-page";
 import { BairrosPage } from "../components/pages/bairros/bairros-page";
 import { CidadePage } from "../components/pages/cidades/cidade-page";
 import { CidadesPage } from "../components/pages/cidades/cidades-page";
+import { ConfiguracoesPage } from "../components/pages/configuracoes/configuracoes-page";
+import { CorretorPage } from "../components/pages/corretores/corretor-page";
+import { CorretoresPage } from "../components/pages/corretores/corretores-page";
 import { DashboardPage } from "../components/pages/dashboard/dashboard-page";
 import { ImoveisPage } from "../components/pages/imoveis/imoveis-page";
 import { ImovelPage } from "../components/pages/imoveis/imovel-page";
 import { LoginPage } from "../components/pages/login/login-page";
+// import { MensagemPage } from "../components/pages/mensagens/mensagem-page";
+// import { MensagensPage } from "../components/pages/mensagens/mensagens-page";
+// import { NovoImovelPage } from "../components/pages/novos-imoveis/novo-imovel-page";
+// import { NovosImoveisPage } from "../components/pages/novos-imoveis/novos-imoveis-page";
+import { ParceiroPage } from "../components/pages/parceiros/parceiro-page";
+import { ParceirosPage } from "../components/pages/parceiros/parceiros-page";
 import { PerfilPage } from "../components/pages/perfil/perfil-page";
 import { PostagemPage } from "../components/pages/postagens/postagem-page";
 import { PostagensPage } from "../components/pages/postagens/postagens-page";
@@ -27,6 +36,13 @@ export const Routes = () => (
       <Route path="postagens/cadastrar" element={<PostagemPage />} />
       <Route path="postagens/:code" element={<PostagemPage />} />
       <Route path="postagens" element={<PostagensPage />} />
+      <Route path="corretores/cadastrar" element={<CorretorPage />} />
+      <Route path="corretores/:code" element={<CorretorPage />} />
+      <Route path="corretores" element={<CorretoresPage />} />
+      <Route path="parceiros/cadastrar" element={<ParceiroPage />} />
+      <Route path="parceiros/:code" element={<ParceiroPage />} />
+      <Route path="parceiros" element={<ParceirosPage />} />
+      <Route path="configuracoes" element={<ConfiguracoesPage />} />
       <Route path="cidades/cadastrar" element={<CidadePage />} />
       <Route path="cidades/:code" element={<CidadePage />} />
       <Route path="cidades" element={<CidadesPage />} />
@@ -34,6 +50,10 @@ export const Routes = () => (
       <Route path="bairros/:code" element={<BairroPage />} />
       <Route path="bairros" element={<BairrosPage />} />
       <Route path="perfil" element={<PerfilPage />} />
+      {/* <Route path="novos-imoveis/:code" element={<NovoImovelPage />} />
+      <Route path="novos-imoveis" element={<NovosImoveisPage />} />
+      <Route path="mensagens/:code" element={<MensagemPage />} />
+      <Route path="mensagens" element={<MensagensPage />} /> */}
     </Route>
   </RrdRoutes>
 );

@@ -18,6 +18,7 @@ import { CommomModule } from "./common/commom.module";
 import { ContactModule } from "./contact/contact.module";
 import { APP_FILTER } from "@nestjs/core";
 import { AllExceptionsFilter } from "./common/filter/all-exceptions.filter";
+import { PartnerModule } from "./partners/partners.module";
 
 @Module({
   imports: [
@@ -46,6 +47,7 @@ import { AllExceptionsFilter } from "./common/filter/all-exceptions.filter";
     PostModule,
     BannerModule,
     AgentModule,
+    PartnerModule,
     ConfigurationModule,
     LocalityModule,
     PropertyModule,
@@ -66,4 +68,3 @@ import { AllExceptionsFilter } from "./common/filter/all-exceptions.filter";
   ],
 })
 export class AppModule {}
-

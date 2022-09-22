@@ -1,4 +1,50 @@
+import { useState } from "react";
 import { Link } from "react-router-dom";
+
+interface RenderLinkProps {
+  to: string;
+  label: string;
+}
+
+const RenderLink: React.FC<RenderLinkProps> = ({ to, label }) => {
+  return (
+    <Link className="nav-link" to={to}>
+      {label}
+    </Link>
+  );
+};
+
+interface RenderDropdownProps {
+  label: string;
+  children?: React.ReactNode;
+}
+
+const RenderDropdown: React.FC<RenderDropdownProps> = ({ label, children }) => {
+  const [show, setShow] = useState(false);
+
+  const toggle = () => {
+    setShow((show) => !show);
+  };
+
+  return (
+    <>
+      <button
+        className={`btn btn-link nav-link ${!show ? "collapsed" : ""}`}
+        type="button"
+        onClick={() => toggle()}
+      >
+        {label}
+        <div className="sb-sidenav-collapse-arrow">
+          <i className="fas fa-angle-down"></i>
+        </div>
+      </button>
+
+      <div className={`collapse ${!show ? "" : "show"}`}>
+        <nav className="sb-sidenav-menu-nested nav">{children}</nav>
+      </div>
+    </>
+  );
+};
 
 export const Sidenav = () => {
   return (
@@ -9,69 +55,22 @@ export const Sidenav = () => {
       >
         <div className="sb-sidenav-menu">
           <div className="nav">
-            {/* <div className="sb-sidenav-menu-heading">Core</div> */}
-            <Link className="nav-link" to="/admin">
-              <div className="sb-nav-link-icon">
-                <i className="fas fa-tachometer-alt"></i>
-              </div>
-              Painel
-            </Link>
-
-            <Link className="nav-link" to="/admin/imoveis">
-              <div className="sb-nav-link-icon">
-                <i className="fas fa-table"></i>
-              </div>
-              Imóveis
-            </Link>
-
-            <button
-              className="btn btn-link nav-link collapsed"
-              type="button"
-              data-bs-toggle="collapse"
-              data-bs-target="#collapseLocalizacoes"
-              aria-expanded="false"
-              aria-controls="collapseLocalizacoes"
-            >
-              <div className="sb-nav-link-icon">
-                <i className="fas fa-book-open"></i>
-              </div>
-              Localizações
-              <div className="sb-sidenav-collapse-arrow">
-                <i className="fas fa-angle-down"></i>
-              </div>
-            </button>
-            <div
-              className="collapse"
-              id="collapseLocalizacoes"
-              aria-labelledby="headingTwo"
-              data-bs-parent="#sidenavAccordion"
-            >
-              <nav
-                className="sb-sidenav-menu-nested nav"
-                id="sidenavAccordionLocalizacoes"
-              >
-                <Link className="nav-link" to="/admin/cidades">
-                  <div className="sb-nav-link-icon">
-                    <i className="fas fa-table"></i>
-                  </div>
-                  Cidades
-                </Link>
-
-                <Link className="nav-link" to="/admin/bairros">
-                  <div className="sb-nav-link-icon">
-                    <i className="fas fa-table"></i>
-                  </div>
-                  Bairros
-                </Link>
-              </nav>
-            </div>
-
-            <Link className="nav-link" to="/admin/postagens">
-              <div className="sb-nav-link-icon">
-                <i className="fas fa-table"></i>
-              </div>
-              Postagens
-            </Link>
+            <RenderLink to="/admin" label="Painel" />
+            <RenderLink to="/admin/corretores" label="Corretores" />
+            <RenderLink to="/admin/parceiros" label="Parceiros" />
+            <RenderLink to="/admin/imoveis" label="Imóveis" />
+            <RenderDropdown label="Localizacões">
+              <RenderLink to="/admin/cidades" label="Cidades" />
+              <RenderLink to="/admin/bairros" label="Bairros" />
+            </RenderDropdown>
+            <RenderLink to="/admin/postagens" label="Postagens" />
+            <RenderDropdown label="Configurações">
+              <RenderLink to="/admin/configuracoes" label="Site" />
+            </RenderDropdown>
+            {/* <RenderDropdown label="Formulários do Site">
+              <RenderLink to="/admin/novos-imoveis" label="Novos Imoveis" />
+              <RenderLink to="/admin/mensagens" label="Mensagens" />
+            </RenderDropdown> */}
           </div>
         </div>
 

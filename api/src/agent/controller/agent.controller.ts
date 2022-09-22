@@ -1,8 +1,10 @@
-import {Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Patch, Post, UseGuards} from '@nestjs/common';
+import {Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Patch, Post, Res, UploadedFile, UseGuards, UseInterceptors} from '@nestjs/common';
 import {AgentService} from "../service/agent.service";
 import {AgentRequest} from "../integration/request/agent.request";
 import {JwtAuthGuard} from "../../authentication/config/jwt-auth.guard";
 import {AgentResponse} from "../integration/response/agent.response";
+import { FileInterceptor } from '@nestjs/platform-express';
+import { Response } from 'express';
 
 @Controller('agent')
 export class AgentController {
@@ -42,5 +44,11 @@ export class AgentController {
         return this.service.delete(code);
     }
 
-
+    @Post(':code/image')
+    @UseGuards(JwtAuthGuard)
+    @HttpCode(HttpStatus.OK)
+    @UseInterceptors(FileInterceptor('file'))
+    public uploadFile(@Param('code') code: number, @UploadedFile() file: Express.Multer.File, @Res() res: Response): Promise<number> {
+        return this.service.setImage(code, file, res);
+    }
 }

@@ -7,25 +7,18 @@ import { apiService } from "../../../services/api.service";
 import { ObjectHelper } from "../../../helpers/object.helper";
 import { GaleriaDeImagens } from "./galeria-de-imagens";
 import { GaleriaDeDocumentos } from "./galeria-de-documentos";
+import { AutocompleteGenerico } from "../../shared/autocomplete/autocomplete-generico";
+import { SeletorBooleanoGenerico } from "../../shared/seletor-booleano-generico";
+import Input from "../../shared/input-generico";
 import {
-  converterBooleanParaString,
-  converterStringParaBoolean,
+  converterParaCep,
+  converterParaMoeda,
 } from "../../../utils/parser.utils";
-import { useTypes } from "../../../hooks/useTypes";
-import { useCategories } from "../../../hooks/useCategories";
 
 export const ImovelPage = () => {
   const navigate = useNavigate();
   const params = useParams();
   const [model, setModel] = useState({} as any);
-  const [agents, setAgents] = useState([]);
-  const { categories, buscarCategorias } = useCategories([]);
-  const [conservationStates, setConservationStates] = useState([]);
-  const { types, buscarTiposDeImovel } = useTypes();
-  const [profiles, setProfiles] = useState([]);
-  const [zones, setZones] = useState([]);
-  const [situations, setSituations] = useState([]);
-  const [transactions, setTransactions] = useState([]);
   const [cities, setCities] = useState([]);
   const [federativeUnits, setFederativeUnits] = useState([]);
   const [neighborhoods, setNeighborhoods] = useState([]);
@@ -288,96 +281,6 @@ export const ImovelPage = () => {
     }
   }
 
-  async function buscarAgenciadores() {
-    setCarregando(true);
-    setAgents([]);
-
-    try {
-      const resposta = await apiService.get(`/agent`);
-      setAgents(resposta.data);
-      setCarregando(false);
-    } catch (error) {
-      console.log({ error });
-      toast.error("Houve um erro ao buscar os Agenciadores.");
-      setCarregando(false);
-    }
-  }
-
-  async function buscarEstadosDeConservacao() {
-    setCarregando(true);
-    setConservationStates([]);
-
-    try {
-      const resposta = await apiService.get(`/property/conservation-states`);
-      setConservationStates(resposta.data);
-      setCarregando(false);
-    } catch (error) {
-      console.log({ error });
-      toast.error("Houve um erro ao buscar os Estados de Conservação.");
-      setCarregando(false);
-    }
-  }
-
-  async function buscarPerfis() {
-    setCarregando(true);
-    setProfiles([]);
-
-    try {
-      const resposta = await apiService.get(`/property/profiles`);
-      setProfiles(resposta.data);
-      setCarregando(false);
-    } catch (error) {
-      console.log({ error });
-      toast.error("Houve um erro ao buscar os Perfis.");
-      setCarregando(false);
-    }
-  }
-
-  async function buscarZonas() {
-    setCarregando(true);
-    setZones([]);
-
-    try {
-      const resposta = await apiService.get(`/property/zones`);
-      setZones(resposta.data);
-      setCarregando(false);
-    } catch (error) {
-      console.log({ error });
-      toast.error("Houve um erro ao buscar as Zonas.");
-      setCarregando(false);
-    }
-  }
-
-  async function buscarSituacoes() {
-    setCarregando(true);
-    setSituations([]);
-
-    try {
-      const resposta = await apiService.get(`/property/situations`);
-      setSituations(resposta.data);
-      setCarregando(false);
-    } catch (error) {
-      console.log({ error });
-      toast.error("Houve um erro ao buscar as Situações.");
-      setCarregando(false);
-    }
-  }
-
-  async function buscarTransacoes() {
-    setCarregando(true);
-    setTransactions([]);
-
-    try {
-      const resposta = await apiService.get(`/property/transactions`);
-      setTransactions(resposta.data);
-      setCarregando(false);
-    } catch (error) {
-      console.log({ error });
-      toast.error("Houve um erro ao buscar as Transações.");
-      setCarregando(false);
-    }
-  }
-
   async function buscarCidades() {
     setCarregando(true);
     setCities([]);
@@ -467,6 +370,20 @@ export const ImovelPage = () => {
       newModel.images = images;
       newModel.documents = documents;
 
+      if (newModel.price) {
+        newModel.price = converterParaMoeda(String(newModel.price));
+      }
+
+      if (newModel.condominiumPrice) {
+        newModel.condominiumPrice = converterParaMoeda(
+          String(newModel.condominiumPrice)
+        );
+      }
+
+      if (newModel.zipCode) {
+        newModel.zipCode = converterParaCep(String(newModel.zipCode));
+      }
+
       setModel(newModel);
 
       setCarregando(false);
@@ -484,14 +401,6 @@ export const ImovelPage = () => {
   }, [model.city]);
 
   useEffect(() => {
-    buscarAgenciadores();
-    buscarCategorias();
-    buscarEstadosDeConservacao();
-    buscarTiposDeImovel();
-    buscarPerfis();
-    buscarZonas();
-    buscarSituacoes();
-    buscarTransacoes();
     buscarCidades();
     buscarUfs();
   }, []);
@@ -537,242 +446,104 @@ export const ImovelPage = () => {
               </div>
 
               <div className="col-md-4">
-                <div className="form-floating mb-3">
-                  <select
-                    className="form-control"
-                    id="input-type"
-                    placeholder="Tipo"
-                    required
-                    value={model?.type?.code || ""}
-                    onChange={(event) =>
-                      atualizarModel(
-                        "type",
-                        types.find(({ code }) => code == event.target.value) ||
-                          null
-                      )
-                    }
-                  >
-                    <option value={""} disabled>
-                      Selecione...
-                    </option>
-                    {types.map((type: any) => (
-                      <option key={type.code} value={type.code}>
-                        {type.description}
-                      </option>
-                    ))}
-                  </select>
-                  <label htmlFor="input-type">Tipo</label>
-                </div>
+                <AutocompleteGenerico
+                  id="campo-types"
+                  idItem="code"
+                  required
+                  descricaoItem="description"
+                  label="Tipo"
+                  endpoint="/property/types"
+                  value={model?.type || {}}
+                  onChange={(type) => atualizarModel("type", type ?? {})}
+                />
               </div>
 
               <div className="col-md-4">
-                <div className="form-floating mb-3">
-                  <select
-                    className="form-control"
-                    id="input-category"
-                    placeholder="Categoria"
-                    required
-                    value={model?.category?.code || ""}
-                    onChange={(event) =>
-                      atualizarModel(
-                        "category",
-                        categories.find(
-                          ({ code }) => code == event.target.value
-                        ) || null
-                      )
-                    }
-                  >
-                    <option value={""} disabled>
-                      Selecione...
-                    </option>
-                    {categories.map((category: any) => (
-                      <option key={category.code} value={category.code}>
-                        {category.description}
-                      </option>
-                    ))}
-                  </select>
-                  <label htmlFor="input-category">Categoria</label>
-                </div>
+                <AutocompleteGenerico
+                  id="campo-categorias"
+                  idItem="code"
+                  descricaoItem="description"
+                  label="Categoria"
+                  required
+                  endpoint="/property/categories"
+                  value={model?.category || {}}
+                  onChange={(category) =>
+                    atualizarModel("category", category ?? {})
+                  }
+                />
               </div>
 
               <div className="col-md-4">
-                <div className="form-floating mb-3">
-                  <select
-                    className="form-control"
-                    id="input-profile"
-                    placeholder="Perfil"
-                    required
-                    value={model?.profile?.code || ""}
-                    onChange={(event) =>
-                      atualizarModel(
-                        "profile",
-                        profiles.find(
-                          ({ code }) => code == event.target.value
-                        ) || null
-                      )
-                    }
-                  >
-                    <option value={""} disabled>
-                      Selecione...
-                    </option>
-                    {profiles.map((profile: any) => (
-                      <option key={profile.code} value={profile.code}>
-                        {profile.description}
-                      </option>
-                    ))}
-                  </select>
-                  <label htmlFor="input-profile">Perfil</label>
-                </div>
+                <AutocompleteGenerico
+                  id="campo-profile"
+                  idItem="code"
+                  descricaoItem="description"
+                  label="Perfil"
+                  required
+                  endpoint="/property/profiles"
+                  value={model?.profile || {}}
+                  onChange={(profile) =>
+                    atualizarModel("profile", profile ?? {})
+                  }
+                />
               </div>
 
               <div className="col-md-4">
-                <div className="form-floating mb-3">
-                  <select
-                    className="form-control"
-                    id="input-zone"
-                    placeholder="Zona"
-                    required
-                    value={model?.zone?.code || ""}
-                    onChange={(event) =>
-                      atualizarModel(
-                        "zone",
-                        zones.find(({ code }) => code == event.target.value) ||
-                          null
-                      )
-                    }
-                  >
-                    <option value={""} disabled>
-                      Selecione...
-                    </option>
-                    {zones.map((zone: any) => (
-                      <option key={zone.code} value={zone.code}>
-                        {zone.description}
-                      </option>
-                    ))}
-                  </select>
-                  <label htmlFor="input-zone">Zona</label>
-                </div>
+                <AutocompleteGenerico
+                  id="campo-zone"
+                  idItem="code"
+                  descricaoItem="description"
+                  label="Zona"
+                  required
+                  endpoint="/property/zones"
+                  value={model?.zone || {}}
+                  onChange={(zone) => atualizarModel("zone", zone ?? {})}
+                />
               </div>
 
               <div className="col-md-4">
-                <div className="form-floating mb-3">
-                  <select
-                    className="form-control"
-                    id="input-situation"
-                    placeholder="Situação"
-                    required
-                    value={model?.situation?.code || ""}
-                    onChange={(event) =>
-                      atualizarModel(
-                        "situation",
-                        situations.find(
-                          ({ code }) => code == event.target.value
-                        ) || null
-                      )
-                    }
-                  >
-                    <option value={""} disabled>
-                      Selecione...
-                    </option>
-                    {situations.map((situation: any) => (
-                      <option key={situation.code} value={situation.code}>
-                        {situation.description}
-                      </option>
-                    ))}
-                  </select>
-                  <label htmlFor="input-situation">Situação</label>
-                </div>
+                <AutocompleteGenerico
+                  id="campo-situation"
+                  idItem="code"
+                  descricaoItem="description"
+                  label="Situação"
+                  required
+                  endpoint="/property/situations"
+                  value={model?.situation || {}}
+                  onChange={(situation) =>
+                    atualizarModel("situation", situation ?? {})
+                  }
+                />
               </div>
 
               <div className="col-md-4">
-                <div className="form-floating mb-3">
-                  <select
-                    className="form-control"
-                    id="input-transaction"
-                    placeholder="Transação"
-                    required
-                    value={model?.transaction?.code || ""}
-                    onChange={(event) =>
-                      atualizarModel(
-                        "transaction",
-                        transactions.find(
-                          ({ code }) => code == event.target.value
-                        ) || null
-                      )
-                    }
-                  >
-                    <option value={""} disabled>
-                      Selecione...
-                    </option>
-                    {transactions.map((transaction: any) => (
-                      <option key={transaction.code} value={transaction.code}>
-                        {transaction.description}
-                      </option>
-                    ))}
-                  </select>
-                  <label htmlFor="input-transaction">Transação</label>
-                </div>
+                <AutocompleteGenerico
+                  id="campo-transaction"
+                  idItem="code"
+                  descricaoItem="description"
+                  label="Transação"
+                  required
+                  endpoint="/property/transactions"
+                  value={model?.transaction || {}}
+                  onChange={(transaction) =>
+                    atualizarModel("transaction", transaction ?? {})
+                  }
+                />
               </div>
 
-              {/* <div className="col-md-4">
-                <div className="form-floating mb-3">
-                  <select
-                    className="form-control"
-                    id="input-finality"
-                    placeholder="Finalidade"
-                    value={model?.finality?.code || ""}
-                    onChange={(event) =>
-                      atualizarModel("finality",
-                        finalities.find(({ code }) => code == event.target.value) ||
-                          null)
-                    }
-                  >
-                    <option value={""} disabled>
-                      Selecione...
-                    </option>
-                    {finalities.map((finality: any) => (
-                      <option key={finality.code} value={finality.code}>
-                        {finality.description}
-                      </option>
-                    ))}
-                  </select>
-                  <label htmlFor="input-finality">Finalidade</label>
-                </div>
-              </div> */}
-
               <div className="col-md-4">
-                <div className="form-floating mb-3">
-                  <select
-                    className="form-control"
-                    id="input-conservationState"
-                    placeholder="Estado de Conservação"
-                    required
-                    value={model?.conservationState?.code || ""}
-                    onChange={(event) =>
-                      atualizarModel(
-                        "conservationState",
-                        conservationStates.find(
-                          ({ code }) => code == event.target.value
-                        ) || null
-                      )
-                    }
-                  >
-                    <option value={""} disabled>
-                      Selecione...
-                    </option>
-                    {conservationStates.map((conservationState: any) => (
-                      <option
-                        key={conservationState.code}
-                        value={conservationState.code}
-                      >
-                        {conservationState.description}
-                      </option>
-                    ))}
-                  </select>
-                  <label htmlFor="input-conservationState">
-                    Estado de Conservação
-                  </label>
-                </div>
+                <AutocompleteGenerico
+                  id="campo-conservationState"
+                  idItem="code"
+                  descricaoItem="description"
+                  label="Estado de Conservação"
+                  required
+                  endpoint="/property/conservation-states"
+                  value={model?.conservationState || {}}
+                  onChange={(conservationState) =>
+                    atualizarModel("conservationState", conservationState ?? {})
+                  }
+                />
               </div>
             </div>
 
@@ -920,19 +691,16 @@ export const ImovelPage = () => {
               </div>
 
               <div className="col-md-4">
-                <div className="form-floating mb-3">
-                  <input
-                    className="form-control"
-                    id="input-zipCode"
-                    type="text"
-                    placeholder="CEP"
-                    value={model.zipCode || ""}
-                    onChange={(event) =>
-                      atualizarModel("zipCode", event.target.value)
-                    }
-                  />
-                  <label htmlFor="input-zipCode">CEP</label>
-                </div>
+                <Input
+                  id="input-zipCode"
+                  label="CEP"
+                  placeholder="00000-000"
+                  mask="cep"
+                  value={model.zipCode || ""}
+                  onChange={(e) =>
+                    atualizarModel("zipCode", e.currentTarget.value)
+                  }
+                />
               </div>
 
               <div className="col-md-8">
@@ -1147,27 +915,12 @@ export const ImovelPage = () => {
               </div>
 
               <div className="col-md-4">
-                <div className="form-floating mb-3">
-                  <select
-                    className="form-control"
-                    id="input-pavement"
-                    placeholder="Rua Pavimentada"
-                    value={converterBooleanParaString(model?.pavement)}
-                    onChange={(event) =>
-                      atualizarModel(
-                        "pavement",
-                        converterStringParaBoolean(event.target.value)
-                      )
-                    }
-                  >
-                    <option value={""} disabled>
-                      Selecione...
-                    </option>
-                    <option value={"true"}>Sim</option>
-                    <option value={"false"}>Não</option>
-                  </select>
-                  <label htmlFor="input-pavement">Rua Pavimentada</label>
-                </div>
+                <SeletorBooleanoGenerico
+                  id="input-pavement"
+                  label="Rua Pavimentada"
+                  value={model?.pavement}
+                  onChange={(value) => atualizarModel("pavement", value)}
+                />
               </div>
             </div>
           </div>
@@ -1178,61 +931,40 @@ export const ImovelPage = () => {
           <div className="card-body">
             <div className="row">
               <div className="col-md-4">
-                <div className="form-floating mb-3">
-                  <input
-                    className="form-control"
-                    id="input-price"
-                    type="number"
-                    placeholder="Valor"
-                    value={model.price || ""}
-                    onChange={(event) =>
-                      atualizarModel("price", event.target.value)
-                    }
-                  />
-                  <label htmlFor="input-price">Valor</label>
-                </div>
+                <Input
+                  id="input-price"
+                  label="Valor"
+                  placeholder="0,00"
+                  mask="currency"
+                  prefix="R$"
+                  value={model.price || ""}
+                  onChange={(e) =>
+                    atualizarModel("price", e.currentTarget.value)
+                  }
+                />
               </div>
 
               <div className="col-md-4">
-                <div className="form-floating mb-3">
-                  <input
-                    className="form-control"
-                    id="input-condominiumPrice"
-                    type="number"
-                    placeholder="Valor do Condomínio"
-                    value={model.condominiumPrice || ""}
-                    onChange={(event) =>
-                      atualizarModel("condominiumPrice", event.target.value)
-                    }
-                  />
-                  <label htmlFor="input-condominiumPrice">
-                    Valor do Condomínio
-                  </label>
-                </div>
+                <Input
+                  id="input-condominiumPrice"
+                  label="Valor do Condomínio"
+                  placeholder="0,00"
+                  mask="currency"
+                  prefix="R$"
+                  value={model.condominiumPrice || ""}
+                  onChange={(e) =>
+                    atualizarModel("condominiumPrice", e.currentTarget.value)
+                  }
+                />
               </div>
 
               <div className="col-md-4">
-                <div className="form-floating mb-3">
-                  <select
-                    className="form-control"
-                    id="input-financeable"
-                    placeholder="Financiável"
-                    value={converterBooleanParaString(model?.financeable)}
-                    onChange={(event) =>
-                      atualizarModel(
-                        "financeable",
-                        converterStringParaBoolean(event.target.value)
-                      )
-                    }
-                  >
-                    <option value={""} disabled>
-                      Selecione...
-                    </option>
-                    <option value={"true"}>Sim</option>
-                    <option value={"false"}>Não</option>
-                  </select>
-                  <label htmlFor="input-financeable">Financiável</label>
-                </div>
+                <SeletorBooleanoGenerico
+                  id="input-financeable"
+                  label="Financiável"
+                  value={model?.financeable}
+                  onChange={(value) => atualizarModel("financeable", value)}
+                />
               </div>
             </div>
           </div>
@@ -1243,146 +975,56 @@ export const ImovelPage = () => {
           <div className="card-body">
             <div className="row">
               <div className="col-md-4">
-                <div className="form-floating mb-3">
-                  <select
-                    className="form-control"
-                    id="input-show"
-                    placeholder="Exibir"
-                    value={converterBooleanParaString(model?.show)}
-                    onChange={(event) =>
-                      atualizarModel(
-                        "show",
-                        converterStringParaBoolean(event.target.value)
-                      )
-                    }
-                  >
-                    <option value={""} disabled>
-                      Selecione...
-                    </option>
-                    <option value={"true"}>Sim</option>
-                    <option value={"false"}>Não</option>
-                  </select>
-                  <label htmlFor="input-show">Exibir</label>
-                </div>
+                <SeletorBooleanoGenerico
+                  id="input-show"
+                  label="Exibir"
+                  value={model?.show}
+                  onChange={(value) => atualizarModel("show", value)}
+                />
               </div>
               <div className="col-md-4">
-                <div className="form-floating mb-3">
-                  <select
-                    className="form-control"
-                    id="input-showValue"
-                    placeholder="Exibir Valor"
-                    value={converterBooleanParaString(model?.showValue)}
-                    onChange={(event) =>
-                      atualizarModel(
-                        "showValue",
-                        converterStringParaBoolean(event.target.value)
-                      )
-                    }
-                  >
-                    <option value={""} disabled>
-                      Selecione...
-                    </option>
-                    <option value={"true"}>Sim</option>
-                    <option value={"false"}>Não</option>
-                  </select>
-                  <label htmlFor="input-showValue">Exibir Valor</label>
-                </div>
+                <SeletorBooleanoGenerico
+                  id="input-showValue"
+                  label="Exibir Valor"
+                  value={model?.showValue}
+                  onChange={(value) => atualizarModel("showValue", value)}
+                />
               </div>
 
               <div className="col-md-4">
-                <div className="form-floating mb-3">
-                  <select
-                    className="form-control"
-                    id="input-featured"
-                    placeholder="Destaque"
-                    value={converterBooleanParaString(model?.featured)}
-                    onChange={(event) =>
-                      atualizarModel(
-                        "featured",
-                        converterStringParaBoolean(event.target.value)
-                      )
-                    }
-                  >
-                    <option value={""} disabled>
-                      Selecione...
-                    </option>
-                    <option value={"true"}>Sim</option>
-                    <option value={"false"}>Não</option>
-                  </select>
-                  <label htmlFor="input-featured">Destaque</label>
-                </div>
+                <SeletorBooleanoGenerico
+                  id="input-featured"
+                  label="Destaque"
+                  value={model?.featured}
+                  onChange={(value) => atualizarModel("featured", value)}
+                />
               </div>
 
               <div className="col-md-4">
-                <div className="form-floating mb-3">
-                  <select
-                    className="form-control"
-                    id="input-superFeatured"
-                    placeholder="Super Destaque"
-                    value={converterBooleanParaString(model?.superFeatured)}
-                    onChange={(event) =>
-                      atualizarModel(
-                        "superFeatured",
-                        converterStringParaBoolean(event.target.value)
-                      )
-                    }
-                  >
-                    <option value={""} disabled>
-                      Selecione...
-                    </option>
-                    <option value={"true"}>Sim</option>
-                    <option value={"false"}>Não</option>
-                  </select>
-                  <label htmlFor="input-superFeatured">Super Destaque</label>
-                </div>
+                <SeletorBooleanoGenerico
+                  id="input-superFeatured"
+                  label="Super Destaque"
+                  value={model?.superFeatured}
+                  onChange={(value) => atualizarModel("superFeatured", value)}
+                />
               </div>
 
               <div className="col-md-4">
-                <div className="form-floating mb-3">
-                  <select
-                    className="form-control"
-                    id="input-rented"
-                    placeholder="Alugado"
-                    value={converterBooleanParaString(model?.rented)}
-                    onChange={(event) =>
-                      atualizarModel(
-                        "rented",
-                        converterStringParaBoolean(event.target.value)
-                      )
-                    }
-                  >
-                    <option value={""} disabled>
-                      Selecione...
-                    </option>
-                    <option value={"true"}>Sim</option>
-                    <option value={"false"}>Não</option>
-                  </select>
-                  <label htmlFor="input-rented">Alugado</label>
-                </div>
+                <SeletorBooleanoGenerico
+                  id="input-rented"
+                  label="Alugado"
+                  value={model?.rented}
+                  onChange={(value) => atualizarModel("rented", value)}
+                />
               </div>
 
               <div className="col-md-4">
-                <div className="form-floating mb-3">
-                  <select
-                    className="form-control"
-                    id="input-reserved"
-                    placeholder="Reservado"
-                    value={converterBooleanParaString(model?.reserved)}
-                    onChange={(event) =>
-                      atualizarModel(
-                        "reserved",
-                        converterStringParaBoolean(event.target.value)
-                      )
-                    }
-                  >
-                    <option value={""} disabled>
-                      Selecione...
-                    </option>
-                    <option value={"true"}>Sim</option>
-                    <option value={"false"}>Não</option>
-                  </select>
-                  <label htmlFor="input-reserved">Reservado</label>
-                </div>
+                <SeletorBooleanoGenerico
+                  id="input-reserved"
+                  label="Reservado"
+                  value={model?.reserved}
+                  onChange={(value) => atualizarModel("reserved", value)}
+                />
               </div>
 
               <div className="col-md-4">
@@ -1440,57 +1082,23 @@ export const ImovelPage = () => {
                 </div>
               </div>
               <div className="col-md-4">
-                <div className="form-floating mb-3">
-                  <select
-                    className="form-control"
-                    id="input-agent"
-                    placeholder="Agenciador"
-                    required
-                    value={model?.agent?.code || ""}
-                    onChange={(event) =>
-                      atualizarModel(
-                        "agent",
-                        agents.find(({ code }) => code == event.target.value) ||
-                          null
-                      )
-                    }
-                  >
-                    <option value={""} disabled>
-                      Selecione...
-                    </option>
-                    {agents.map((agent: any) => (
-                      <option key={agent.code} value={agent.code}>
-                        {agent.name}
-                      </option>
-                    ))}
-                  </select>
-                  <label htmlFor="input-agent">Agenciador</label>
-                </div>
+                <AutocompleteGenerico
+                  id="campo-agent"
+                  idItem="code"
+                  descricaoItem="name"
+                  label="Corretor"
+                  endpoint="/agent"
+                  value={model?.agent || {}}
+                  onChange={(agent) => atualizarModel("agent", agent ?? {})}
+                />
               </div>
               <div className="col-md-4">
-                <div className="form-floating mb-3">
-                  <select
-                    className="form-control"
-                    id="input-unitAvailable"
-                    placeholder="Unidade Disponível"
-                    value={converterBooleanParaString(model?.unitAvailable)}
-                    onChange={(event) =>
-                      atualizarModel(
-                        "unitAvailable",
-                        converterStringParaBoolean(event.target.value)
-                      )
-                    }
-                  >
-                    <option value={""} disabled>
-                      Selecione...
-                    </option>
-                    <option value={"true"}>Sim</option>
-                    <option value={"false"}>Não</option>
-                  </select>
-                  <label htmlFor="input-unitAvailable">
-                    Unidade Disponível
-                  </label>
-                </div>
+                <SeletorBooleanoGenerico
+                  id="input-unitAvailable"
+                  label="Unidade Disponível"
+                  value={model?.unitAvailable}
+                  onChange={(value) => atualizarModel("unitAvailable", value)}
+                />
               </div>
               <div className="col-md-8">
                 <div className="form-floating mb-3">

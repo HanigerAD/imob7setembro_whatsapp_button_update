@@ -6,6 +6,6 @@ export class ConfigurationSiteRequest {
     public institutionalText?: string;
     public openingHour?: string;
     public institutionalTextResume?: string;
-    public phone: PhoneRequest[];
+    public phone?: PhoneRequest[];
     public email?: string;
 }

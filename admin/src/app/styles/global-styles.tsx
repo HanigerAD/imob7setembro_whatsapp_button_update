@@ -43,4 +43,17 @@ export const GlobalStyles = createGlobalStyle`
     background-position-y: 78%;
     padding-right: 2rem !important;
   }
+
+  .remove-option-selected {
+    color: red;
+    font-style: italic;
+  }
+
+  .input-group {
+    display: flex;
+
+    .form-floating {
+      flex: 1;
+    }
+  }
 `;

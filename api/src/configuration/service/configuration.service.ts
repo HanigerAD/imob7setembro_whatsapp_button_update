@@ -27,8 +27,8 @@ export class ConfigurationService {
 
     public update(request: ConfigurationSiteRequest): Promise<number> {
         return this.repository.update(ConfigurationSiteMapper.requestToEntity(request))
-            .then(() => this.phoneService.updatePhones(CommercialEntityEnum.REAL_STATE, this.definePhoneCommercialEntity(request.phone)))
-            .then(() => this.commercialEntityService.updateEmail(CommercialEntityEnum.REAL_STATE, request.email));
+            // .then(() => this.phoneService.updatePhones(CommercialEntityEnum.REAL_STATE, this.definePhoneCommercialEntity(request.phone)))
+            // .then(() => this.commercialEntityService.updateEmail(CommercialEntityEnum.REAL_STATE, request.email));
     }
 
     public definePhoneCommercialEntity(requests: PhoneRequest[]): PhoneRequest[] {
