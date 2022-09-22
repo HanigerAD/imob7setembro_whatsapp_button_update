@@ -1,5 +1,5 @@
 Status Imob7
-(05/09/22 - 14:30)
+(21/09/22 - 23:00)
 
 - [] Painel Administrativo
 - - [FEITO] Adicionar a imagem \/ de Select nos campos.
@@ -19,7 +19,7 @@ Status Imob7
 - - - - - - [FEITO] Cadastrar várias imagens ao mesmo tempo.
 - - - - - - [] definir logo marca d'água nas fotos por padrão centralizado na "Direita" ou na "Esquerda"
 - - - - [FEITO] Corretores - (cadastro de corretores com foto)
-- - - - [] Contatos de Clientes
+- - - - [EM ANDAMENTO] Contatos de Clientes
 - - - - - [] Novos Imoveis
 - - - - - [] Mensagens
 - - - - [] Usuarios
