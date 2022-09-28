@@ -1,23 +1,35 @@
-export function converterStringParaBoolean(str: string): Boolean | null {
+function isFalse(value: any): Boolean {
+  return value === "false" || value === false || value === "0" || value === 0
+}
+
+function isTrue(value: any): Boolean {
+  return value === "true" || value === true || value === "1" || value === 1
+}
+
+export function converterStringParaBoolean(str: any): Boolean | null {
   let value = null;
 
-  if (str === "true" || str == "false") {
-    value = JSON.parse(str);
+  if (isFalse(str)) {
+    value = false;
+  }
+
+  if (isTrue(str)) {
+    value = true;
   }
 
   return value;
 }
 
 export function converterBooleanParaString(
-  bln: Boolean | number | null
+  bln: any
 ): string {
   let value = "";
 
-  if (bln === false || bln === 0) {
+  if (isFalse(bln)) {
     value = "false";
   }
 
-  if (bln === true || bln === 1) {
+  if (isTrue(bln)) {
     value = "true";
   }
 

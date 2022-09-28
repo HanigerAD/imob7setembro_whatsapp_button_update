@@ -17,6 +17,7 @@ const Input: React.FC<InputProps> = ({
   className,
   value: defaultValue,
   onChange,
+  type,
   ...props
 }) => {
   const handleKeyUp = useCallback(
@@ -57,12 +58,21 @@ const Input: React.FC<InputProps> = ({
       <div className="input-group mb-3">
         {prefix && <span className="input-group-text">{prefix}</span>}
         <div className="form-floating">
-          <input
-            className={`form-control ${className}`}
-            defaultValue={defaultValue}
-            onKeyUp={handleKeyUp}
-            {...props}
-          />
+          {type === 'date' ?
+            <input
+              className={`form-control ${className}`}
+              defaultValue={defaultValue}
+              onChange={onChange}
+              type={type}
+              {...props} />
+            : null}
+          {type !== 'date' ?
+            <input
+              className={`form-control ${className}`}
+              defaultValue={defaultValue}
+              onKeyUp={handleKeyUp}
+              {...props} />
+            : null}
           <label htmlFor={id}>{label}</label>
         </div>
       </div>
