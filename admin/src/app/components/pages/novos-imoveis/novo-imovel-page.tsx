@@ -7,8 +7,6 @@ import ImageFallback from "../../../assets/images/image-fallback.png";
 import { apiService } from "../../../services/api.service";
 import { ObjectHelper } from "../../../helpers/object.helper";
 import { CDN_URL } from "../../../services/cdn.service";
-import AddImage from "../../../assets/images/add-image.jpg";
-import { imageFallback } from "../../../helpers/image-fallback";
 import Input from "../../shared/input-generico";
 
 export const NovoImovelPage = () => {

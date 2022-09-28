@@ -3,19 +3,15 @@ import { useEffect, useMemo, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import TextEditor from "react-quill";
 import { toast } from "react-toastify";
-import ImageFallback from "../../../assets/images/image-fallback.png";
 import { apiService } from "../../../services/api.service";
 import { ObjectHelper } from "../../../helpers/object.helper";
-import { CDN_URL } from "../../../services/cdn.service";
-import AddImage from "../../../assets/images/add-image.jpg";
-import { imageFallback } from "../../../helpers/image-fallback";
+import Input from "../../shared/input-generico";
 
 export const MensagemPage = () => {
   const navigate = useNavigate();
   const params = useParams();
   const [model, setModel] = useState({} as any);
   const [modelAnt, setModelAnt] = useState({} as any);
-  const [users, setUsers] = useState([]);
   const [carregando, setCarregando] = useState(false);
 
   const modelId = params.code || null;
@@ -27,7 +23,7 @@ export const MensagemPage = () => {
   async function cancelar(event: any) {
     event.preventDefault();
 
-    navigate(`/admin/postagens`);
+    navigate(`/admin/mensagens`);
   }
 
   async function manipularEnvio(event: any) {
@@ -45,28 +41,24 @@ export const MensagemPage = () => {
     let newModel = Object.assign({}, data);
 
     newModel = ObjectHelper.mantemSomenteCampos(newModel, [
-      "title",
-      "text",
-      "keywords",
-      "user",
+      "fullname",
+      "email",
+      "phone",
+      "subject",
+      "message",
     ]);
-
-    newModel.user = newModel.user
-      ? ObjectHelper.mantemSomenteCampos(newModel.user, ["code"])
-      : null;
-    newModel.user = newModel.user ? newModel.user.code : null;
 
     return newModel;
   }
 
-  async function salvarPostagem(data: any) {
+  async function salvarMensagem(data: any) {
     const newModel = removeCamposSalvar(data);
     let code = modelId || "";
 
     if (code) {
-      await apiService.patch(`/blog/posts/${code}`, newModel);
+      await apiService.patch(`/contact/messages/${code}`, newModel);
     } else {
-      const resposta = await apiService.post(`/blog/posts`, newModel);
+      const resposta = await apiService.post(`/contact/message`, newModel);
 
       code = resposta.data[0];
     }
@@ -74,51 +66,25 @@ export const MensagemPage = () => {
     return code;
   }
 
-  async function salvarImagemDaPostagem(code: string, image: any) {
-    if (image && typeof image != "string") {
-      const data = new FormData();
-
-      data.append("file", image);
-
-      await apiService.post(`/blog/posts/${code}/image`, data);
-    }
-  }
-
   async function salvar(data: any) {
     setCarregando(true);
 
     try {
-      let code = await salvarPostagem(data);
-      await salvarImagemDaPostagem(code, data.image);
+      let code = await salvarMensagem(data);
 
       toast.success("Registro salvo com sucesso");
       setCarregando(false);
 
       if (code != modelId) {
-        navigate(`/admin/postagens/${code}`);
+        navigate(`/admin/mensagens/${code}`);
       } else {
         buscar(code);
       }
     } catch (error) {
       console.log({ error });
       toast.error(
-        "Houve um erro ao salvar a Postagem. Verifique se os campos foram preenchidos corretamente"
+        "Houve um erro ao salvar a Mensagem. Verifique se os campos foram preenchidos corretamente"
       );
-      setCarregando(false);
-    }
-  }
-
-  async function buscarUsuarios() {
-    setCarregando(true);
-    setUsers([]);
-
-    try {
-      const resposta = await apiService.get(`/user/users`);
-      setUsers(resposta.data);
-      setCarregando(false);
-    } catch (error) {
-      console.log({ error });
-      toast.error("Houve um erro ao buscar os Usuários.");
       setCarregando(false);
     }
   }
@@ -128,7 +94,7 @@ export const MensagemPage = () => {
     setModel({});
 
     try {
-      const resposta = await apiService.get(`/blog/posts/${modelId}`);
+      const resposta = await apiService.get(`/contact/messages/${modelId}`);
 
       const newModel = Object.assign({}, resposta.data);
 
@@ -138,31 +104,16 @@ export const MensagemPage = () => {
       setCarregando(false);
     } catch (error) {
       console.log({ error });
-      toast.error("Houve um erro ao buscar a Postagem.");
+      toast.error("Houve um erro ao buscar a Mensagem.");
       setCarregando(false);
     }
   }
-
-  const image = useMemo(() => {
-    if (model.image) {
-      if (typeof model.image == "string") {
-        return `${CDN_URL}/${model.image}`;
-      } else {
-        return URL.createObjectURL(model.image);
-      }
-    } else {
-      return ImageFallback;
-    }
-  }, [model]);
-
-  useEffect(() => {
-    buscarUsuarios();
-  }, []);
 
   useEffect(() => {
     setModelAnt({});
 
     if (modelId) {
+      console.log({ modelId });
       buscar(modelId);
     }
   }, [modelId]);
@@ -170,12 +121,12 @@ export const MensagemPage = () => {
   return (
     <div className="container-fluid px-4">
       <div className="mt-4">
-        <h1>Postagem</h1>
+        <h1>Mensagem</h1>
       </div>
 
       <ol className="breadcrumb mb-4">
-        <li className="breadcrumb-item">Postagens</li>
-        <li className="breadcrumb-item active">Postagem</li>
+        <li className="breadcrumb-item">Mensagens</li>
+        <li className="breadcrumb-item active">Mensagem</li>
       </ol>
 
       <form onSubmit={manipularEnvio}>
@@ -184,118 +135,63 @@ export const MensagemPage = () => {
 
           <div className="card-body">
             <div className="row">
-              <div className="col-md-4">
-                <img
-                  loading="lazy"
-                  className="mb-1"
-                  src={image}
-                  width="100%"
-                  alt=""
-                  onError={imageFallback}
+              <div className="col-md-6">
+                <Input
+                  id="input-fullname"
+                  label="Nome Completo"
+                  placeholder="Nome Completo"
+                  value={model.fullname || ""}
+                  onChange={(e) =>
+                    atualizarModel("fullname", e.currentTarget.value)
+                  }
                 />
+              </div>
 
-                <div>
-                  <input
-                    type="file"
-                    className="d-none"
-                    id="add-file"
-                    accept="image/*"
-                    onChange={(event: any) =>
-                      atualizarModel("image", event.target.files[0])
-                    }
-                  />
+              <div className="col-md-6">
+                <Input
+                  id="input-email"
+                  label="E-mail"
+                  type="email"
+                  placeholder="E-mail"
+                  value={model.email || ""}
+                  onChange={(e) =>
+                    atualizarModel("email", e.currentTarget.value)
+                  }
+                />
+              </div>
 
-                  <label className="card btn mb-4" htmlFor="add-file">
-                    Adicionar Imagem
-                  </label>
-                </div>
+              <div className="col-md-4">
+                <Input
+                  id="input-phone"
+                  label="Telefone"
+                  placeholder="(00) 0 0000-0000"
+                  mask="phone"
+                  value={model.phone || ""}
+                  onChange={(e) =>
+                    atualizarModel("phone", e.currentTarget.value)
+                  }
+                />
               </div>
 
               <div className="col-md-8">
-                <div className="row">
-                  <div className="col-md-12">
-                    <div className="form-floating mb-3">
-                      <input
-                        className="form-control"
-                        id="input-title"
-                        type="text"
-                        placeholder="Titulo"
-                        value={model.title || ""}
-                        onChange={(event) =>
-                          atualizarModel("title", event.target.value)
-                        }
-                      />
-                      <label htmlFor="input-title">Titulo</label>
-                    </div>
-                  </div>
-
-                  <div className="col-md-6">
-                    <div className="form-floating mb-3">
-                      <select
-                        className="form-control"
-                        id="input-user"
-                        placeholder="Usuário"
-                        value={model?.user?.code || ""}
-                        onChange={(event) =>
-                          atualizarModel(
-                            "user",
-                            users.find(
-                              ({ code }) => code == event.target.value
-                            ) || null
-                          )
-                        }
-                      >
-                        <option value={""} disabled>
-                          Selecione...
-                        </option>
-                        {users.map((user: any) => (
-                          <option key={user.code} value={user.code}>
-                            {user.name}
-                          </option>
-                        ))}
-                      </select>
-                      <label htmlFor="input-user">Usuário</label>
-                    </div>
-                  </div>
-
-                  <div className="col-md-6">
-                    <div className="form-floating mb-3">
-                      <input
-                        className="form-control"
-                        id="input-createDate"
-                        type="date"
-                        placeholder="Data da Criação"
-                        value={model.createDate || ""}
-                        disabled
-                      />
-                      <label htmlFor="input-createDate">Data da Criação</label>
-                    </div>
-                  </div>
-                  <div className="col-md-12">
-                    <div className="form-floating mb-3">
-                      <input
-                        className="form-control"
-                        id="input-keywords"
-                        type="text"
-                        placeholder="Palavras Chaves"
-                        value={model.keywords || ""}
-                        onChange={(event) =>
-                          atualizarModel("keywords", event.target.value)
-                        }
-                      />
-                      <label htmlFor="input-keywords">Palavras Chaves</label>
-                    </div>
-                  </div>
-                </div>
+                <Input
+                  id="input-subject"
+                  label="Assunto"
+                  placeholder="Assunto"
+                  value={model.subject || ""}
+                  onChange={(e) =>
+                    atualizarModel("subject", e.currentTarget.value)
+                  }
+                />
               </div>
             </div>
 
             <TextEditor
-              placeholder="Texto"
+              placeholder="Mensagem"
               className=" mb-3"
               theme="snow"
-              value={model?.text || ""}
-              onChange={(value) => atualizarModel("text", value)}
+              value={model?.message || ""}
+              onChange={(value) => atualizarModel("message", value)}
             />
           </div>
         </div>

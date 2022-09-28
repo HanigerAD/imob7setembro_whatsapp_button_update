@@ -1,9 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import { confirmAlert } from "react-confirm-alert";
-import { imageFallback } from "../../../helpers/image-fallback";
 import { apiService } from "../../../services/api.service";
-import { CDN_URL } from "../../../services/cdn.service";
 import { Pagination } from "../../layouts/admin/components/pagination";
 import { toast } from "react-toastify";
 import { usePagination } from "../../../hooks/usePagination";
@@ -16,14 +14,14 @@ export const MensagensPage = () => {
   async function deletar(model: any) {
     confirmAlert({
       title: "Atenção",
-      message: `Você deseja realmente deletar a postagem ${model.title} ?`,
+      message: `Você deseja realmente deletar a mensagem ${model.title} ?`,
       buttons: [
         {
           label: "Sim",
           onClick: async () => {
             try {
               setCarregando(true);
-              await apiService.delete(`/blog/posts/${model.code}`);
+              await apiService.delete(`/contact/messages/${model.code}`);
               toast.success("Registro removido com sucesso");
               buscar();
             } catch (error) {
@@ -46,7 +44,7 @@ export const MensagensPage = () => {
 
     try {
       const filters = {};
-      const resposta = await apiService.get("/blog/posts", {
+      const resposta = await apiService.get("/contact/messages", {
         params: filters,
       });
       setModels(resposta.data);
@@ -73,22 +71,22 @@ export const MensagensPage = () => {
   return (
     <div className="container-fluid px-4">
       <div className="mt-4 d-flex justify-content-between align-items-center">
-        <h1>Postagens</h1>
+        <h1>Mensagens</h1>
 
         <Link
           className="btn btn-primary btn-sm"
-          to="/admin/postagens/cadastrar"
+          to="/admin/mensagens/cadastrar"
         >
           Cadastrar
         </Link>
       </div>
 
       <ol className="breadcrumb mb-4">
-        <li className="breadcrumb-item active">Postagens</li>
+        <li className="breadcrumb-item active">Mensagens</li>
       </ol>
 
       <div className="card mb-4">
-        <div className="card-header">Postagens</div>
+        <div className="card-header">Mensagens</div>
 
         <div className="card-body">
           {carregando ? (
@@ -100,11 +98,10 @@ export const MensagensPage = () => {
                   <thead>
                     <tr>
                       <th scope="col">#</th>
-                      <th scope="col">Imagem</th>
-                      <th scope="col">Titulo</th>
-                      <th scope="col">Palavras chave</th>
-                      <th scope="col">Data de Criação</th>
-                      <th scope="col">Usuario</th>
+                      <th scope="col">Nome Completo</th>
+                      <th scope="col">E-mail</th>
+                      <th scope="col">Telefone</th>
+                      <th scope="col">Assunto</th>
                       <th scope="col" style={{ minWidth: 60 }}>
                         Opções
                       </th>
@@ -115,29 +112,15 @@ export const MensagensPage = () => {
                       currentItems.map((model: any) => (
                         <tr key={model.code}>
                           <th scope="row">{model.code}</th>
-                          <td>
-                            <img
-                              width={50}
-                              height={50}
-                              style={{ borderRadius: "50%" }}
-                              src={`${CDN_URL}/${model.image}`}
-                              alt={model.title}
-                              onError={imageFallback}
-                            />
-                          </td>
-                          <td>{model.title}</td>
-                          <td>{model.keywords}</td>
-                          <td>
-                            {model.createDate
-                              ? new Date(model.createDate).toLocaleString()
-                              : ""}
-                          </td>
-                          <td>{model.user && model.user.name}</td>
+                          <td>{model.fullname}</td>
+                          <td>{model.email}</td>
+                          <td>{model.phone}</td>
+                          <td>{model.subject ? String(model.subject).substring(0,100): ''}</td>
                           <td>
                             <Link
                               className="btn btn-link text-dark p-0"
                               title="Editar"
-                              to={`/admin/postagens/${model.code}`}
+                              to={`/admin/mensagens/${model.code}`}
                             >
                               <i className="fas fa-pen-to-square fa-fw"></i>
                             </Link>
