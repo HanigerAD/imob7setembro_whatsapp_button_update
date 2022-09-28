@@ -1,16 +1,11 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import { confirmAlert } from "react-confirm-alert";
-import { imageFallback } from "../../../helpers/image-fallback";
 import { apiService } from "../../../services/api.service";
-import { CDN_URL } from "../../../services/cdn.service";
 import { Pagination } from "../../layouts/admin/components/pagination";
 import { toast } from "react-toastify";
 import { usePagination } from "../../../hooks/usePagination";
-import {
-  converterParaMoeda,
-  converterParaTelefone,
-} from "../../../utils/parser.utils";
+import { converterParaMoeda, converterParaTelefone } from "../../../utils/parser.utils";
 
 export const NovosImoveisPage = () => {
   const [models, setModels] = useState([]);
@@ -20,7 +15,7 @@ export const NovosImoveisPage = () => {
   async function deletar(model: any) {
     confirmAlert({
       title: "Atenção",
-      message: `Você deseja realmente deletar o novo imovel ${model.title} ?`,
+      message: `Você deseja realmente deletar o novo imovel de ${model.fullname} ?`,
       buttons: [
         {
           label: "Sim",
@@ -38,7 +33,7 @@ export const NovosImoveisPage = () => {
         },
         {
           label: "Não",
-          onClick: () => {},
+          onClick: () => { },
         },
       ],
     });
@@ -88,11 +83,11 @@ export const NovosImoveisPage = () => {
       </div>
 
       <ol className="breadcrumb mb-4">
-        <li className="breadcrumb-item active">Formulários do Cliente</li>
+        <li className="breadcrumb-item active">Novos Imoveis</li>
       </ol>
 
       <div className="card mb-4">
-        <div className="card-header">Novos Imoveis</div>
+        <div className="card-header">Novos Imóveis</div>
 
         <div className="card-body">
           {carregando ? (
@@ -115,13 +110,7 @@ export const NovosImoveisPage = () => {
                           </p>
 
                           <p className="text-justify text-truncate para mb-0">
-                            <b>Data:</b>
-                            &nbsp;
-                            <span>{model.date}</span>
-                          </p>
-
-                          <p className="text-justify text-truncate para mb-0">
-                            <b>Nome:</b>
+                            <b>Nome Completo:</b>
                             &nbsp;
                             <span>{model.fullname}</span>
                           </p>
@@ -135,22 +124,17 @@ export const NovosImoveisPage = () => {
                           <p className="text-justify text-truncate para mb-0">
                             <b>Telefone:</b>
                             &nbsp;
-                            <span>{converterParaTelefone(model.phone)}</span>
+                            <span>{model.phone ? converterParaTelefone(model.phone) : ''}</span>
                           </p>
                         </div>
                       </div>
 
-                      <div className="col-md-3 mt-1">
+                      <div className="col-md-6 mt-1">
                         <div className="mt-1 mb-1 spec-1">
                           <p className="text-justify text-truncate para mb-0">
-                            <b>Logradouro:</b>
+                            <b>UF:</b>
                             &nbsp;
-                            <span>{model.address}</span>
-                          </p>
-                          <p className="text-justify text-truncate para mb-0">
-                            <b>Bairro:</b>
-                            &nbsp;
-                            <span>{model.neighborhood}</span>
+                            <span>{model.uf}</span>
                           </p>
                           <p className="text-justify text-truncate para mb-0">
                             <b>Cidade:</b>
@@ -158,9 +142,14 @@ export const NovosImoveisPage = () => {
                             <span>{model.city}</span>
                           </p>
                           <p className="text-justify text-truncate para mb-0">
-                            <b>UF:</b>
+                            <b>Bairro:</b>
                             &nbsp;
-                            <span>{model.uf}</span>
+                            <span>{model.neighborhood}</span>
+                          </p>
+                          <p className="text-justify text-truncate para mb-0">
+                            <b>Endereço:</b>
+                            &nbsp;
+                            <span>{model.address}</span>
                           </p>
                           <p className="text-justify text-truncate para mb-0">
                             <b>Quartos:</b>
@@ -170,20 +159,21 @@ export const NovosImoveisPage = () => {
                           <p className="text-justify text-truncate para mb-0">
                             <b>Vagas de Garagem:</b>
                             &nbsp;
-                            <span>{model.parking || 0}</span>
-                          </p>
-                          <p className="text-justify text-truncate para mb-0">
-                            <b>Area Privada:</b>
-                            &nbsp;
-                            <span>{model.privativeArea || 0} m2</span>
+                            <span>{model.parkingVacancy || 0}</span>
                           </p>
                           <p className="text-justify text-truncate para mb-0">
                             <b>Area Total:</b>
                             &nbsp;
                             <span>{model.totalArea || 0} m2</span>
                           </p>
+                          <p className="text-justify text-truncate para mb-0">
+                            <b>Zona:</b>
+                            &nbsp;
+                            <span>{model.zone}</span>
+                          </p>
                         </div>
                       </div>
+
                       <div className="align-items-center align-content-center col-md-3 border-left mt-1">
                         <div className="d-flex flex-row align-items-center">
                           <h4 className="mr-1">
@@ -191,30 +181,24 @@ export const NovosImoveisPage = () => {
                           </h4>
                         </div>
 
-                        <p className="text-justify text-truncate para mb-0">
-                          <b>Tipo:</b>
-                          &nbsp;
-                          <span>{model.type}</span>
-                        </p>
-
                         <div className="d-flex flex-column mt-4">
                           <Link
                             className="btn btn-warning btn-sm"
                             title="Editar"
-                            to={`/admin/imoveis/${model.code}`}
+                            to={`/admin/novos-imoveis/${model.code}`}
                           >
                             <i className="fas fa-pen-to-square fa-fw"></i>
                             <span>Editar</span>
                           </Link>
 
-                          <Link
+                          <button
                             className="btn btn-danger btn-sm mt-2"
                             title="Deletar"
-                            to={`/admin/imoveis/${model.code}`}
+                            onClick={() => deletar(model)}
                           >
-                            <i className="fas fa-pen-to-square fa-fw"></i>
+                            <i className="fas fa-trash fa-fw"></i>
                             <span>Deletar</span>
-                          </Link>
+                          </button>
                         </div>
                       </div>
                     </div>
