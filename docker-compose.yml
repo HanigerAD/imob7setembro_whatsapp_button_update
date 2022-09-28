@@ -19,6 +19,8 @@ services:
     container_name: imob7-admin
     build: ./admin
     command: npm run start
+    environment:
+      - WATCHPACK_POLLING=true
     ports:
      - "3002:3000"
     volumes:
