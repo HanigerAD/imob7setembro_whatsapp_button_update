@@ -1,7 +1,7 @@
 # imob7setembro
 
 Status Imob7
-(28/09/22 - 18:00)
+(28/09/22 - 23:00)
 
 - [] Painel Administrativo
 - - [FEITO] Adicionar a imagem \/ de Select nos campos.
@@ -15,6 +15,7 @@ Status Imob7
 - - - - - [FEITO] Adicionar obrigatoriedade dos campos
 - - - - - [] Adicionar campo "Motivo Exclusão do Imóvel" só será permitido a exclusão após colocar esse motivo.
 - - - - - [] CEP para a Longitude e Latitude
+- - - - - [] Alterar campo valor para INT
 - - - - - [FEITO] Remover obrigatoriedade dos campos Longitude e Latitude
 - - - - - [FEITO] Campo Link para vídeo do Youtube
 - - - - - [] Imagens
@@ -33,7 +34,7 @@ Status Imob7
 
 - [] site
 - - [FEITO] Centralizar o Texto "Encontre o imóvel..."
-- - [] Colocar os cards do corretores na página "Sobre nós".
+- - [FEITO] Colocar os cards do corretores na página "Sobre nós".
 - - [] Fazer o Carrossel para as logos de parceiros
 - - [] Adicionar a aba para o Filtro de Imóveis Financiáveis.
 - - [FEITO] Ajustar os links de compartilhamento do imóvel. Face e no Whats já com a mensagem incluíndo o ID e título do imóvel a ser compartilhado.

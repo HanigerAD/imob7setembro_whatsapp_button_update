@@ -2,44 +2,6 @@ version: "3.6"
 name: imob7setembro
 
 services:
-  api:
-    container_name: imob7-api
-    build: ./api
-    command: npm run start:dev
-    ports:
-     - "3000:3000"
-    volumes:
-      - ./api:/usr/app
-    links:
-      - database
-    depends_on:
-      - admin-database
-
-  admin:
-    container_name: imob7-admin
-    build: ./admin
-    command: npm run start
-    environment:
-      - WATCHPACK_POLLING=true
-    ports:
-     - "3002:3000"
-    volumes:
-      - ./admin:/usr/app
-    depends_on:
-      - api
-  
-  site:
-    container_name: imob7-site
-    build: ./site
-    command: npm run start
-    ports:
-      - "4200:4200"
-      - "49153:49153"
-    volumes:
-      - ./site:/usr/app
-    depends_on:
-      - api
-  
   database:
     container_name: imob7-database
     build: ./database
@@ -51,23 +13,89 @@ services:
       - "3306:3306"
     volumes:
       - imob7-data:/var/lib/mysql
+    deploy:
+      resources:
+          limits:
+            cpus: "0.50"
+            memory: 512M
 
-  admin-database:
-    container_name: imob7-admin-database
-    image: phpmyadmin/phpmyadmin
-    links:
-      - database
-    environment:
-      PMA_HOST: database
-      PMA_PORT: 3306
-      PMA_ARBITRARY: 1
+  # admin-database:
+  #   container_name: imob7-admin-database
+  #   image: phpmyadmin/phpmyadmin
+  #   links:
+  #     - database
+  #   environment:
+  #     PMA_HOST: database
+  #     PMA_PORT: 3306
+  #     PMA_ARBITRARY: 1
+  #   restart: always
+  #   ports:
+  #     - 3307:80
+  #   volumes:
+  #     - imob7-data:/var/lib/pgadmin
+  #   depends_on:
+  #     - database
+  #   deploy:
+  #     resources:
+  #         limits:
+  #           cpus: "0.50"
+  #           memory: 512M
+
+  api:
+    container_name: imob7-api
+    build: ./api
+    command: npm run start:dev
     restart: always
     ports:
-      - 3307:80
+     - "3000:3000"
     volumes:
-      - imob7-data:/var/lib/pgadmin
+      - ./api:/usr/app
+    links:
+      - database
     depends_on:
       - database
+    deploy:
+      resources:
+          limits:
+            cpus: "0.50"
+            memory: 512M
+
+  admin:
+    container_name: imob7-admin
+    build: ./admin
+    command: npm run start
+    environment:
+      - WATCHPACK_POLLING=true
+    restart: always
+    ports:
+     - "3002:3000"
+    volumes:
+      - ./admin:/usr/app
+    depends_on:
+      - api
+    deploy:
+      resources:
+          limits:
+            cpus: "0.50"
+            memory: 512M
+  
+  site:
+    container_name: imob7-site
+    build: ./site
+    command: npm run start
+    restart: always
+    ports:
+      - "4200:4200"
+      - "49153:49153"
+    volumes:
+      - ./site:/usr/app
+    depends_on:
+      - api
+    deploy:
+      resources:
+          limits:
+            cpus: "0.50"
+            memory: 512M
 
 volumes:
   imob7-data:

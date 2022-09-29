@@ -1,8 +1,8 @@
-import {Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Patch, Post, Res, UploadedFile, UseGuards, UseInterceptors} from '@nestjs/common';
-import {AgentService} from "../service/agent.service";
-import {AgentRequest} from "../integration/request/agent.request";
-import {JwtAuthGuard} from "../../authentication/config/jwt-auth.guard";
-import {AgentResponse} from "../integration/response/agent.response";
+import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Patch, Post, Res, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common';
+import { AgentService } from "../service/agent.service";
+import { AgentRequest } from "../integration/request/agent.request";
+import { JwtAuthGuard } from "../../authentication/config/jwt-auth.guard";
+import { AgentResponse } from "../integration/response/agent.response";
 import { FileInterceptor } from '@nestjs/platform-express';
 import { Response } from 'express';
 
@@ -10,7 +10,7 @@ import { Response } from 'express';
 export class AgentController {
     constructor(
         private service: AgentService
-    ) {}
+    ) { }
 
     @Post()
     @UseGuards(JwtAuthGuard)
@@ -19,7 +19,6 @@ export class AgentController {
     }
 
     @Get()
-    @UseGuards(JwtAuthGuard)
     public getAll(): Promise<AgentResponse[]> {
         return this.service.getAll();
     }
