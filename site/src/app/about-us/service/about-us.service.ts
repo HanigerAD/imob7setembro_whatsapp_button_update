@@ -6,12 +6,16 @@ import { AgentRestService } from './agent-rest.service';
 import { map } from 'rxjs/operators';
 import { AgentMapper } from '../mapper/agent.mapper';
 import { Observable } from 'rxjs';
+import { PartnerRestService } from 'src/app/shared/services/partner-rest.service';
+import { PartnerModel } from 'src/app/shared/model/partner.model';
+import { PartnerMapper } from 'src/app/shared/mapper/partner.mapper';
 
 @Injectable()
 export class AboutUsService {
 
   constructor(
-    private agentRest: AgentRestService
+    private agentRest: AgentRestService,
+    private partnerRest: PartnerRestService
   ) { }
 
   public getSiteInfoStorage(): ConfigurationModel {
@@ -21,6 +25,12 @@ export class AboutUsService {
   public getAgents(): Observable<AgentModel[]> {
     return this.agentRest.getAgents().pipe(
       map(response => AgentMapper.mapAgentsArrayResponseToModel(response))
+    );
+  }
+
+  public getPartners(): Observable<PartnerModel[]> {
+    return this.partnerRest.getPartners().pipe(
+      map(response => PartnerMapper.mapPartnersArrayResponseToModel(response))
     );
   }
 }

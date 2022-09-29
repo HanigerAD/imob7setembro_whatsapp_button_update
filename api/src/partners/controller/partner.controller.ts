@@ -22,7 +22,7 @@ import { Response } from "express";
 
 @Controller("partner")
 export class PartnerController {
-  constructor(private service: PartnerService) {}
+  constructor(private service: PartnerService) { }
 
   @Post()
   @UseGuards(JwtAuthGuard)
@@ -31,7 +31,6 @@ export class PartnerController {
   }
 
   @Get()
-  @UseGuards(JwtAuthGuard)
   public getAll(): Promise<PartnerResponse[]> {
     return this.service.getAll();
   }

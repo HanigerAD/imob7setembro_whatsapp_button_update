@@ -15,6 +15,7 @@ export const environment = {
     property: "http://localhost:3000/property",
     contact: "http://localhost:3000/contact",
     cdn: "http://cdn.imobiliaria7setembro.com.br/",
+    partner: "http://localhost:3000/partner",
   },
   cdn: "http://cdn.imobiliaria7setembro.com.br",
 };

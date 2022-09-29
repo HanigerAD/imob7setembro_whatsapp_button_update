@@ -10,7 +10,7 @@ import { Builder } from "builder-pattern";
 
 @Injectable()
 export class ImageService {
-  constructor(private cdnService: CdnService) {}
+  constructor(private cdnService: CdnService) { }
 
   get acceptedFormats(): string[] {
     return ["image/png", "image/jpg", "image/jpeg"];
@@ -42,9 +42,22 @@ export class ImageService {
 
   private async prepareImageForCDN(image: ImageRequest): Promise<CdnDto> {
     image.file.filename = this.renameImage(image.file.originalname);
+
+    const maxWidth = image.width;
+    const maxHeight = image.height;
+    const { width: originalWidth, height: originalHeight } = await sharp(image.file.buffer).metadata();
+
+    if (originalWidth <= maxWidth && originalHeight <= maxHeight) {
+      image.width = originalWidth;
+      image.height = originalHeight;
+    }
+
     const imageBuffer = await sharp(image.file.buffer)
-      .resize(image.width, image.height)
+      .resize(image.width, image.height, {
+        fit: 'inside',
+      })
       .toBuffer();
+
     return this.buildCdnDto(imageBuffer, image.file.filename);
   }
 

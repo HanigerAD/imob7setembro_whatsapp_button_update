@@ -1,7 +1,7 @@
 # imob7setembro
 
 Status Imob7
-(28/09/22 - 11:00)
+(29/09/22 - 15:30)
 
 - [] Painel Administrativo
 - - [FEITO] Adicionar a imagem \/ de Select nos campos.
@@ -35,7 +35,7 @@ Status Imob7
 - [] site
 - - [FEITO] Centralizar o Texto "Encontre o imóvel..."
 - - [FEITO] Colocar os cards do corretores na página "Sobre nós".
-- - [] Fazer o Carrossel para as logos de parceiros
+- - [FEITO] logos de parceiros
 - - [] Adicionar a aba para o Filtro de Imóveis Financiáveis.
 - - [FEITO] Ajustar os links de compartilhamento do imóvel. Face e no Whats já com a mensagem incluíndo o ID e título do imóvel a ser compartilhado.
 - - [FEITO] Buscar por imovel

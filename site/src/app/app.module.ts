@@ -40,6 +40,7 @@ import { ShareButtonsModule } from 'ngx-sharebuttons/buttons';
 import { ShareIconsModule } from 'ngx-sharebuttons/icons';
 import { SharedModule } from './shared/shared.module';
 import { AgentRestService } from './about-us/service/agent-rest.service';
+import { PartnerRestService } from './shared/services/partner-rest.service';
 
 @NgModule({
   declarations: [
@@ -80,6 +81,7 @@ import { AgentRestService } from './about-us/service/agent-rest.service';
     PropertyRestService,
     AboutUsService,
     AgentRestService,
+    PartnerRestService,
     NewsService,
     NewsRestService,
     SellYourPropertyService,

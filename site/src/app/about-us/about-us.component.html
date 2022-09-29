@@ -68,14 +68,14 @@
     </div>
 </section>
 
-<!-- TESTIMONIAL -->
+<!-- CORRETORES -->
 <section>
     <div class="container">
         <div class="row">
             <div class="col-md-8 col-lg-6 mx-auto">
                 <div class="title__head">
                     <h2 class="text-center text-capitalize">
-                        Entre em contato com nossos corretores
+                        Corretores
                     </h2>
                 </div>
             </div>
@@ -103,4 +103,28 @@
         </div>
     </div>
 </section>
-<!-- END TESTIMONIAL -->
+<!-- END CORRETORES -->
+
+<!-- PARCEIROS -->
+<section>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-8 col-lg-6 mx-auto">
+                <div class="title__head">
+                    <h2 class="text-center text-capitalize">
+                        Parceiros
+                    </h2>
+                </div>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+
+        <div class="d-flex justify-content-around align-content-around flex-wrap">
+            <div *ngFor="let partner of partners" style="width: 150px" class="d-flex align-items-center">
+                <img src="{{ partner.image }}" alt="{{ partner.name }}" class="img-fluid"
+                    onerror="this.src='../../assets/images/sem-imagem-300x300.png'" />
+            </div>
+        </div>
+    </div>
+</section>
+<!-- END PARCEIROS -->

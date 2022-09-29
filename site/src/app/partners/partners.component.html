@@ -19,9 +19,10 @@
         <div class="row">
             <div class="col-lg-12">
                 <div class="title__leading">
-                    <h2 class="text-capitalize"> Simule seu financiamento  </h2>
+                    <h2 class="text-capitalize"> Simule seu financiamento </h2>
                     <p>
-                        Disponibilizamos abaixo, os sites de alguns bancos parceiros para que você faça uma simulação de financiamento.
+                        Disponibilizamos abaixo, os sites de alguns bancos parceiros para que você faça uma simulação de
+                        financiamento.
                     </p>
                 </div>
             </div>
@@ -29,36 +30,16 @@
         <div class="row">
             <div class="col-lg-12">
                 <div class="title__leading">
-                    <h2 class="text-capitalize"> Bancos parceiros </h2>
+                    <h2 class="text-capitalize"> Parceiros </h2>
 
-                    <div class="row">
-                        <div class="col-md-2 zoom">
-                            <a (click)="redirectToPartner('https://www.bb.com.br/pbb/pagina-inicial/voce/produtos-e-servicos/financiamentos/bb-credito-imobiliario#/')">
-                                <img class="img-responsive" src="../../assets/images/bb-partner.png" height="100" width="100">
-                            </a>
-                        </div>
-                        <div class="col-md-2 zoom">
-                            <a (click)="redirectToPartner('https://banco.bradesco/html/classic/produtos-servicos/emprestimo-e-financiamento/encontre-seu-credito/simuladores-imoveis.shtm')">
-                                <img src="../../assets/images/bradesco-partner.png" height="100" width="100">
-                            </a>
-                        </div>
-                        <div class="col-md-2 zoom">
-                            <a (click)="redirectToPartner('http://www8.caixa.gov.br/siopiinternet-web/simulaOperacaoInternet.do?method=inicializarCasoUso')">
-                                <img src="../../assets/images/caixa-partner.png" height="100" width="100">
-                            </a>
-                        </div>
-                        <div class="col-md-2 zoom">
-                            <a (click)="redirectToPartner('https://www.itau.com.br/emprestimos-financiamentos/credito-imobiliario/simulador/')">
-                                <img src="../../assets/images/itau-partner.png" height="100" width="100">
-                            </a>
-                        </div>
-                        <div class="col-md-2 zoom">
-                            <a (click)="redirectToPartner('https://www.santander.com.br/atendimento-santander/')">
-                                <img src="../../assets/images/santander-partner.png" height="100" width="100">
-                            </a>
+                    <!-- PARCEIROS -->
+                    <div class="d-flex justify-content-around align-content-around flex-wrap">
+                        <div *ngFor="let partner of partners" style="width: 150px" class="d-flex align-items-center">
+                            <img src="{{ partner.image }}" alt="{{ partner.name }}" class="img-fluid"
+                                onerror="this.src='../../assets/images/sem-imagem-300x300.png'" />
                         </div>
                     </div>
-
+                    <!-- END PARCEIROS -->
                 </div>
             </div>
         </div>

@@ -15,6 +15,7 @@ export const environment = {
     property: "http://xbcopu.hospedagemelastica.com.br/property",
     contact: "http://xbcopu.hospedagemelastica.com.br/contact",
     cdn: "http://cdn.imobiliaria7setembro.com.br/",
+    partner: "http://xbcopu.hospedagemelastica.com.br/partner",
   },
   cdn: "http://cdn.imobiliaria7setembro.com.br",
 };
