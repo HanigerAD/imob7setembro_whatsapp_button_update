@@ -28,12 +28,20 @@
         <div class="row">
             <div class="col-md-9 col-lg-8">
                 <div class="single__detail-area-title">
-                    <a data-href="{{urlToShareFacebook}}">
+                    <!-- <a data-href="{{urlToShareFacebook}}" target="_blank">
                         <i class="fa fa-facebook-square icon-to-share"></i>
                     </a>
-                    <a [href]="urlToShareWhatsApp">
+                    <a [href]="urlToShareWhatsApp" target="_blank">
                         <i class="fa fa-whatsapp icon-to-share icon-to-share-wa text-success"></i>
-                    </a>
+                    </a> -->
+                    <share-buttons theme="circles-dark"
+                        [include]="['copy', 'whatsapp', 'facebook', 'email', 'messenger', 'telegram']"
+                        [showIcon]="true"
+                        [showText]="false"
+                        [url]="infoToShare.url"
+                        [description]="infoToShare.description"
+                        class="pt-5">
+                    </share-buttons>
 
                     <h3 class="text-capitalize"> Cód. {{ property?.internalCode }} - {{ property?.title }}</h3>
                     <p> {{ property?.neighborhood?.description }} - {{ property?.city?.description }}, {{ property?.federativeUnit?.description }} </p>

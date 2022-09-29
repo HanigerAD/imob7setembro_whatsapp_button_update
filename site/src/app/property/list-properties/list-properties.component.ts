@@ -79,17 +79,17 @@ export class ListPropertiesComponent implements OnInit, OnChanges {
 
       case (0 || TransactionEnum.SALE): {
         this.minPrice = 10000;
-        this.maxPrice = 2000000;
+        this.maxPrice = 10000000;
         this.minPriceConfig = 10000;
-        this.maxPriceConfig = 2000000;
+        this.maxPriceConfig = 10000000;
         break;
       }
 
       case (TransactionEnum.RENT || TransactionEnum.SEASON): {
-        this.minPrice = 100;
-        this.maxPrice = 20000;
-        this.minPriceConfig = 100;
-        this.maxPriceConfig = 20000;
+        this.minPrice = 300;
+        this.maxPrice = 50000;
+        this.minPriceConfig = 300;
+        this.maxPriceConfig = 50000;
         break;
       }
     }

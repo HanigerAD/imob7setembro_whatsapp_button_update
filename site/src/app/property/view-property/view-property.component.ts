@@ -1,22 +1,22 @@
-import {AfterViewInit, Component, OnChanges, OnDestroy, OnInit} from '@angular/core';
-import {Subscription} from 'rxjs';
-import {PropertyService} from '../services/property.service';
-import {ActivatedRoute, Router} from '@angular/router';
-import {PropertyModel} from '../models/property.model';
-import {PropertyDetailsModel} from '../models/property-details.model';
+import { AfterViewInit, Component, OnChanges, OnDestroy, OnInit } from '@angular/core';
+import { Subscription } from 'rxjs';
+import { PropertyService } from '../services/property.service';
+import { ActivatedRoute, Router } from '@angular/router';
+import { PropertyModel } from '../models/property.model';
+import { PropertyDetailsModel } from '../models/property-details.model';
 import * as L from 'leaflet';
-import {FormBuilder, FormGroup} from '@angular/forms';
-import {SearchModel} from '../../navbar/search/model/search.model';
-import {FinalityModel} from '../../navbar/search/model/finality.model';
-import {TypeModel} from '../../navbar/search/model/type.model';
-import {CityModel} from '../../navbar/search/model/city.model';
-import {NeighborhoodModel} from '../../navbar/search/model/neighborhood.model';
-import {SearchService} from '../../navbar/search/services/search.service';
-import {Options} from '@angular-slider/ngx-slider';
-import {StorageEnum} from '../../shared/storage.enum';
-import {ZoneModel} from '../../navbar/search/model/zone.model';
-import {PropertyZoneEnum} from '../../navbar/search/enum/property-zone.enum';
-import {TransactionEnum} from '../../shared/enum/transaction.enum';
+import { FormBuilder, FormGroup } from '@angular/forms';
+import { SearchModel } from '../../navbar/search/model/search.model';
+import { FinalityModel } from '../../navbar/search/model/finality.model';
+import { TypeModel } from '../../navbar/search/model/type.model';
+import { CityModel } from '../../navbar/search/model/city.model';
+import { NeighborhoodModel } from '../../navbar/search/model/neighborhood.model';
+import { SearchService } from '../../navbar/search/services/search.service';
+import { Options } from '@angular-slider/ngx-slider';
+import { StorageEnum } from '../../shared/storage.enum';
+import { ZoneModel } from '../../navbar/search/model/zone.model';
+import { PropertyZoneEnum } from '../../navbar/search/enum/property-zone.enum';
+import { TransactionEnum } from '../../shared/enum/transaction.enum';
 
 @Component({
   selector: 'app-view-property',
@@ -36,9 +36,9 @@ export class ViewPropertyComponent implements OnInit, OnDestroy, OnChanges, Afte
   public cities: CityModel[] = [];
   public neighborhoods: NeighborhoodModel[] = [];
   public minPrice: number = 10000;
-  public maxPrice: number = 2000000;
+  public maxPrice: number = 10000000;
   public minPriceConfig: number = 10000;
-  public maxPriceConfig: number = 2000000;
+  public maxPriceConfig: number = 10000000;
   public optionsSlider: Options;
   public similarProperties: PropertyModel[] = [];
   public ruralZoneSelected = false;
@@ -46,11 +46,11 @@ export class ViewPropertyComponent implements OnInit, OnDestroy, OnChanges, Afte
   private subscriptions: Subscription = new Subscription();
 
   constructor(
-      private service: PropertyService,
-      private activatedRoute: ActivatedRoute,
-      private formBuilder: FormBuilder,
-      private searchService: SearchService,
-      private router: Router
+    private service: PropertyService,
+    private activatedRoute: ActivatedRoute,
+    private formBuilder: FormBuilder,
+    private searchService: SearchService,
+    private router: Router
   ) { }
 
   public ngOnInit(): void {
@@ -83,34 +83,43 @@ export class ViewPropertyComponent implements OnInit, OnDestroy, OnChanges, Afte
   }
 
   get urlToShareWhatsApp(): string {
-    return `whatsapp://send?text=Veja só easse imóvel que encontrei na Imobiliária 7 de Setembro: - ${window.location.href}`;
+    const baseUrl = "https://wa.me";
+    const text = `Veja só easse imóvel que encontrei na Imobiliária 7 de Setembro: - ${window.location.href}`;
+    return `${baseUrl}/?text=${text}`;
+  }
+
+  get infoToShare() {
+    return {
+      url: window.location.href,
+      description: `Veja só easse imóvel que encontrei na Imobiliária 7 de Setembro: - ${window.location.href}`
+    }
   }
 
   private getProperty(code: number): void {
     this.subscriptions.add(
-        this.service.getProperty(code).subscribe(
-            property => {
-              this.property = property;
-              this.getPropertyImages(code);
-              this.getSimilarProperties();
-              this.initMap();
-            }
-        )
+      this.service.getProperty(code).subscribe(
+        property => {
+          this.property = property;
+          this.getPropertyImages(code);
+          this.getSimilarProperties();
+          this.initMap();
+        }
+      )
     );
   }
 
   private getPropertyCode(): void {
     this.subscriptions.add(
-        this.activatedRoute.params.subscribe(
-            params => this.getProperty(params.code)
-        )
+      this.activatedRoute.params.subscribe(
+        params => this.getProperty(params.code)
+      )
     );
   }
 
   private getPropertyImages(code: number): void {
     this.subscriptions.add(
       this.service.getPropertyImages(code).subscribe(
-          urls => this.imagesUrls = urls
+        urls => this.imagesUrls = urls
       )
     );
   }
@@ -121,7 +130,7 @@ export class ViewPropertyComponent implements OnInit, OnDestroy, OnChanges, Afte
 
   private initMap(): void {
     this.map = L.map('map', {
-      center: [ Number(this.property.latitude), Number(this.property.longitude) ],
+      center: [Number(this.property.latitude), Number(this.property.longitude)],
       zoom: 14
     });
 
@@ -179,33 +188,33 @@ export class ViewPropertyComponent implements OnInit, OnDestroy, OnChanges, Afte
 
   private getFinalities(): void {
     this.subscriptions.add(
-        this.searchService.getFinalities().subscribe(
-            finalities => this.finalities = finalities
-        )
+      this.searchService.getFinalities().subscribe(
+        finalities => this.finalities = finalities
+      )
     );
   }
 
   private getZones(): void {
     this.subscriptions.add(
-        this.searchService.getZones().subscribe(
-            zones => this.zones = zones
-        )
+      this.searchService.getZones().subscribe(
+        zones => this.zones = zones
+      )
     );
   }
 
   private getTypes(): void {
     this.subscriptions.add(
-        this.searchService.getTypes().subscribe(
-            types => this.types = types
-        )
+      this.searchService.getTypes().subscribe(
+        types => this.types = types
+      )
     );
   }
 
   private getCities(): void {
     this.subscriptions.add(
-        this.searchService.getCities().subscribe(
-            cities => this.manageGettingCities(cities)
-        )
+      this.searchService.getCities().subscribe(
+        cities => this.manageGettingCities(cities)
+      )
     );
   }
 
@@ -216,9 +225,9 @@ export class ViewPropertyComponent implements OnInit, OnDestroy, OnChanges, Afte
 
   public getNeighborhoods(): void {
     this.subscriptions.add(
-        this.searchService.getNeighborhoods(this.searchForm.get('city').value).subscribe(
-            neighborhoods => this.neighborhoods = neighborhoods
-        )
+      this.searchService.getNeighborhoods(this.searchForm.get('city').value).subscribe(
+        neighborhoods => this.neighborhoods = neighborhoods
+      )
     );
   }
 
@@ -229,8 +238,8 @@ export class ViewPropertyComponent implements OnInit, OnDestroy, OnChanges, Afte
 
   private configureSlider(): void {
     this.optionsSlider = {
-      floor: 10000,
-      ceil: 2000000,
+      floor: this.minPriceConfig,
+      ceil: this.maxPriceConfig,
       animate: true,
       translate: (value: number): string => {
         return 'R$' + (this.roundValue(value)).toLocaleString();
@@ -242,7 +251,7 @@ export class ViewPropertyComponent implements OnInit, OnDestroy, OnChanges, Afte
   }
 
   private roundValue(value: number): number {
-    return Math.trunc(Math.round(value  * 100) / 1000000 ) * 10000;
+    return Math.trunc(Math.round(value * 100) / 1000000) * 10000;
   }
 
   public search(): void {
@@ -255,9 +264,9 @@ export class ViewPropertyComponent implements OnInit, OnDestroy, OnChanges, Afte
 
   private getSimilarProperties(): void {
     this.subscriptions.add(
-        this.service.getProperties(this.filters).subscribe(
-            properties => this.similarProperties = properties.filter(property => property.code != this.property.code)
-        )
+      this.service.getProperties(this.filters).subscribe(
+        properties => this.similarProperties = properties.filter(property => property.code != this.property.code)
+      )
     );
   }
 
@@ -276,24 +285,24 @@ export class ViewPropertyComponent implements OnInit, OnDestroy, OnChanges, Afte
 
   public verifyMinAndMaxFilterValues(): void {
     const transactionCode = this.service.filteredTransaction ?
-        this.service.filteredTransaction :
-        Number(this.searchForm.get('finality').value);
+      this.service.filteredTransaction :
+      Number(this.searchForm.get('finality').value);
 
     switch (transactionCode) {
 
       case (0 || TransactionEnum.SALE): {
         this.minPrice = 10000;
-        this.maxPrice = 2000000;
+        this.maxPrice = 10000000;
         this.minPriceConfig = 10000;
-        this.maxPriceConfig = 2000000;
+        this.maxPriceConfig = 10000000;
         break;
       }
 
       case (TransactionEnum.RENT || TransactionEnum.SEASON): {
-        this.minPrice = 100;
-        this.maxPrice = 20000;
-        this.minPriceConfig = 100;
-        this.maxPriceConfig = 20000;
+        this.minPrice = 300;
+        this.maxPrice = 50000;
+        this.minPriceConfig = 300;
+        this.maxPriceConfig = 50000;
         break;
       }
     }

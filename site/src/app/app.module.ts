@@ -66,6 +66,8 @@ import {SharedModule} from './shared/shared.module';
         ReactiveFormsModule,
         NgbModule,
         NgxMaskModule.forRoot(),
+        ShareButtonsModule,
+        ShareIconsModule,
         SharedModule
     ],
   providers: [
