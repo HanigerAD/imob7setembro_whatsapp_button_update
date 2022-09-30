@@ -102,7 +102,7 @@ export const GaleriaDeImagens = ({
               className="card-img-top"
               src={
                 typeof photo == "string"
-                  ? `${CDN_URL}/${photo}`
+                  ? `${CDN_URL}/original-${photo}`
                   : criarImagemTemp(photo)
               }
               alt={title}

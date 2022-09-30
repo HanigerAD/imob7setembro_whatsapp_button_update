@@ -7,6 +7,7 @@ import { Module } from '@nestjs/common';
 import { LocalityModule } from "../locality/locality.module";
 import { CommomModule } from '../common/commom.module';
 import { HttpModule } from "@nestjs/axios";
+import { ConfigurationModule } from 'src/configuration/configuration.module';
 
 @Module({
     controllers: [PropertyController],
@@ -17,6 +18,7 @@ import { HttpModule } from "@nestjs/axios";
         PropertyBasicDataRespository
     ],
     imports: [
+        ConfigurationModule,
         LocalityModule,
         CommomModule,
         HttpModule

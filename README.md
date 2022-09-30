@@ -1,7 +1,7 @@
 # imob7setembro
 
 Status Imob7
-(29/09/22 - 15:30)
+(29/09/22 - 16:00)
 
 - [] Painel Administrativo
 - - [FEITO] Adicionar a imagem \/ de Select nos campos.
@@ -18,9 +18,9 @@ Status Imob7
 - - - - - [] Alterar campo valor para INT
 - - - - - [FEITO] Remover obrigatoriedade dos campos Longitude e Latitude
 - - - - - [FEITO] Campo Link para vídeo do Youtube
-- - - - - [] Imagens
+- - - - - [FEITO] Imagens
 - - - - - - [FEITO] Cadastrar várias imagens ao mesmo tempo.
-- - - - - - [] definir logo marca d'água nas fotos por padrão centralizado na "Direita" ou na "Esquerda"
+- - - - - - [FEITO] definir logo marca d'água nas fotos por padrão centralizado na "Direita" ou na "Esquerda"
 - - - - [FEITO] Corretores - (cadastro de corretores com foto)
 - - - - [FEITO] Contatos de Clientes
 - - - - - [FEITO] Novos Imoveis
@@ -36,7 +36,7 @@ Status Imob7
 - - [FEITO] Centralizar o Texto "Encontre o imóvel..."
 - - [FEITO] Colocar os cards do corretores na página "Sobre nós".
 - - [FEITO] logos de parceiros
-- - [] Adicionar a aba para o Filtro de Imóveis Financiáveis.
+- - [FEITO] Adicionar a aba para o Filtro de Imóveis Financiáveis.
 - - [FEITO] Ajustar os links de compartilhamento do imóvel. Face e no Whats já com a mensagem incluíndo o ID e título do imóvel a ser compartilhado.
 - - [FEITO] Buscar por imovel
 - - - [FEITO] valor de Compra (10.000 até 10.000.000)

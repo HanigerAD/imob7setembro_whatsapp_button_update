@@ -1,5 +1,5 @@
 import { ImageResponse } from './../integration/response/photo.response';
-import {HttpService, Injectable} from '@nestjs/common';
+import { HttpService, Injectable } from '@nestjs/common';
 import { Builder } from 'builder-pattern';
 import { Response } from 'express';
 
@@ -37,17 +37,18 @@ import { ProfileMapper } from './../../profile/mapper/profile.mapper';
 import { TransactionMapper } from './../../transaction/mapper/transaction.mapper';
 import { TypeMapper } from './../../type/mapper/type.mapper';
 import { ImageMapper } from './../mapper/image.mapper';
-import {CdnService} from "../../../common/service/cdn.service";
-import {ImageSortRequest} from "../integration/request/image-sort.request";
+import { CdnService } from "../../../common/service/cdn.service";
+import { ImageSortRequest } from "../integration/request/image-sort.request";
 import { PropertyDocumentResponse } from "../integration/response/property-document.response";
 import { PropertyDocumentMapper } from "../mapper/property-document.mapper";
-import {LogEntity} from "../entity/log.entity";
-import {LogRequest} from "../integration/request/log.request";
-import {LogMapper} from "../mapper/log.mapper";
-import {LogResponse} from "../integration/response/log.response";
-import {TableFieldEnum} from "../table-field.enum";
-import {SituationResponse} from "../../../user/integration/response/situation.response";
-import {SituationMapper} from "../../../user/mapper/situation.mapper";
+import { LogEntity } from "../entity/log.entity";
+import { LogRequest } from "../integration/request/log.request";
+import { LogMapper } from "../mapper/log.mapper";
+import { LogResponse } from "../integration/response/log.response";
+import { TableFieldEnum } from "../table-field.enum";
+import { SituationResponse } from "../../../user/integration/response/situation.response";
+import { SituationMapper } from "../../../user/mapper/situation.mapper";
+import { ConfigurationService } from 'src/configuration/service/configuration.service';
 
 
 
@@ -59,7 +60,8 @@ export class PropertyService {
         private cityService: CityService,
         private federativeUnitService: FederativeUnitService,
         private imageService: ImageService,
-        private documentService: DocumentService
+        private documentService: DocumentService,
+        private configurationService: ConfigurationService
     ) {
     }
 
@@ -76,7 +78,7 @@ export class PropertyService {
 
         if (filter.internalCode) {
             return this.repository.getById(filter.internalCode)
-                .then(property => [ PropertyMapper.entityToResponse(property) ]);
+                .then(property => [PropertyMapper.entityToResponse(property)]);
         }
 
         return this.repository.getAll(UtilsService.clearObject(filters))
@@ -179,18 +181,24 @@ export class PropertyService {
             .then(documents => documents.map(document => PropertyDocumentMapper.mapPropertyDocumentEntityToResponse(document)));
     }
 
-    public insertPropertyImages(files: Express.Multer.File[], propertyCode: number, res: Response): Promise<void> {
-        return this.imageService.saveImages(this.buildPropertyImage(files), res)
+    public async insertPropertyImages(files: Express.Multer.File[], propertyCode: number, res: Response): Promise<void> {
+        const { logo: logoImageName } = await this.configurationService.get();
+        const logoUrl = `${process.env.CDN_URL}/${logoImageName}`;
+
+        return this.imageService.saveImages(this.buildPropertyImage(files), res, true, logoUrl)
             .then(() => Promise.all(files.map((file, i) => this.repository.insertPropertyImages(file.filename, i, propertyCode))))
             .then(() => {
             })
 
     }
 
-    public insertPropertyImage(file: Express.Multer.File, propertyCode: number, res: Response, order: number): Promise<void> {
-        return this.imageService.saveImage(this.buildPropertyImageRequest(file), res)
+    public async insertPropertyImage(file: Express.Multer.File, propertyCode: number, res: Response, order: number): Promise<void> {
+        const { logo: logoImageName } = await this.configurationService.get();
+        const logoUrl = `${process.env.CDN_URL}/${logoImageName}`;
+
+        return this.imageService.saveImage(this.buildPropertyImageRequest(file), res, true, logoUrl)
             .then(() => this.repository.insertPropertyImage(file[0].filename, order, propertyCode))
-            .then(() => {});
+            .then(() => { });
     }
 
     public updateImagesSort(imagesSort: ImageSortRequest[]): void {
@@ -198,9 +206,9 @@ export class PropertyService {
     }
 
     public async insertPropertyDocument(file: Express.Multer.File, propertyCode: number): Promise<void> {
-      const newFile = this.buildPropertyDocument(file);
-      await this.documentService.saveDocument(newFile);
-      await this.repository.insertPropertyDocument(newFile.filename, newFile.originalname, propertyCode);
+        const newFile = this.buildPropertyDocument(file);
+        await this.documentService.saveDocument(newFile);
+        await this.repository.insertPropertyDocument(newFile.filename, newFile.originalname, propertyCode);
     }
 
     public insertDocuments(files: Express.Multer.File[], propertyCode: number, res: Response): void {
@@ -227,7 +235,7 @@ export class PropertyService {
             .file(file[0])
             .width(ImageSizeEnum.PROPERTY_WIDTH)
             .height(ImageSizeEnum.PROPERTY_HEIGHT)
-        .build();
+            .build();
     }
 
     public getPropertyImages(propertyCode: number): Promise<ImageResponse[]> {

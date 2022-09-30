@@ -76,7 +76,7 @@ export const ImoveisPage = () => {
                       <div className="col-md-3 mt-1">
                         <img
                           className="img-fluid img-responsive rounded product-image"
-                          src={`${CDN_URL}/${model.photo}`}
+                          src={`${CDN_URL}/original-${model.photo}`}
                           alt={model.title}
                           onError={imageFallback}
                         />
