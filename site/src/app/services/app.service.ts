@@ -27,7 +27,7 @@ export class AppService {
 
   get siteBanner(): Observable<string> {
     return this.restService.siteBanner.pipe(
-        map(banner => banner[0].image)
+        map(banner => `${environment.cdn}/${banner[0].image}`)
     );
   }
 
