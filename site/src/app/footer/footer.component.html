@@ -8,9 +8,7 @@
                         <figure>
                             <img [src]="siteLogo" alt="" class="logo-footer">
                         </figure>
-                        <p>
-                            {{ siteInfo?.institutionalTextResume }}
-                        </p>
+                        <div [innerHTML]="siteInfo?.institutionalTextResume"></div>
 
                         <ul class="list-unstyled mb-0 mt-3">
                             <li> <b> <i class="fa fa-map-marker"></i></b><span> {{ siteInfo?.address }} </span> </li>

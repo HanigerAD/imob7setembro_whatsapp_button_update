@@ -17,6 +17,7 @@ export class AppComponent implements OnInit {
   public siteInfo: ConfigurationModel;
   public siteLogo = '';
   public siteBanner = '';
+  public siteBanners = [];
 
   constructor(
       private service: AppService
@@ -26,6 +27,7 @@ export class AppComponent implements OnInit {
   public ngOnInit(): void {
     this.getSiteConfiguration();
     this.getSiteBanner();
+    this.getSiteBanners();
   }
 
   private getSiteConfiguration(): void {
@@ -42,6 +44,17 @@ export class AppComponent implements OnInit {
             banner => {
               this.siteBanner = banner;
               localStorage.setItem(StorageEnum.BANNER, banner);
+            }
+        )
+    );
+  }
+
+  private getSiteBanners(): void {
+    this.subscriptions.add(
+        this.service.siteBanners.subscribe(
+            banners => {
+              this.siteBanners = banners;
+              localStorage.setItem(StorageEnum.BANNERS, JSON.stringify(banners));
             }
         )
     );

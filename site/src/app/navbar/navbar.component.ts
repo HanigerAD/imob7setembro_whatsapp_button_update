@@ -1,37 +1,49 @@
-import {Component, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core';
-import {LoginModel} from '../shared/model/login.model';
-import {NavbarService} from './navbar.service';
-import {NavigationEnd, NavigationStart, Router} from '@angular/router';
-import {SearchService} from './search/services/search.service';
-import {StorageEnum} from '../shared/storage.enum';
+import { Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
+import { LoginModel } from '../shared/model/login.model';
+import { NavbarService } from './navbar.service';
+import { NavigationEnd, NavigationStart, Router } from '@angular/router';
+import { SearchService } from './search/services/search.service';
+import { StorageEnum } from '../shared/storage.enum';
 
 @Component({
   selector: 'app-navbar',
   templateUrl: './navbar.component.html',
   styleUrls: ['./navbar.component.css']
 })
-export class NavbarComponent implements OnInit {
+export class NavbarComponent implements OnInit, OnDestroy {
 
   @Input()
   public siteInfo: LoginModel;
 
   @Input()
   public siteLogo: string;
+  public currentBanner = '';
+  public bannerInterval: any;
 
   public homepageOn = false;
   public navbarIsCollapsed = false;
 
   constructor(
-      private service: NavbarService,
-      private router: Router,
-      private searchService: SearchService
+    private service: NavbarService,
+    private router: Router,
+    private searchService: SearchService
   ) { }
 
   public ngOnInit(): void {
     this.verifyIsHomepage();
     this.router.events.subscribe(
-        () => this.verifyIsHomepage()
+      () => this.verifyIsHomepage()
     );
+    this.currentBanner = this.getCurrentBanner();
+    this.bannerInterval = setInterval(() => {
+      this.currentBanner = this.getCurrentBanner();
+    }, 5000);
+  }
+
+  public ngOnDestroy(): void {
+    if (this.bannerInterval) {
+      clearInterval(this.bannerInterval);
+    }
   }
 
   private verifyIsHomepage(): void {
@@ -105,9 +117,25 @@ export class NavbarComponent implements OnInit {
     this.navbarIsCollapsed = !this.navbarIsCollapsed;
   }
 
-  get banner(): string {
-    const banner = JSON.stringify(localStorage.getItem(StorageEnum.BANNER));
-    return `background-image:url(${banner});`;
+  public getCurrentBanner() {
+    const banners: string[] = JSON.parse(localStorage.getItem(StorageEnum.BANNERS)) || [];
+
+    if (banners.length) {
+      let currentBanner = this.currentBanner;
+      let indexOfCurrentBanner = banners.findIndex(banner => banner === currentBanner);
+
+      if (indexOfCurrentBanner >= 0 && indexOfCurrentBanner + 1 < banners.length) {
+        return banners[indexOfCurrentBanner + 1];
+      } else {
+        return banners[0];
+      }
+    } else {
+      return '';
+    }
+  }
+
+  get banner() {
+    return `background-image:url(${this.currentBanner});`;
   }
 
 }

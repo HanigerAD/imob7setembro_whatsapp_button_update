@@ -1,4 +1,3 @@
-
 <!--<meta property="og:title" [content]="property.title" />-->
 <!--<meta property="og:type" content="article" />-->
 <!--<meta property="og:image" content="http://cdn-imobiliaria7setembro-com-br.umbler.net/e3ddc533-9683-4ab7-b907-0ea521933d3a.jpg" />-->
@@ -14,7 +13,8 @@
                     <ol class="breadcrumb mb-0 bg-light">
                         <li class="breadcrumb-item"><a href="index.html"><i class="fa fa-home"></i> </a></li>
                         <li class="breadcrumb-item"> <a (click)="redirectToProperties()">Imóveis</a></li>
-                        <li class="breadcrumb-item active"> <span class="text-capitalize"> {{ property?.title }} </span></li>
+                        <li class="breadcrumb-item active"> <span class="text-capitalize"> {{ property?.title }} </span>
+                        </li>
 
                     </ol>
                 </div>
@@ -26,42 +26,27 @@
 <div class="single__detail-area fadein-page-slow">
     <div class="container">
         <div class="row">
-            <div class="col-md-9 col-lg-8">
-                <div class="single__detail-area-title">
-                    <!-- <a data-href="{{urlToShareFacebook}}" target="_blank">
-                        <i class="fa fa-facebook-square icon-to-share"></i>
-                    </a>
-                    <a [href]="urlToShareWhatsApp" target="_blank">
-                        <i class="fa fa-whatsapp icon-to-share icon-to-share-wa text-success"></i>
-                    </a> -->
-                    <share-buttons theme="circles-dark"
-                        [include]="['copy', 'whatsapp', 'facebook', 'email', 'messenger', 'telegram']"
-                        [showIcon]="true"
-                        [showText]="false"
-                        [url]="infoToShare.url"
-                        [description]="infoToShare.description"
-                        class="pt-5">
-                    </share-buttons>
-
-                    <h3 class="text-capitalize"> Cód. {{ property?.internalCode }} - {{ property?.title }}</h3>
-                    <p> {{ property?.neighborhood?.description }} - {{ property?.city?.description }}, {{ property?.federativeUnit?.description }} </p>
-                </div>
-            </div>
-            <div class="col-md-3 col-lg-4">
+            <div class="col-md-12">
                 <div class="single__detail-area-price">
                     <h4 class="text-capitalize text-gray"> {{ property?.price | currency: 'R$ ' }} </h4>
-                    <h6 class="text-capitalize text-white" *ngIf="property?.financeable"> <span class="financeable-label"> Financiável </span> </h6>
-<!--                    <ul class="list-inline">-->
-<!--                        <li class="list-inline-item">-->
-<!--                            <a href="#" class="badge badge-primary p-2 rounded"><i class="fa fa-exchange"></i></a>-->
-<!--                        </li>-->
-<!--                        <li class="list-inline-item">-->
-<!--                            <a href="#" class="badge badge-primary p-2 rounded"><i class="fa fa-heart"></i></a>-->
-<!--                        </li>-->
-<!--                        <li class="list-inline-item">-->
-<!--                            <a href="#" class="badge badge-primary p-2 rounded"><i class="fa fa-print"></i></a>-->
-<!--                        </li>-->
-<!--                    </ul>-->
+                    <h6 class="text-capitalize text-white" *ngIf="property?.financeable"> <span
+                            class="financeable-label"> Financiável </span> </h6>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="single__detail-area-title d-flex align-items-center">
+                    <div class="mr-auto">
+                        <h3 class="text-capitalize"> Cód. {{ property?.internalCode }} - {{ property?.title }}</h3>
+                        <p> {{ property?.neighborhood?.description }} - {{ property?.city?.description }}, {{
+                            property?.federativeUnit?.description }} </p>
+                    </div>
+                    <div class="">
+                        <share-buttons theme="circles-dark"
+                            [include]="['copy', 'whatsapp', 'facebook', 'email', 'messenger', 'telegram']"
+                            [showIcon]="true" [showText]="false" [url]="infoToShare.url"
+                            [description]="infoToShare.description">
+                        </share-buttons>
+                    </div>
                 </div>
             </div>
         </div>
@@ -77,22 +62,17 @@
             <section class="carousel" aria-label="Imóveis">
                 <ol class="carousel__viewport">
 
-                    <li
-                        *ngFor="let image of imagesUrls; let i = index"
-                        id="carousel__slide{{i}}"
-                        tabindex="0"
+                    <li *ngFor="let image of imagesUrls; let i = index" id="carousel__slide{{i}}" tabindex="0"
                         class="carousel__slide">
                         <div class="image-watermark">
                             <img [src]="getPropertyImage(image)" class="property-image">
                             <div class="watermark-position">
-                                <img class="watermark-large" src="./assets/images/logo-sete-colorido-transparent.png"/>
+                                <img class="watermark-large" src="./assets/images/logo-sete-colorido-transparent.png" />
                             </div>
                         </div>
                         <div class="carousel__snapper">
-                            <a href="#carousel__slide{{i-1}}"
-                               class="carousel__prev">Go to last slide</a>
-                            <a href="#carousel__slide{{i+1}}"
-                               class="carousel__next">Go to next slide</a>
+                            <a href="#carousel__slide{{i-1}}" class="carousel__prev">Go to last slide</a>
+                            <a href="#carousel__slide{{i+1}}" class="carousel__next">Go to next slide</a>
                         </div>
                     </li>
 
@@ -116,10 +96,10 @@
                     <div class="col-lg-12">
                         <div class="single__detail-desc">
                             <h5 class="text-capitalize detail-heading mt-0">Descrição</h5>
-<!--                            <div class="show__more show-more">-->
-                                <div [innerHTML]="property?.description"></div>
-<!--                                <a href="javascript:void(0)" class="show__more-button ">read more</a>-->
-<!--                            </div>-->
+                            <!--                            <div class="show__more show-more">-->
+                            <div [innerHTML]="property?.description"></div>
+                            <!--                                <a href="javascript:void(0)" class="show__more-button ">read more</a>-->
+                            <!--                            </div>-->
                         </div>
                         <div class="clearfix"></div>
 
@@ -159,9 +139,9 @@
                         <div class="single__detail-features">
                             <h5 class="text-capitalize detail-heading">Localização</h5>
 
-                                <div class="map-frame">
-                                    <div id="map"></div>
-                                </div>
+                            <div class="map-frame">
+                                <div id="map"></div>
+                            </div>
 
                             <!-- END FILTER VERTICAL -->
                         </div>
@@ -184,67 +164,57 @@
 
                                     <div class="form-group ml-2">
                                         <div class="form-check">
-                                            <input formControlName="financeable" class="form-check-input bankable" type="checkbox" value="" id="defaultCheck1">
+                                            <input formControlName="financeable" class="form-check-input bankable"
+                                                type="checkbox" value="" id="defaultCheck1">
                                             <label class="form-check-label ml-1" for="defaultCheck1">
                                                 Financiável
                                             </label>
                                         </div>
                                     </div>
                                     <div class="form-group">
-                                        <select
-                                                class="wide select_option form-control"
-                                                formControlName="zone">
+                                        <select class="wide select_option form-control" formControlName="zone">
                                             <option data-display="Property Status" value="0">Zona</option>
-                                            <option *ngFor="let zone of zones"
-                                                    [value]="zone.code"> {{ zone.description }}</option>
+                                            <option *ngFor="let zone of zones" [value]="zone.code"> {{ zone.description
+                                                }}</option>
 
                                         </select>
                                     </div>
                                     <div class="form-group" *ngIf="ruralZoneSelected">
-                                        <select
-                                                class="wide select_option form-control"
-                                                formControlName="hectare">
+                                        <select class="wide select_option form-control" formControlName="hectare">
                                             <option data-display="Property Status" value="0" selected>Hectares</option>
                                             <option value="1"> Menos que 100 ha </option>
                                             <option value="2"> Mais que 100 ha </option>
                                         </select>
                                     </div>
                                     <div class="form-group">
-                                        <select
-                                                class="wide select_option form-control"
-                                                formControlName="type">
+                                        <select class="wide select_option form-control" formControlName="type">
                                             <option data-display="Property Status" value="0">Tipo</option>
-                                            <option *ngFor="let type of types"
-                                                    [value]="type.code"> {{ type.description }}</option>
+                                            <option *ngFor="let type of types" [value]="type.code"> {{ type.description
+                                                }}</option>
 
                                         </select>
                                     </div>
                                     <div class="form-group">
-                                        <select
-                                                class="wide select_option form-control"
-                                                formControlName="finality"
-                                                (change)="verifyMinAndMaxFilterValues()">
+                                        <select class="wide select_option form-control" formControlName="finality"
+                                            (change)="verifyMinAndMaxFilterValues()">
                                             <option data-display="Property Type" value="0">Finalidade</option>
-                                            <option *ngFor="let finality of finalities"
-                                                    [value]="finality.code"> {{ finality.description }} </option>
+                                            <option *ngFor="let finality of finalities" [value]="finality.code"> {{
+                                                finality.description }} </option>
                                         </select>
                                     </div>
                                     <div class="form-group">
-                                        <select
-                                                class="wide select_option form-control"
-                                                formControlName="city"
-                                                (change)="getNeighborhoods()">
+                                        <select class="wide select_option form-control" formControlName="city"
+                                            (change)="getNeighborhoods()">
                                             <option data-display="Area From" value="0"> Cidade </option>
-                                            <option *ngFor="let city of cities"
-                                                    [value]="city.code"> {{ city.description }} </option>
+                                            <option *ngFor="let city of cities" [value]="city.code"> {{ city.description
+                                                }} </option>
                                         </select>
                                     </div>
                                     <div class="form-group">
-                                        <select class="wide select_option form-control"
-                                                formControlName="neighborhood">
+                                        <select class="wide select_option form-control" formControlName="neighborhood">
                                             <option data-display="Locations" value="0">Bairros</option>
                                             <option *ngFor="let neighnorhood of neighborhoods"
-                                                    [value]="neighnorhood.code"> {{ neighnorhood.description }}</option>
+                                                [value]="neighnorhood.code"> {{ neighnorhood.description }}</option>
                                         </select>
                                     </div>
                                     <div class="form-group">
@@ -283,15 +253,14 @@
                                     </div>
                                     <div class="form-group">
                                         <label class="mb-3">Preferências de valor</label>
-                                        <ngx-slider [(value)]="minPrice" [(highValue)]="maxPrice" [options]="optionsSlider"></ngx-slider>
+                                        <ngx-slider [(value)]="minPrice" [(highValue)]="maxPrice"
+                                            [options]="optionsSlider"></ngx-slider>
                                     </div>
 
                                 </div>
                                 <div class="products__filter__footer">
                                     <div class="form-group mb-0">
-                                        <button
-                                            (click)="search()"
-                                            class="btn btn-primary text-capitalize btn-block">
+                                        <button (click)="search()" class="btn btn-primary text-capitalize btn-block">
                                             <i class="fa fa-search ml-1"></i>
                                             Pesquisar imóveis
                                         </button>
@@ -322,11 +291,12 @@
                                     <div class="card__image card__box-v1">
                                         <div class="row no-gutters">
                                             <div class="col-md-4 col-lg-3 col-xl-4"
-                                                 *ngFor="let property of similarProperties.slice(0,2)">
+                                                *ngFor="let property of similarProperties.slice(0,2)">
                                                 <div class="card__image__header h-250">
                                                     <a href="#">
                                                         <div class="ribbon text-capitalize">solda out</div>
-                                                        <img [src]="getPropertyImage(property.photo)" class="img-fluid w100 img-transition">
+                                                        <img [src]="getPropertyImage(property.photo)"
+                                                            class="img-fluid w100 img-transition">
                                                         <div class="info"> {{ property.transaction }}</div>
                                                     </a>
                                                 </div>
@@ -338,23 +308,29 @@
 
                             </div>
                         </div>
-                        <div class="tab-pane fade show active" id="pills-tab-two" role="tabpanel" aria-labelledby="pills-tab-two">
+                        <div class="tab-pane fade show active" id="pills-tab-two" role="tabpanel"
+                            aria-labelledby="pills-tab-two">
                             <div class="row">
-                                <div class="col-md-6 col-lg-6" *ngFor="let property of similarProperties.slice(0,2)" (click)="seePropertyDetails(property.code)">
+                                <div class="col-md-6 col-lg-6" *ngFor="let property of similarProperties.slice(0,2)"
+                                    (click)="seePropertyDetails(property.code)">
                                     <div class="card__image card__box-v1">
                                         <div class="card__image-header h-250 img-space">
                                             <!--                                                    <div class="ribbon text-capitalize">sold out</div>-->
                                             <div class="image-watermark">
-                                                <img [src]="getPropertyImage(property.photo)" alt="" class="img-fluid w100 img-transition">
+                                                <img [src]="getPropertyImage(property.photo)" alt=""
+                                                    class="img-fluid w100 img-transition">
                                             </div>
                                             <div class="watermark-position-small">
-                                                <img class="watermark-small" src="./assets/images/logo-sete-colorido-transparent.png"/>
+                                                <img class="watermark-small"
+                                                    src="./assets/images/logo-sete-colorido-transparent.png" />
                                             </div>
-                                            <div class="info info-bankable" *ngIf="property.financeable"> Financiável </div>
+                                            <div class="info info-bankable" *ngIf="property.financeable"> Financiável
+                                            </div>
                                             <div class="info"> {{ property.transaction }} </div>
                                         </div>
                                         <div class="card__image-body">
-                                            <span class="badge badge-primary text-capitalize mb-2"> {{ property.category }} </span>
+                                            <span class="badge badge-primary text-capitalize mb-2"> {{ property.category
+                                                }} </span>
                                             <h6 class="text-capitalize">
                                                 <a href="#"> {{ property.title }}</a>
                                             </h6>
@@ -372,16 +348,16 @@
                                                     <!--                </span>-->
                                                 </li>
                                                 <li class="list-inline-item">
-                <span>
-                    Dormitórios <br>
-                    <i class="fa fa-bed"></i> {{ property.bedroom }}
-                </span>
+                                                    <span>
+                                                        Dormitórios <br>
+                                                        <i class="fa fa-bed"></i> {{ property.bedroom }}
+                                                    </span>
                                                 </li>
                                                 <li class="list-inline-item">
-                <span>
-                    Área <br>
-                    <i class="fa fa-map"></i> {{ property.totalArea }}m²
-                </span>
+                                                    <span>
+                                                        Área <br>
+                                                        <i class="fa fa-map"></i> {{ property.totalArea }}m²
+                                                    </span>
                                                 </li>
                                             </ul>
                                         </div>
@@ -391,7 +367,8 @@
                                             </figure>
                                             <ul class="list-inline my-auto ml-auto">
                                                 <li class="list-inline-item">
-                                                    <h6 class="text-primary"> {{ property.price | currency: 'R$':'symbol' }} </h6>
+                                                    <h6 class="text-primary"> {{ property.price | currency:
+                                                        'R$':'symbol' }} </h6>
                                                 </li>
 
                                             </ul>
@@ -404,7 +381,7 @@
                         </div>
                     </div>
 
-                    </div>
+                </div>
             </div>
         </div>
         <!-- END SIMILIAR PROPERTY -->
