@@ -43,6 +43,12 @@ export function converterParaMoeda(value: string) {
     .replace(/(?=(\d{3})+(\D))\B/g, ".");
 }
 
+export function converterMoedaParaNumero(value: string) {
+  return value
+    .replace(/\D/g, "")
+    .replace(/(\d)(\d{2})$/, "$1.$2");
+}
+
 export function converterParaCep(value: string) {
   return value.replace(/\D/g, "").replace(/^(\d{5})(\d)/, "$1-$2");
 }

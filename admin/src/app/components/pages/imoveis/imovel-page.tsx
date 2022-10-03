@@ -11,6 +11,7 @@ import { AutocompleteGenerico } from "../../shared/autocomplete/autocomplete-gen
 import { SeletorBooleanoGenerico } from "../../shared/seletor-booleano-generico";
 import Input from "../../shared/input-generico";
 import {
+  converterMoedaParaNumero,
   converterParaCep,
   converterParaMoeda,
 } from "../../../utils/parser.utils";
@@ -174,6 +175,8 @@ export const ImovelPage = () => {
 
   async function salvarImovel(data: any) {
     const newModel = removeCamposSalvar(data);
+    newModel.price = converterMoedaParaNumero(newModel.price);
+
     let code = modelId || "";
 
     if (code) {
@@ -644,7 +647,7 @@ export const ImovelPage = () => {
                       atualizarModel(
                         "city",
                         cities.find(({ code }) => code == event.target.value) ||
-                          null
+                        null
                       )
                     }
                   >
