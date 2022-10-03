@@ -14,10 +14,10 @@ import { AgentEntity } from './../../../agent/entity/agent.entity';
 import { PropertyFilterEntity } from './../entity/property-filter.entity';
 import { ImageSortRequest } from "../integration/request/image-sort.request";
 import { PropertyDocumentEntity } from "../entity/property-document.entity";
-import {log} from "util";
-import {LogEntity} from "../entity/log.entity";
-import {LogResponse} from "../integration/response/log.response";
-import {SituationEntity} from "../../../user/entity/situation.entity";
+import { log } from "util";
+import { LogEntity } from "../entity/log.entity";
+import { LogResponse } from "../integration/response/log.response";
+import { SituationEntity } from "../../../user/entity/situation.entity";
 import { RepositoryException } from "src/common/exceptions/repository-exception";
 
 @Injectable()
@@ -127,7 +127,7 @@ export class PropertyRepository {
                         }
 
                         if (filter == 'preco') {
-                            queryBuilder.whereBetween('valor', [ filters[filter].minPrice, filters[filter].maxPrice ])
+                            queryBuilder.whereBetween('valor', [filters[filter].minPrice, filters[filter].maxPrice])
                         }
 
                         if (filter == 'transacao') {
@@ -145,7 +145,7 @@ export class PropertyRepository {
 
                         if (filter == 'categoria') {
                             if (filters[filter].toUpperCase() == 'RURAL') {
-                                queryBuilder.whereIn('categoria_imovel.codigo', [9,10,11]);
+                                queryBuilder.whereIn('categoria_imovel.codigo', [9, 10, 11]);
                             }
                         }
 
@@ -300,6 +300,34 @@ export class PropertyRepository {
             .from('foto_imovel');
     }
 
+    public async delete(code: number): Promise<number> {
+        return this.knex.transaction(
+            (trx) => {
+                return this.knex
+                    .delete()
+                    .from('foto_imovel')
+                    .where('imovel', code)
+                    .transacting(trx)
+                    .then(
+                        () => this.knex
+                            .delete()
+                            .from('documento_imovel')
+                            .where('imovel', code)
+                            .transacting(trx)
+                            .then(
+                                () => this.knex
+                                    .delete()
+                                    .from('imovel')
+                                    .where('codigo', code)
+                                    .transacting(trx)
+                            )
+                    )
+                    .catch(trx.rollback)
+            }
+        );
+
+    }
+
     public deleteImage(path: string): Promise<number> {
         return this.knex
             .delete()
@@ -326,8 +354,8 @@ export class PropertyRepository {
 
     public insertPropertyDocument(filename: string, originalName: string, propertyCode: number): Promise<number> {
         return this.knex
-              .insert({ imovel: propertyCode, documento: filename, nome_arquivo: originalName })
-              .into('documento_imovel');
+            .insert({ imovel: propertyCode, documento: filename, nome_arquivo: originalName })
+            .into('documento_imovel');
     }
 
     public rentPropertyCounter(): Promise<number> {

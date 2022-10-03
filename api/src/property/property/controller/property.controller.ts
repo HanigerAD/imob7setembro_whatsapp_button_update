@@ -43,7 +43,7 @@ export class PropertyController {
   constructor(
     private service: PropertyService,
     private basicDataService: PropertyBasicDataService
-  ) {}
+  ) { }
 
   @Post("properties")
   @UseGuards(JwtAuthGuard)
@@ -110,6 +110,13 @@ export class PropertyController {
     @Body() deletedDocuments: string[]
   ): void {
     this.service.deleteDocuments(deletedDocuments);
+  }
+
+  @Delete("properties/:code")
+  @UseGuards(JwtAuthGuard)
+  @HttpCode(HttpStatus.OK)
+  public deleteProperty(@Param("code") code: number): Promise<number> {
+    return this.service.delete(code);
   }
 
   @Get("properties")

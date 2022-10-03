@@ -1,5 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
+import { confirmAlert } from "react-confirm-alert";
+import { toast } from "react-toastify";
 import { imageFallback } from "../../../helpers/image-fallback";
 import { apiService } from "../../../services/api.service";
 import { CDN_URL } from "../../../services/cdn.service";
@@ -12,6 +14,34 @@ export const ImoveisPage = () => {
   const [models, setModels] = useState([]);
   const [carregando, setCarregando] = useState(false);
   const paginationProps = usePagination({ currentPage: 1, itemsPerPage: 5 });
+
+  async function deletar(model: any) {
+    confirmAlert({
+      title: "Atenção",
+      message: `Você deseja realmente deletar o imovel ${model.title} ?`,
+      buttons: [
+        {
+          label: "Sim",
+          onClick: async () => {
+            try {
+              setCarregando(true);
+              await apiService.delete(`property/properties/${model.code}`);
+              toast.success("Registro removido com sucesso");
+              buscar();
+
+            } catch (error) {
+              console.log({ error });
+              setCarregando(false);
+            }
+          },
+        },
+        {
+          label: "Não",
+          onClick: () => { },
+        },
+      ],
+    });
+  }
 
   async function buscar(filters = {}) {
     setCarregando(true);
@@ -161,15 +191,14 @@ export const ImoveisPage = () => {
                             <i className="fas fa-pen-to-square fa-fw"></i>
                             <span>Editar</span>
                           </Link>
-
-                          {/* <Link
-                          className="btn btn-danger btn-sm mt-2"
-                          title="Deletar"
-                          to={`/admin/imoveis/${model.code}`}
-                        >
-                          <i className="fas fa-pen-to-square fa-fw"></i>
-                          <span>Deletar</span>
-                        </Link> */}
+                          <button
+                            className="btn btn-danger btn-sm mt-2"
+                            title="Deletar"
+                            onClick={() => deletar(model)}
+                          >
+                            <i className="fas fa-pen-to-square fa-fw"></i>
+                            <span>Deletar</span>
+                          </button>
                         </div>
                       </div>
                     </div>

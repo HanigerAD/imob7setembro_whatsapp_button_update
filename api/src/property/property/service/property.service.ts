@@ -251,6 +251,10 @@ export class PropertyService {
         Promise.all(paths.map(path => this.repository.deleteDocuments(path)));
     }
 
+    public delete(code: number): Promise<number> {
+        return this.repository.delete(code);
+    }
+
     public insertLogs(logRequest: LogRequest[]): void {
         const entity: LogEntity[] = LogMapper.mapRequestListToEntity(logRequest);
         Promise.all(entity.map(log => this.repository.insertLog(log)));
