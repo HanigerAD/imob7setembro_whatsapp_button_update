@@ -37,16 +37,8 @@
         <div class="row">
             <div class="col-lg-6">
                 <div class="title__leading">
-                    <!-- <h6 class="text-uppercase">trusted By thousands</h6> -->
-                    <h2 class="text-capitalize"> {{ siteInfo.institutionalTextResume }} </h2>
-                    <!--                    <p>-->
-                    <!--                        {{ siteInfo.configuration.institutionalTextResume }}-->
-                    <!--                    </p>-->
-                    <p>
-                        {{ siteInfo.institutionalText }}
-                    </p>
-                    <!--                    <a href="#" class="btn btn-primary mt-3 text-capitalize"> read more-->
-                    <!--                        <i class="fa fa-angle-right ml-3 "></i></a>-->
+                    <h2 class="text-capitalize" [innerHTML]="siteInfo.institutionalTextResume"></h2>
+                    <div [innerHTML]="siteInfo.institutionalText"></div>
                 </div>
             </div>
             <div class="col-lg-6">
