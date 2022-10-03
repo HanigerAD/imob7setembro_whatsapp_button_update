@@ -64,12 +64,13 @@ export const Sidenav = () => {
               <RenderLink to="/admin/bairros" label="Bairros" />
             </RenderDropdown>
             <RenderLink to="/admin/postagens" label="Postagens" />
-            <RenderDropdown label="Configurações">
-              <RenderLink to="/admin/configuracoes" label="Site" />
-            </RenderDropdown>
             <RenderDropdown label="Formulários do Site">
               <RenderLink to="/admin/novos-imoveis" label="Novos Imoveis" />
               <RenderLink to="/admin/mensagens" label="Mensagens" />
+            </RenderDropdown>
+            <RenderDropdown label="Configurações">
+              <RenderLink to="/admin/configuracoes" label="Site" />
+              <RenderLink to="/admin/usuarios" label="Usuários" />
             </RenderDropdown>
           </div>
         </div>

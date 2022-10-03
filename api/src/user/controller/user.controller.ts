@@ -11,14 +11,15 @@ import {
     Query,
     UseGuards
 } from '@nestjs/common';
-import {UserService} from "../service/user.service";
-import {UserRequest} from "../integration/request/user.request";
-import {Observable} from "rxjs";
-import {UserResponse} from "../integration/response/user.response";
-import {JwtAuthGuard} from "../../authentication/config/jwt-auth.guard";
-import {PasswordRequest} from "../integration/request/password.request";
-import {UserDto} from "../DTO/userDto";
-import {PermissionResponse} from "../integration/response/permission.response";
+import { Observable } from "rxjs";
+import { UserService } from "../service/user.service";
+import { UserRequest } from "../integration/request/user.request";
+import { UserResponse } from "../integration/response/user.response";
+import { JwtAuthGuard } from "../../authentication/config/jwt-auth.guard";
+import { PasswordRequest } from "../integration/request/password.request";
+import { UserDto } from "../DTO/userDto";
+import { PermissionResponse } from "../integration/response/permission.response";
+import { SituationResponse } from '../integration/response/situation.response';
 
 @Controller('user')
 export class UserController {
@@ -43,6 +44,12 @@ export class UserController {
     @UseGuards(JwtAuthGuard)
     public getPermissions(): Promise<PermissionResponse[]> {
         return this.service.getPermissions();
+    }
+
+    @Get('situations')
+    @UseGuards(JwtAuthGuard)
+    public getSituations(): Promise<SituationResponse[]> {
+        return this.service.getSituations();
     }
 
     @Get('permissions/:code')

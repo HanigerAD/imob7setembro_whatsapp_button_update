@@ -1,18 +1,18 @@
-import {Injectable} from "@nestjs/common";
-import {UserRepository} from "../repository/user.repository";
-import {Observable} from "rxjs";
-import {UserMapper} from "../mapper/user.mapper";
-import {UserRequest} from "../integration/request/user.request";
-import {map} from "rxjs/operators";
-import {UserResponse} from "../integration/response/user.response";
-import {UserBuilder} from "../builder/user.builder";
-import {PermissionMapper} from "../mapper/permission.mapper";
-import {PermissionResponse} from "../integration/response/permission.response";
-import {SituationMapper} from "../mapper/situation.mapper";
-import {SituationResponse} from "../integration/response/situation.response";
-import {UserPermissionMapper} from "../mapper/user-permission.mapper";
-import {PasswordRequest} from "../integration/request/password.request";
-import {UserDto} from "../DTO/userDto";
+import { Injectable } from "@nestjs/common";
+import { UserRepository } from "../repository/user.repository";
+import { Observable } from "rxjs";
+import { UserMapper } from "../mapper/user.mapper";
+import { UserRequest } from "../integration/request/user.request";
+import { map } from "rxjs/operators";
+import { UserResponse } from "../integration/response/user.response";
+import { UserBuilder } from "../builder/user.builder";
+import { PermissionMapper } from "../mapper/permission.mapper";
+import { PermissionResponse } from "../integration/response/permission.response";
+import { SituationMapper } from "../mapper/situation.mapper";
+import { SituationResponse } from "../integration/response/situation.response";
+import { UserPermissionMapper } from "../mapper/user-permission.mapper";
+import { PasswordRequest } from "../integration/request/password.request";
+import { UserDto } from "../DTO/userDto";
 
 
 @Injectable()
@@ -59,6 +59,14 @@ export class UserService {
 
     public getSituation(code: number): Promise<SituationResponse> {
         return this.repository.getSituation(code).then(situation => SituationMapper.entityToResponse(situation));
+    }
+
+    public getSituations(): Promise<SituationResponse[]> {
+        return this.repository.getSituations().then(
+            situations => situations.map(
+                situation => SituationMapper.entityToResponse(situation)
+            )
+        );
     }
 
     public getUserPermissions(code: number): Promise<PermissionResponse[]> {

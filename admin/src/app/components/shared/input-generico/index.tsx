@@ -1,5 +1,4 @@
 import React, { InputHTMLAttributes, useCallback } from "react";
-
 import { cep, currency, cpf, phone } from "./masks";
 
 interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
@@ -58,7 +57,7 @@ const Input: React.FC<InputProps> = ({
       <div className="input-group mb-3">
         {prefix && <span className="input-group-text">{prefix}</span>}
         <div className="form-floating">
-          {type === 'date' ?
+          {type === 'date' || type === 'password' ?
             <input
               className={`form-control ${className}`}
               defaultValue={defaultValue}
@@ -66,7 +65,7 @@ const Input: React.FC<InputProps> = ({
               type={type}
               {...props} />
             : null}
-          {type !== 'date' ?
+          {type !== 'date' && type !== 'password' ?
             <input
               className={`form-control ${className}`}
               defaultValue={defaultValue}

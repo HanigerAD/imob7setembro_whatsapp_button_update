@@ -1,11 +1,11 @@
-import {Injectable} from "@nestjs/common";
-import {InjectKnex, Knex} from "nestjs-knex";
-import {UserEntity} from "../entity/user.entity";
-import {from, Observable} from "rxjs";
-import {SituationEntity} from "../entity/situation.entity";
-import {PermissionEntity} from "../entity/permission.entity";
-import {UserPermissionEntity} from "../entity/user-permission.entity";
-import {SituationEnum} from "../../common/enum/situation.enum";
+import { Injectable } from "@nestjs/common";
+import { InjectKnex, Knex } from "nestjs-knex";
+import { from, Observable } from "rxjs";
+import { UserEntity } from "../entity/user.entity";
+import { SituationEntity } from "../entity/situation.entity";
+import { PermissionEntity } from "../entity/permission.entity";
+import { UserPermissionEntity } from "../entity/user-permission.entity";
+import { SituationEnum } from "../../common/enum/situation.enum";
 
 @Injectable()
 export class UserRepository {
@@ -52,6 +52,12 @@ export class UserRepository {
             .first()
     }
 
+    public getSituations(): Promise<SituationEntity[]> {
+        return this.knex
+            .select('*')
+            .from('situacao')
+    }
+
     public getUserPermissions(code: number): Promise<PermissionEntity[]> {
         return this.knex
             .select('permissao.*')
@@ -71,7 +77,7 @@ export class UserRepository {
     public updatePassword(code: number, password: string): Observable<number> {
         return from(
             this.knex
-                .update({senha: password})
+                .update({ senha: password })
                 .from('usuario')
                 .where('codigo', '=', code)
         );
@@ -80,7 +86,7 @@ export class UserRepository {
     public delete(code: number): Observable<number> {
         return from(
             this.knex
-                .update({situacao: SituationEnum.INACTIVE})
+                .update({ situacao: SituationEnum.INACTIVE })
                 .from('usuario')
                 .where('codigo', '=', code)
         );

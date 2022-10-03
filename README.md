@@ -3,20 +3,20 @@
 Status Imob7
 (30/09/22 - 18:00)
 
-- [] Painel Administrativo
+- [FEITO] Painel Administrativo
 - - [FEITO] Adicionar a imagem \/ de Select nos campos.
-- - - [] Cadastros
+- - - [FEITO] Cadastros
 - - - - [FEITO] Cidade
 - - - - [FEITO] Bairros
-- - - - [] Imóvel
+- - - - [FEITO] Imóvel
 - - - - - [FEITO] Permitir Remover imovel
 - - - - - - [FEITO] Adicionar campo "Motivo Exclusão do Imóvel" só será permitido a exclusão após colocar esse motivo.
 - - - - - [FEITO] Cadastro de Documentos
 - - - - - [FEITO] Alterar Visualização da listagem de imoveis
 - - - - - [FEITO] Filtros de imoveis
 - - - - - [FEITO] Adicionar obrigatoriedade dos campos
-- - - - - [] CEP para a Longitude e Latitude
-- - - - - [] Alterar campo valor para INT
+- - - - - [NAO SERA FEITO] CEP para a Longitude e Latitude
+- - - - - [FEITO] Alterar campo valor para INT
 - - - - - [FEITO] Remover obrigatoriedade dos campos Longitude e Latitude
 - - - - - [FEITO] Campo Link para vídeo do Youtube
 - - - - - [FEITO] Imagens
@@ -26,12 +26,12 @@ Status Imob7
 - - - - [FEITO] Contatos de Clientes
 - - - - - [FEITO] Novos Imoveis
 - - - - - [FEITO] Mensagens
-- - - - [] Usuarios
-- - - - [] Permissões de Usuarios
+- - - - [FEITO] Usuarios
+- - - - [FEITO] Permissões de Usuarios
 - - - - [FEITO] Parceiros (Logo e Nome)
 - - - - [FEITO] Configurações
 - - - - - [FEITO] Banners
-- - - - - - [] Banner Topo - Posicionamento exato mesmo que a imagem seja maior que os 1920px de largura.
+- - - - - - [NAO SERA FEITO] Banner Topo - Posicionamento exato mesmo que a imagem seja maior que os 1920px de largura.
 
 - [FEITO] site
 - - [FEITO] Centralizar o Texto "Encontre o imóvel..."

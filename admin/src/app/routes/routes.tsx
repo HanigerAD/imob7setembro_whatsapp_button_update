@@ -21,6 +21,8 @@ import { ParceirosPage } from "../components/pages/parceiros/parceiros-page";
 import { PerfilPage } from "../components/pages/perfil/perfil-page";
 import { PostagemPage } from "../components/pages/postagens/postagem-page";
 import { PostagensPage } from "../components/pages/postagens/postagens-page";
+import { UsuarioPage } from "../components/pages/usuarios/usuario-page";
+import { UsuariosPage } from "../components/pages/usuarios/usuarios-page";
 
 export const Routes = () => (
   <RrdRoutes>
@@ -56,6 +58,9 @@ export const Routes = () => (
       <Route path="mensagens/cadastrar" element={<MensagemPage />} />
       <Route path="mensagens/:code" element={<MensagemPage />} />
       <Route path="mensagens" element={<MensagensPage />} />
+      <Route path="usuarios/cadastrar" element={<UsuarioPage />} />
+      <Route path="usuarios/:code" element={<UsuarioPage />} />
+      <Route path="usuarios" element={<UsuariosPage />} />
     </Route>
   </RrdRoutes>
 );
