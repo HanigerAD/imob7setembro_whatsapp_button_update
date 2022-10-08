@@ -16,4 +16,7 @@
 .sepia {  }
 .huerotate { filter: hue-rotate(180deg); }
 .rss.opacity { filter: opacity(50%); }
-
+.navbar-transparent {
+    box-shadow: 0 2px 3pxhsla(0,0%,39%,.1);
+    background-color: #b2c1c185;
+}
