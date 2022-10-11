@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Tempo de geração: 28/09/2022 às 22:26
+-- Tempo de geração: 10/10/2022 às 17:20
 -- Versão do servidor: 5.7.39-0ubuntu0.18.04.2-log
 -- Versão do PHP: 7.2.24-0ubuntu0.18.04.13
 
@@ -18,12 +18,8 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Current Database: `imob7`
+-- Banco de dados: `xbcopu_imob7`
 --
-
-CREATE DATABASE /*!32312 IF NOT EXISTS*/ `imob7` /*!40100 DEFAULT CHARACTER SET latin1 */;
-
-USE `imob7`;
 
 -- --------------------------------------------------------
 
@@ -152,7 +148,8 @@ CREATE TABLE `banner` (
 --
 
 INSERT INTO `banner` (`codigo`, `imagem`) VALUES
-(202, 'e5f733a4-3c5f-4936-ae9b-f5ba61b72bce.jpeg');
+(203, 'e884f78d-0d33-4f4f-b769-9aadf799dbf5.jpg'),
+(204, 'ca3750c4-36c4-407c-ba32-28147c417160.jpg');
 
 -- --------------------------------------------------------
 
@@ -223,7 +220,7 @@ CREATE TABLE `configuracao_site` (
 --
 
 INSERT INTO `configuracao_site` (`codigo`, `logo`, `titulo`, `texto_institucional`, `resumo_texto_institucional`, `horario_abertura_semana`, `horario_fechamento_semana`, `horario_abertura_sabado`, `horario_fechamento_sabado`, `horario_fechamento_domingo`, `horario_abertura_domingo`, `endereco`, `email`, `telefone`) VALUES
-(1, 'b4653163-2ba9-41f8-87a5-b69ca715cfb3.png', 'Imobiliaria 7 Setembro', 'Temos como foco realizar o sonho que é a conquista do imóvel desejado pelo seu cliente.\n\nA Imobiliária 7 de Setembro fundada em agosto de 1989, tem como foco de seu trabalho, não apenas a satisfação das necessidades, com a visão de ser referência no seu ramo de negócio em informações e soluções, mas também buscar atender a expectativa na realização do sonho que é a conquista do imóvel desejado pelo seu cliente. A equipe, composta por seus profissionais é dedicada a oferecer os melhores serviços aos clientes. Além disso, a Imobiliária 7 de Setembro também presta assessoria em todos os processos da compra e venda de imóveis e também na assessoria em áreas rurais de agropastoril e florestal.', 'Temos profissionais dedicados a oferecer os melhores serviços a nossos clientes.', '09:00', '17:00', '09:00', '12:00', NULL, 'Fechado', 'R. Dr. Lauro Azambuja, 288 - Centro, Guaíba - RS', 'atendimento@imobiliaria7setembro.com.br', '(51) 3480-4066');
+(1, '4092dd0d-edf8-4bbc-95da-1c7b222685ac.png', 'Imobiliaria 7 Setembro', '<p>Temos como foco realizar o sonho que é a conquista do imóvel desejado pelo seu cliente. A Imobiliária 7 de Setembro fundada em agosto de 1989, tem como foco de seu trabalho, não apenas a satisfação das necessidades, com a visão de ser referência no seu ramo de negócio em informações e soluções, mas também buscar atender a expectativa na realização do sonho que é a conquista do imóvel desejado pelo seu cliente. A equipe, composta por seus profissionais é dedicada a oferecer os melhores serviços aos clientes. Além disso, a Imobiliária 7 de Setembro também presta assessoria em todos os processos da compra e venda de imóveis e também na assessoria em áreas rurais de agropastoril e florestal.</p>', '<p>Temos profissionais dedicados a oferecer os melhores serviços a nossos clientes.</p>', '09:00', '17:00', '09:00', '12:00', NULL, 'Fechado', 'R. Dr. Lauro Azambuja, 288 - Centro, Guaíba - RS', 'atendimento@imobiliaria7setembro.com.br', '(51) 3480-4066');
 
 -- --------------------------------------------------------
 
@@ -243,8 +240,11 @@ CREATE TABLE `documento_imovel` (
 --
 
 INSERT INTO `documento_imovel` (`codigo`, `imovel`, `documento`, `nome_arquivo`) VALUES
-(1, 3, '34a0df4f-f30a-4c82-a677-f1678b62a08e.pdf', 'Autorização.pdf'),
-(2, 3, '4197c362-4ad4-42f3-8bb3-e6540aaf0311.jpeg', 'WhatsApp Image 2022-01-21 at 10.17.48.jpeg');
+(3, 4, '23191a36-8786-4f13-b3a0-e0cdd400b327.jpg', 'Autorização.jpg'),
+(4, 4, '8bfd9688-b636-42a8-9523-f98664f3f7eb.jpg', 'Matrícula (1).jpg'),
+(5, 4, '10233fbc-dafd-49b1-9023-53c74f45448a.jpg', 'Matrícula (2).jpg'),
+(6, 5, 'f446d4b6-c1c7-49e8-a7b4-d2258d994654.pdf', 'Autorização.pdf'),
+(7, 5, '7ac5359a-c455-4dbd-8035-4bce3e474ac8.jpeg', 'WhatsApp Image 2022-01-21 at 10.17.48.jpeg');
 
 -- --------------------------------------------------------
 
@@ -285,41 +285,47 @@ CREATE TABLE `foto_imovel` (
 --
 
 INSERT INTO `foto_imovel` (`codigo`, `ordem`, `imovel`, `foto`) VALUES
-(1, 1, 1, '00791444-0e63-4d54-8e9f-926f7a0ac324.jpg'),
-(2, 1, 2, '82b07da9-0b54-491c-af8e-ed3ff2223a19.jpg'),
-(3, 2, 2, 'a083bb0d-196e-44ff-bf0a-b9b8b51ddd98.jpg'),
-(4, 3, 2, 'dbaec44a-03b7-4303-af0c-2d51e466851b.jpg'),
-(5, 4, 2, '507ff86f-043a-4c6e-aa24-dbed3ba2b29a.jpg'),
-(6, 5, 2, '01033658-70e5-4bf1-82b9-f5671ba9e14b.jpg'),
-(7, 6, 2, 'c71fd55a-ac95-4e96-809d-67a1bc159835.jpg'),
-(8, 7, 2, '3ec9718d-74fd-4f32-b439-22e2800067d3.jpg'),
-(9, 8, 2, '0a1b0b40-0c78-42d7-b389-4473cd882238.jpg'),
-(10, 9, 2, '427bbffa-7a88-49e3-b984-840379ce2114.jpg'),
-(11, 10, 2, '1e2ba100-219a-49d5-a3a4-c301e7c8238f.jpg'),
-(12, 11, 2, '361c824c-2584-4272-a55e-c80207c5c8e0.jpg'),
-(13, 12, 2, 'fce5669f-60f7-4334-a555-0390c1e832a7.jpg'),
-(14, 13, 2, '2da18824-63ad-4625-90ec-7cd23577f324.jpg'),
-(15, 1, 3, 'b0ab24ed-5f80-499d-a301-bd6a1840a79f.jpg'),
-(16, 2, 3, 'c7ff2433-bec5-499c-944b-985b3330e679.jpg'),
-(17, 3, 3, 'ca122749-33bc-4454-8ae3-529530e7b2ed.jpg'),
-(18, 4, 3, 'f38bb873-c9b1-4129-a988-1fc6542c51db.jpg'),
-(19, 5, 3, '281cba43-a6ca-4a66-9af0-ea13ce3ba2cf.jpg'),
-(20, 6, 3, 'd86317df-46b8-4d0c-946b-53a7e8150e17.jpg'),
-(21, 7, 3, '44b864c5-5fec-438d-a800-1f56d3e1dbe0.jpg'),
-(22, 8, 3, 'e0d7fce7-5944-45ec-a596-ec9ee09d705c.jpg'),
-(23, 9, 3, 'a075a7eb-f583-4ac9-8b26-a0b618eda4eb.jpg'),
-(24, 10, 3, '898129db-7f4b-4cca-a6b0-0311487e6676.jpg'),
-(25, 11, 3, '5d04385a-a92d-4ea0-a688-5b318cabf717.jpg'),
-(26, 12, 3, 'fe506fe3-4013-4617-ae2e-f881c3ad0403.jpg'),
-(27, 13, 3, '16533912-b8e1-4e13-8f24-37e755ddb467.jpg'),
-(28, 14, 3, '3299ca8b-a3c2-4948-a937-1a465d6ded2f.jpg'),
-(29, 15, 3, '839d690e-1e21-4d38-99fa-6038f2ba3adb.jpg'),
-(30, 16, 3, '91656621-ecb7-4a57-b071-298017a5854c.jpg'),
-(31, 17, 3, '59d7076e-3f8c-4199-adde-0ad1e4e4e572.jpg'),
-(32, 18, 3, '9c1bd7a8-34c2-40ac-8a8b-bdfe082a390e.jpg'),
-(33, 19, 3, '7bf6f6a9-7305-4101-911b-3fa1013000fa.jpg'),
-(34, 20, 3, '10a81d72-187e-43d7-a079-bae43f420933.jpg'),
-(35, 21, 3, 'd6b7ab59-389a-426a-bf38-0be4c54c0f3c.jpg');
+(36, 1, 4, '84ffcd26-ff4f-4d87-b89a-229801db80a3.jpg'),
+(37, 2, 4, '7a34355c-ebe7-430b-8e14-843437317ece.jpg'),
+(38, 3, 4, '443e24e7-1876-4657-8a1a-47923778c2f3.jpg'),
+(39, 4, 4, '7dbfb99e-d2ca-4a9d-b73d-52e9c5785927.jpg'),
+(40, 5, 4, 'b5c22dd9-f92c-4846-b140-b829ad34363e.jpg'),
+(41, 6, 4, '09cecc29-8fc5-45b8-a5f7-57012397130e.jpg'),
+(42, 7, 4, 'ce07d8b5-7cc4-4463-9d21-570f7ee1934d.jpg'),
+(43, 8, 4, '83ef5d97-b7ed-444a-82c1-ae003307d19c.jpg'),
+(44, 9, 4, '2183328d-e0a3-4e96-b043-47543bc670d4.jpg'),
+(45, 10, 4, 'c3677b4c-21f5-4bba-bad4-ae7dd85490a6.jpg'),
+(46, 11, 4, '67c8ae4c-338b-4e9b-ba7e-c8d64f371489.jpg'),
+(47, 12, 4, 'c405cef3-3fb3-40e9-ae0b-f393d4dbaba2.jpg'),
+(48, 13, 4, '5a01c004-93ef-4c81-95a9-3b03d1959bfc.jpg'),
+(49, 14, 4, '26323687-28f7-47f7-9b29-868a91b6d2ef.jpg'),
+(50, 15, 4, '55f29f18-5500-44e7-bb06-4d0b87219c78.jpg'),
+(51, 16, 4, '00bd97c3-b198-4a72-86e4-1b95f6ad5c73.jpg'),
+(52, 17, 4, '8b1a762e-e536-4e64-95e5-989879946e07.jpg'),
+(53, 18, 4, 'a61269bb-c27e-49cc-92f6-4c33a87c569d.jpg'),
+(54, 19, 4, '5084b9ef-db64-4ca8-a131-1fdd0c6ad574.jpg'),
+(55, 20, 4, 'a3178d19-3287-46c1-b436-0e85a7ef5cc0.jpg'),
+(56, 1, 5, '7fad9775-36a3-4766-8ebc-21d48b551e74.jpg'),
+(57, 2, 5, '5a057cd1-73b7-49a7-9c85-1379e380b8b1.jpg'),
+(58, 3, 5, '3647e03b-afab-4185-bdf4-a0ce459c8068.jpg'),
+(59, 4, 5, 'f18e3feb-ace3-45f9-8370-3cf19bb6a6dc.jpg'),
+(60, 5, 5, 'edd556b7-25c8-4d02-839a-287e44e18b9f.jpg'),
+(61, 6, 5, 'dc92902c-6c73-40a9-ae12-73c4c4e42080.jpg'),
+(62, 7, 5, '218fe33f-1091-40c1-840b-e9899a003ce0.jpg'),
+(63, 8, 5, 'e7344104-ceee-41f7-a08f-b24f9baf9f24.jpg'),
+(64, 9, 5, 'd654834a-5403-42a4-b587-1bc5874bd5dd.jpg'),
+(65, 10, 5, '9a5eccf3-521f-485a-8727-ffe460e33545.jpg'),
+(66, 11, 5, '9799ed1f-a0fb-4aa8-98e4-1fd97f311e80.jpg'),
+(67, 12, 5, 'b800ce35-14be-4600-9f97-8290475273e9.jpg'),
+(68, 13, 5, '8c8ff538-3a31-46ca-9dc5-569da78ff2b9.jpg'),
+(69, 14, 5, 'fcda16f9-8f4e-41c0-80b8-133a55d902cb.jpg'),
+(70, 15, 5, '57141095-37f9-4c53-8b91-2e08e631399a.jpg'),
+(71, 16, 5, '8c093a90-6a82-45ea-b58f-d09793cdd225.jpg'),
+(72, 17, 5, '8118fb96-8cf1-43f8-9cf0-f2a482efc022.jpg'),
+(73, 18, 5, 'f5dd678e-f317-4031-bb6e-9683439ee65f.jpg'),
+(74, 19, 5, 'f3fb1991-2c6f-4a2c-9b53-9bf10d467c47.jpg'),
+(75, 20, 5, '08f64144-c9b4-4f6f-9e16-0b5f372f7b17.jpg'),
+(76, 21, 5, '7246a864-3aba-4f00-9e65-74fb1e9632cb.jpg');
 
 -- --------------------------------------------------------
 
@@ -377,9 +383,8 @@ CREATE TABLE `imovel` (
 --
 
 INSERT INTO `imovel` (`codigo`, `titulo`, `valor`, `dormitorio`, `unidade_disponivel`, `banheiro`, `vaga`, `area_privativa`, `area_total`, `pavimento`, `financiavel`, `descricao`, `informacao_privada`, `categoria`, `exibir`, `reservado`, `expiracao_reserva`, `hectare`, `ano_construcao`, `destaque`, `super_destaque`, `suite`, `alugado`, `valor_condominio`, `perfil`, `zona`, `agenciador`, `estado_conservacao`, `tipo`, `transacao`, `exibir_valor`, `municipio`, `bairro`, `cep`, `logradouro`, `numero`, `complemento`, `latitude`, `longitude`, `situacao`, `codigo_interno`, `link_youtube`) VALUES
-(1, 'CASA PARA VENDA ALEGRIA GUAÍBA', '600000', 5, NULL, 1, 2, '213', '504', NULL, NULL, '<p>Casa para venda na Alegria. Possui 5 dormitórios, sala de estar, sala de jantar, cozinha, banheiro e garagem para 2 carros.</p><p>Terreno medindo 504,14m².&nbsp;</p>', NULL, 5, 0, NULL, NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL, 3, 1, 19, 1, 1, 1, NULL, 3, 2, NULL, 'Spagiari', NULL, NULL, '-10', '10', 1, 1949, NULL),
-(2, 'Imóvel á venda Alegria ', '600.000', 5, NULL, 1, 2, '213', '504', 1, 0, '<p>Imóvel á venda no bairro Alegria com ótima localização.</p><p> Possui 5 dormitórios, sala de estar, sala de jantar, cozinha, banheiro e garagem para 2 carros.</p><p>Terreno medindo 504,14m².&nbsp;</p>', NULL, 5, 1, 0, NULL, NULL, NULL, 0, 0, NULL, 0, NULL, 3, 1, 15, 2, 1, 1, NULL, 3, 2, '92727020', 'Av. Brasil ', 602, NULL, NULL, NULL, 1, 1949, NULL),
-(3, 'Casa á venda Alegria ', '849.500', 2, 1, 2, 2, '155', '741', 1, 1, '<p><span style=\"color: rgb(122, 122, 122);\">- Cerca elétrica em toda extensão do terreno;</span></p><p><span style=\"color: rgb(122, 122, 122);\">- 3 Reservatórios de água de 500lt cada no sótão;</span></p><p><span style=\"color: rgb(122, 122, 122);\">- 3 Reservatórios de coleta na chuva de 1000lt cada (Cisterna);</span></p><p><span style=\"color: rgb(122, 122, 122);\">- Garagem coberta para 3 carros;</span></p><p><span style=\"color: rgb(122, 122, 122);\">- Terreno com drenos de chuva;</span></p><p><span style=\"color: rgb(122, 122, 122);\">- Calhas para chuva na casa principal;</span></p><p><span style=\"color: rgb(122, 122, 122);\">- Cozinha planejada e coifa;</span></p><p><span style=\"color: rgb(122, 122, 122);\">- Móvel planejado na sala de estar;</span></p><p><span style=\"color: rgb(122, 122, 122);\">- Closet suíte;</span></p><p><span style=\"color: rgb(122, 122, 122);\">- Móveis dos banheiros;</span></p><p><span style=\"color: rgb(122, 122, 122);\">- Lareira;</span></p><p><span style=\"color: rgb(122, 122, 122);\">- Churrasqueira;</span></p><p><span style=\"color: rgb(122, 122, 122);\">- Salão de festas com 60m² c/ banheiro completo;</span></p><p><span style=\"color: rgb(122, 122, 122);\">- Sistema de água quente (gás) na cozinha e banheiros;</span></p><p><span style=\"color: rgb(122, 122, 122);\">- Sistema elétrico (CEEE) trifásico;</span></p><p><span style=\"color: rgb(122, 122, 122);\">- Forro de gesso na suíte, em um dos quartos, sala de estar (pé direito 4metros);</span></p><p><span style=\"color: rgb(122, 122, 122);\">- 2 Ar condicionados nos quartos;</span></p><p><span style=\"color: rgb(122, 122, 122);\">- Terreno murado com grades na frente;</span></p><p><span style=\"color: rgb(122, 122, 122);\">- Portão eletrônico;</span></p><p><span style=\"color: rgb(122, 122, 122);\">- 2 Toldos verticais retráteis nas aberturas da garagem;</span></p><p><span style=\"color: rgb(122, 122, 122);\">- Altura das paredes interna do imóvel 2m 75 cm</span></p>', NULL, 5, 1, 0, NULL, NULL, NULL, 0, 0, 1, 0, NULL, 3, 1, 15, 2, 1, 1, NULL, 3, 2, '92727320', 'Rua Dona Teresa Spagiari', 210, NULL, NULL, NULL, 1, 2275, NULL);
+(4, 'Imóvel á venda Alegria ', '600000.00', 5, NULL, 1, 2, '213', '504', 1, 0, '<p>Casa á venda no bairro Alegria. Possui 5 dormitórios, sala de estar, sala de jantar, cozinha, banheiro e garagem para 2 carros.</p><p><br></p><p>Terreno medindo 504,14m².&nbsp;</p>', NULL, 5, 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 3, 1, 15, 1, 1, 1, NULL, 3, 2, NULL, 'Av. Brasil ', 602, NULL, NULL, NULL, 1, 1949, 'https://www.youtube.com/watch?v=yXRQy-90vms'),
+(5, 'Imóvel á venda Alegria ', '850000.00', 2, NULL, 2, 2, '155', '741', 1, 1, '<p><span style=\"color: rgb(122, 122, 122);\">- Cerca elétrica em toda extensão do terreno;</span></p><p><span style=\"color: rgb(122, 122, 122);\">- 3 Reservatórios de água de 500lt cada no sótão;</span></p><p><span style=\"color: rgb(122, 122, 122);\">- 3 Reservatórios de coleta na chuva de 1000lt cada (Cisterna);</span></p><p><span style=\"color: rgb(122, 122, 122);\">- Garagem coberta para 3 carros;</span></p><p><span style=\"color: rgb(122, 122, 122);\">- Terreno com drenos de chuva;</span></p><p><span style=\"color: rgb(122, 122, 122);\">- Calhas para chuva na casa principal;</span></p><p><span style=\"color: rgb(122, 122, 122);\">- Cozinha planejada e coifa;</span></p><p><span style=\"color: rgb(122, 122, 122);\">- Móvel planejado na sala de estar;</span></p><p><span style=\"color: rgb(122, 122, 122);\">- Closet suite;</span></p><p><span style=\"color: rgb(122, 122, 122);\">- Móveis dos banheiros;</span></p><p><span style=\"color: rgb(122, 122, 122);\">- Lareira;</span></p><p><span style=\"color: rgb(122, 122, 122);\">- Churrasqueira;</span></p><p><span style=\"color: rgb(122, 122, 122);\">- Salão de festas com 60m² c/ banheiro completo;</span></p><p><span style=\"color: rgb(122, 122, 122);\">- Sistema de água quente (gás) na cozinha e banheiros;</span></p><p><span style=\"color: rgb(122, 122, 122);\">- Sistema elétrico (CEEE) trifásico;</span></p><p><span style=\"color: rgb(122, 122, 122);\">- Forro de gesso na suíte, em um dos quartos, sala de estar (pé direito 4metros);</span></p><p><span style=\"color: rgb(122, 122, 122);\">- 2 Ar condicionados nos quartos;</span></p><p><span style=\"color: rgb(122, 122, 122);\">- Terreno murado e grades na frente;</span></p><p><span style=\"color: rgb(122, 122, 122);\">- Portão eletrônico;</span></p><p><span style=\"color: rgb(122, 122, 122);\">- 2 Toldos verticais retráteis nas aberturas da garagem;</span></p><p><span style=\"color: rgb(122, 122, 122);\">- Altura das paredes interna do imóvel 2m 75 cm</span></p>', NULL, 5, 1, 0, NULL, NULL, NULL, 0, 0, 1, 0, NULL, 3, 1, 15, 2, 1, 1, NULL, 3, 2, '92500-000', 'R. Tereza Spagiari', 210, NULL, NULL, NULL, 1, 2275, NULL);
 
 -- --------------------------------------------------------
 
@@ -424,6 +429,13 @@ CREATE TABLE `mensagens` (
   `assunto` text NOT NULL,
   `mensagem` text NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Despejando dados para a tabela `mensagens`
+--
+
+INSERT INTO `mensagens` (`codigo`, `nome_completo`, `email`, `telefone`, `assunto`, `mensagem`) VALUES
+(1, 'Rodrigo', 'haniger@haniger.com.br', '5134916238', 'Teste', 'Teste');
 
 -- --------------------------------------------------------
 
@@ -505,6 +517,18 @@ CREATE TABLE `parceiro` (
   `imagem` text
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+--
+-- Despejando dados para a tabela `parceiro`
+--
+
+INSERT INTO `parceiro` (`codigo`, `nome`, `imagem`) VALUES
+(1, 'Banco do Brasil', '4486cf2e-1cb0-4ffe-85a5-823b6748145d.png'),
+(2, 'Bradesco', 'b9f83736-96bc-403b-8923-c624a0992f01.png'),
+(3, 'Itaú', 'fb71d85a-7c12-465e-9240-72232379599c.png'),
+(4, 'HSBC', 'dc278f2d-b3e1-440d-8565-adab3d7d8926.png'),
+(5, 'Caixa', 'aa9c22a2-fd8c-45e8-a11c-7cea43624b80.png'),
+(6, 'Santander', '655154c3-5c78-47b3-a76d-60b74a29657b.png');
+
 -- --------------------------------------------------------
 
 --
@@ -563,10 +587,6 @@ CREATE TABLE `permissao_usuario` (
 --
 
 INSERT INTO `permissao_usuario` (`codigo`, `usuario`, `permissao`) VALUES
-(42, 15, 1),
-(43, 15, 2),
-(44, 15, 3),
-(45, 15, 4),
 (46, 16, 1),
 (47, 16, 2),
 (48, 16, 3),
@@ -589,7 +609,15 @@ INSERT INTO `permissao_usuario` (`codigo`, `usuario`, `permissao`) VALUES
 (68, 25, 4),
 (69, 26, 1),
 (70, 27, 1),
-(71, 28, 1);
+(71, 28, 1),
+(79, 15, 2),
+(80, 15, 3),
+(81, 15, 4),
+(82, 15, 1),
+(95, 1, 1),
+(96, 1, 2),
+(97, 1, 3),
+(98, 1, 4);
 
 -- --------------------------------------------------------
 
@@ -764,7 +792,7 @@ CREATE TABLE `usuario` (
 --
 
 INSERT INTO `usuario` (`codigo`, `nome`, `email`, `senha`, `situacao`) VALUES
-(1, 'Eduardo Pereira', 'eduardo.pereira@haniger.com.br', 'qwerty124124', 1),
+(1, 'Eduardo Pereira', 'eduardo.pereira@haniger.com.br', 'Qwerty124124', 2),
 (15, 'Marcelo Jardim', 'marcelo@imobiliaria7setembro.com.br', 'marcelo7', 1),
 (16, 'Lisiane Correa', 'lisianecorrea87@gmail.com', '94170771', 1),
 (17, 'Roberta Garcia', 'rgarcia@teste.com', 'teste123', 2),
@@ -1012,7 +1040,7 @@ ALTER TABLE `bairro`
 -- AUTO_INCREMENT de tabela `banner`
 --
 ALTER TABLE `banner`
-  MODIFY `codigo` int(6) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=203;
+  MODIFY `codigo` int(6) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=205;
 
 --
 -- AUTO_INCREMENT de tabela `blog`
@@ -1036,7 +1064,7 @@ ALTER TABLE `configuracao_site`
 -- AUTO_INCREMENT de tabela `documento_imovel`
 --
 ALTER TABLE `documento_imovel`
-  MODIFY `codigo` int(6) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `codigo` int(6) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT de tabela `estado_conservacao`
@@ -1048,13 +1076,13 @@ ALTER TABLE `estado_conservacao`
 -- AUTO_INCREMENT de tabela `foto_imovel`
 --
 ALTER TABLE `foto_imovel`
-  MODIFY `codigo` int(6) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=36;
+  MODIFY `codigo` int(6) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=79;
 
 --
 -- AUTO_INCREMENT de tabela `imovel`
 --
 ALTER TABLE `imovel`
-  MODIFY `codigo` int(6) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `codigo` int(6) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT de tabela `localidade`
@@ -1072,7 +1100,7 @@ ALTER TABLE `log`
 -- AUTO_INCREMENT de tabela `mensagens`
 --
 ALTER TABLE `mensagens`
-  MODIFY `codigo` int(6) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `codigo` int(6) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT de tabela `municipio`
@@ -1084,13 +1112,13 @@ ALTER TABLE `municipio`
 -- AUTO_INCREMENT de tabela `novos_imoveis`
 --
 ALTER TABLE `novos_imoveis`
-  MODIFY `codigo` int(6) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `codigo` int(6) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT de tabela `parceiro`
 --
 ALTER TABLE `parceiro`
-  MODIFY `codigo` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `codigo` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT de tabela `perfil_imovel`
@@ -1108,7 +1136,7 @@ ALTER TABLE `permissao`
 -- AUTO_INCREMENT de tabela `permissao_usuario`
 --
 ALTER TABLE `permissao_usuario`
-  MODIFY `codigo` int(6) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=72;
+  MODIFY `codigo` int(6) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=99;
 
 --
 -- AUTO_INCREMENT de tabela `situacao`

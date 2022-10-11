@@ -41,12 +41,14 @@ import { ShareIconsModule } from 'ngx-sharebuttons/icons';
 import { SharedModule } from './shared/shared.module';
 import { AgentRestService } from './about-us/service/agent-rest.service';
 import { PartnerRestService } from './shared/services/partner-rest.service';
+import { NavbarSliderComponent } from './navbar/slider/slider.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     NavbarComponent,
     SearchComponent,
+    NavbarSliderComponent,
     ListPropertiesComponent,
     ViewPropertyComponent,
     FooterComponent,

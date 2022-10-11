@@ -1,7 +1,7 @@
-import { Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { LoginModel } from '../shared/model/login.model';
 import { NavbarService } from './navbar.service';
-import { NavigationEnd, NavigationStart, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { SearchService } from './search/services/search.service';
 import { StorageEnum } from '../shared/storage.enum';
 
@@ -10,15 +10,13 @@ import { StorageEnum } from '../shared/storage.enum';
   templateUrl: './navbar.component.html',
   styleUrls: ['./navbar.component.css']
 })
-export class NavbarComponent implements OnInit, OnDestroy {
+export class NavbarComponent implements OnInit {
 
   @Input()
   public siteInfo: LoginModel;
 
   @Input()
   public siteLogo: string;
-  public currentBanner = '';
-  public bannerInterval: any;
 
   public homepageOn = false;
   public navbarIsCollapsed = false;
@@ -31,19 +29,14 @@ export class NavbarComponent implements OnInit, OnDestroy {
 
   public ngOnInit(): void {
     this.verifyIsHomepage();
+    this.scrollToTop();
     this.router.events.subscribe(
       () => this.verifyIsHomepage()
     );
-    this.currentBanner = this.getCurrentBanner();
-    this.bannerInterval = setInterval(() => {
-      this.currentBanner = this.getCurrentBanner();
-    }, 5000);
   }
-
-  public ngOnDestroy(): void {
-    if (this.bannerInterval) {
-      clearInterval(this.bannerInterval);
-    }
+  
+  public scrollToTop(): void {
+    window.scroll(0, 0);
   }
 
   private verifyIsHomepage(): void {
@@ -117,25 +110,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
     this.navbarIsCollapsed = !this.navbarIsCollapsed;
   }
 
-  public getCurrentBanner() {
-    const banners: string[] = JSON.parse(localStorage.getItem(StorageEnum.BANNERS)) || [];
-
-    if (banners.length) {
-      let currentBanner = this.currentBanner;
-      let indexOfCurrentBanner = banners.findIndex(banner => banner === currentBanner);
-
-      if (indexOfCurrentBanner >= 0 && indexOfCurrentBanner + 1 < banners.length) {
-        return banners[indexOfCurrentBanner + 1];
-      } else {
-        return banners[0];
-      }
-    } else {
-      return '';
-    }
+  get banners() {
+    return JSON.parse(localStorage.getItem(StorageEnum.BANNERS)) || [];
   }
-
-  get banner() {
-    return `background-image:url(${this.currentBanner});`;
-  }
-
 }

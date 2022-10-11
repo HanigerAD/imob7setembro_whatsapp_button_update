@@ -38,7 +38,6 @@ export class HomepageComponent implements OnInit, OnDestroy {
   public ngOnInit(): void {
     this.getFeaturedProperties();
     this.getBlogPosts();
-    this.scrollToTop();
     this.getConfiguration();
   }
 
@@ -68,10 +67,6 @@ export class HomepageComponent implements OnInit, OnDestroy {
 
   public getImageUrl(pathFile: string): string {
     return this.service.getImage(pathFile);
-  }
-
-  public scrollToTop(): void {
-    window.scroll(0, 0);
   }
 
   public seePropertyDetails(code: number): void {

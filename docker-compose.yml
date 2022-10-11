@@ -8,16 +8,19 @@ services:
     command: --default-authentication-plugin=mysql_native_password
     restart: always
     environment:
+      MYSQL_DATABASE: imob7
+      MYSQL_PASSWORD: password
       MYSQL_ROOT_PASSWORD: password
     ports:
       - "3306:3306"
     volumes:
-      - imob7-data:/var/lib/mysql
+      - ./database/init:/docker-entrypoint-initdb.d
+      - ./database/data:/var/lib/mysql
     deploy:
       resources:
-          limits:
-            cpus: "0.50"
-            memory: 512M
+        limits:
+          cpus: "0.50"
+          memory: 512M
 
   # admin-database:
   #   container_name: imob7-admin-database
@@ -47,7 +50,7 @@ services:
     command: npm run start:dev
     restart: always
     ports:
-     - "3000:3000"
+      - "3000:3000"
     volumes:
       - ./api:/usr/app
     links:
@@ -56,9 +59,9 @@ services:
       - database
     deploy:
       resources:
-          limits:
-            cpus: "0.50"
-            memory: 512M
+        limits:
+          cpus: "0.50"
+          memory: 512M
 
   admin:
     container_name: imob7-admin
@@ -68,17 +71,17 @@ services:
       - WATCHPACK_POLLING=true
     restart: always
     ports:
-     - "3002:3000"
+      - "3002:3000"
     volumes:
       - ./admin:/usr/app
     depends_on:
       - api
     deploy:
       resources:
-          limits:
-            cpus: "0.50"
-            memory: 512M
-  
+        limits:
+          cpus: "0.50"
+          memory: 512M
+
   site:
     container_name: imob7-site
     build: ./site
@@ -93,9 +96,9 @@ services:
       - api
     deploy:
       resources:
-          limits:
-            cpus: "0.50"
-            memory: 512M
+        limits:
+          cpus: "0.50"
+          memory: 512M
 
 volumes:
   imob7-data:

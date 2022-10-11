@@ -27,6 +27,7 @@
             ],
             "styles": [
               "src/styles.css",
+              "src/custom-styles.css",
               "./node_modules/leaflet/dist/leaflet.css",
               "node_modules/ngx-sharebuttons/themes/circles.scss",
               "node_modules/ngx-sharebuttons/themes/modern.scss"
@@ -102,6 +103,7 @@
             ],
             "styles": [
               "src/styles.css",
+              "src/custom-styles.css",
               "./node_modules/leaflet/dist/leaflet.css"
             ],
             "scripts": []

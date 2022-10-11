@@ -1,3 +1,7 @@
+.first-header {
+    position: relative;
+    background: transparent;
+}
 
 .secondary-navbar {
     background-image: url(src/assets/ponte-guaiba.jpg);

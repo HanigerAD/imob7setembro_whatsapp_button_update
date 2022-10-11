@@ -1,0 +1,47 @@
+@charset "UTF-8";
+
+@-webkit-keyframes breath {
+    0% {
+        background-size: 100% auto;
+    }
+
+    50% {
+        background-size: 120% auto;
+    }
+
+    100% {
+        background-size: 140% auto;
+    }
+}
+
+@keyframes breath {
+    0% {
+        background-size: 100% auto;
+    }
+
+    50% {
+        background-size: 120% auto;
+    }
+
+    100% {
+        background-size: 140% auto;
+    }
+}
+
+
+.app .form-control {
+    border: 1px solid #d1d5da !important;
+}
+
+.bg-theme {
+    -webkit-animation: breath 15s linear infinite;
+    animation: breath 15s linear infinite;
+}
+
+.navbar-transparent .navbar-brand img:last-child {
+    display: block !important;
+}
+
+header .ngx-slider .ngx-slider-bubble {
+    color: #fff !important;
+}
