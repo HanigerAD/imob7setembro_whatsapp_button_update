@@ -146,6 +146,18 @@ export const ConfiguracoesPage = () => {
     }
   }
 
+  async function generateImagesWithWatermark() {
+    setCarregando(true);
+    try {
+      await apiService.get(`/property/properties/generate-images-with-watermark`);
+      setCarregando(false);
+    } catch (error) {
+      console.log({ error });
+      toast.error("Houve um erro ao criar as imagens com marca d'agua.");
+      setCarregando(false);
+    }
+  }
+
   const logo = useMemo(() => {
     if (model.logo) {
       if (typeof model.logo == "string") {
@@ -288,6 +300,15 @@ export const ConfiguracoesPage = () => {
               onChange={(banners) => atualizarModel("banners", banners || [])}
             />
           </div>
+        </div>
+
+        <div className="d-inline-block w-100">
+          <button className="btn btn-primary btn-sm"
+            type="button"
+            disabled={carregando}
+            onClick={generateImagesWithWatermark}>
+            Gerar imagens com marca d'agua
+          </button>
         </div>
 
         <div className="d-inline-block w-100">

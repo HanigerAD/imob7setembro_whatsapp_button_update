@@ -49,6 +49,7 @@ import { TableFieldEnum } from "../table-field.enum";
 import { SituationResponse } from "../../../user/integration/response/situation.response";
 import { SituationMapper } from "../../../user/mapper/situation.mapper";
 import { ConfigurationService } from 'src/configuration/service/configuration.service';
+import { ImageWatermark } from 'src/common/integration/request/image-watermark';
 
 
 
@@ -83,6 +84,25 @@ export class PropertyService {
 
         return this.repository.getAll(UtilsService.clearObject(filters))
             .then(properties => PropertyMapper.entityListToResponse(properties));
+    }
+
+    public async generateImagesWithWatermark(res: Response): Promise<void> {
+        // buscar todas as imagens originais das propriedades
+        let allImagesOfPropertiesResponse = await this.repository.getAllPropertiesImagesUrls();
+        let allImagesOfProperties = allImagesOfPropertiesResponse.map(
+            ({ foto }) => ({
+                foto,
+                originalFoto: `original-${foto}`,
+                originalFotoUrl: `${process.env.CDN_URL}/original-${foto}`,
+            } as ImageWatermark)
+        );
+        // buscar logo
+        const { logo: logoImageName } = await this.configurationService.get();
+        const logoUrl = `${process.env.CDN_URL}/${logoImageName}`;
+
+        console.log('1', allImagesOfProperties);
+
+        return this.imageService.applyWatermarkAndSubmitToCdn(allImagesOfProperties, logoUrl, res);
     }
 
     public getSingle(code: number): Promise<PropertyDetailResponse> {

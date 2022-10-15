@@ -281,6 +281,13 @@ export class PropertyRepository {
             .orderBy('ordem', 'asc');
     }
 
+    public getAllPropertiesImagesUrls(): Promise<PropertyImageEntity[]> {
+        return this.knex
+            .select('foto')
+            .from('foto_imovel')
+            .orderBy('ordem', 'asc');
+    }
+
     public getPropertyDocuments(code: number): Promise<PropertyDocumentEntity[]> {
         return this.knex
             .select('*')

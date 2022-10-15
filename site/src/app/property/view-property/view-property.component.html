@@ -66,9 +66,6 @@
                         class="carousel__slide">
                         <div class="image-watermark">
                             <img [src]="getPropertyImage(image)" class="property-image">
-                            <div class="watermark-position">
-                                <img class="watermark-large" src="./assets/images/logo-sete-colorido-transparent.png" />
-                            </div>
                         </div>
                         <div class="carousel__snapper">
                             <a href="#carousel__slide{{i-1}}" class="carousel__prev">Go to last slide</a>
@@ -319,10 +316,6 @@
                                             <div class="image-watermark">
                                                 <img [src]="getPropertyImage(property.photo)" alt=""
                                                     class="img-fluid w100 img-transition">
-                                            </div>
-                                            <div class="watermark-position-small">
-                                                <img class="watermark-small"
-                                                    src="./assets/images/logo-sete-colorido-transparent.png" />
                                             </div>
                                             <div class="info info-bankable" *ngIf="property.financeable"> Financiável
                                             </div>

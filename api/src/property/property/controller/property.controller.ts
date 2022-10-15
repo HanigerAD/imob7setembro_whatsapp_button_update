@@ -51,6 +51,14 @@ export class PropertyController {
     return this.service.insertProperty(request);
   }
 
+  @Get("properties/generate-images-with-watermark")
+  @UseGuards(JwtAuthGuard)
+  public async generateImagesWithWatermark(
+    @Res() res: Response
+  ): Promise<void> {
+    return this.service.generateImagesWithWatermark(res);
+  }
+
   @Post("properties/:code/images")
   @UseInterceptors(FilesInterceptor("files"))
   @HttpCode(HttpStatus.OK)

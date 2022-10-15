@@ -8,6 +8,7 @@ import { Builder } from "builder-pattern";
 import { ImageRequest } from "../integration/request/image.request";
 import { CdnService } from "./cdn.service";
 import { CdnDto } from "../dto/cdn.dto";
+import { ImageWatermark } from "../integration/request/image-watermark";
 
 @Injectable()
 export class ImageService {
@@ -42,6 +43,22 @@ export class ImageService {
 
   public async saveImage(image: ImageRequest, res: Response, addWatermask = false, logoUrl = ''): Promise<void> {
     const cdnDtos = await this.prepararImagensParaCdn(image, addWatermask, logoUrl);
+
+    if (cdnDtos.length) {
+      return this.cdnService.sendMultipleFilesToFTP(cdnDtos, res);
+    }
+
+    return null;
+  }
+
+  public async applyWatermarkAndSubmitToCdn(images: ImageWatermark[], logoUrl: string, res: Response): Promise<void> {
+    const cdnDtos = [];
+
+    for (let image of images) {
+      const bufferImagemComMarcaDagua = await this.aplicarMarcaDagua(image.originalFotoUrl, logoUrl);
+      const cdnDtoImagemTratadaComMarcaDagua = this.buildCdnDto(bufferImagemComMarcaDagua, image.foto);
+      cdnDtos.concat(cdnDtoImagemTratadaComMarcaDagua);
+    }
 
     if (cdnDtos.length) {
       return this.cdnService.sendMultipleFilesToFTP(cdnDtos, res);
@@ -88,22 +105,23 @@ export class ImageService {
     return await sharp(imageBuffer)
       .resize(width, height, {
         fit: 'inside',
+        withoutEnlargement: true,
+      })
+      .toFormat('jpeg', {
+        progressive: true,
+        quality: 80,
       })
       .toBuffer();
   }
 
-  private async aplicarMarcaDagua(imageBuffer: Buffer, logoUrl): Promise<Buffer> {
-    let image = await Jimp.read(imageBuffer);
+  private async aplicarMarcaDagua(imageContent: any, logoUrl): Promise<Buffer> {
+    let image = await Jimp.read(imageContent);
     let watermark = await Jimp.read(logoUrl);
 
     watermark.resize(image.bitmap.width / 5, Jimp.AUTO);
 
-    const LOGO_MARGIN_PERCENTAGE = 5;
-    const xMargin = (image.bitmap.width * LOGO_MARGIN_PERCENTAGE) / 100;
-    const yMargin = (image.bitmap.width * LOGO_MARGIN_PERCENTAGE) / 100;
-
-    const X = image.bitmap.width - watermark.bitmap.width - xMargin;
-    const Y = image.bitmap.height - watermark.bitmap.height - yMargin;
+    const X = (image.bitmap.width / 2) - (watermark.bitmap.width / 2);
+    const Y = (image.bitmap.height / 2) - (watermark.bitmap.height / 2);
 
     const mimeImage = image.getMIME();
 
