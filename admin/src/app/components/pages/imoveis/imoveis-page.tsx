@@ -9,6 +9,7 @@ import { Pagination } from "../../layouts/admin/components/pagination";
 import { usePagination } from "../../../hooks/usePagination";
 import { ImoveisFiltros } from "./imoveis-filtros";
 import { converterParaMoeda } from "../../../utils/parser.utils";
+import { VisualizarImovelModal } from "./visualizar-imovel-modal";
 
 export const ImoveisPage = () => {
   const [models, setModels] = useState([]);
@@ -183,8 +184,9 @@ export const ImoveisPage = () => {
                         </p>
 
                         <div className="d-flex flex-column mt-4">
+                          <VisualizarImovelModal code={model.code} />
                           <Link
-                            className="btn btn-warning btn-sm"
+                            className="btn btn-warning btn-sm mt-2"
                             title="Editar"
                             to={`/admin/imoveis/${model.code}`}
                           >
