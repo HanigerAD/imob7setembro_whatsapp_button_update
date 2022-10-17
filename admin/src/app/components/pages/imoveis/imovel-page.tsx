@@ -15,6 +15,7 @@ import {
   converterParaCep,
   converterParaMoeda,
 } from "../../../utils/parser.utils";
+import { MapaComponent } from "../../shared/mapa/mapa-component";
 
 export const ImovelPage = () => {
   const navigate = useNavigate();
@@ -387,6 +388,14 @@ export const ImovelPage = () => {
         newModel.zipCode = converterParaCep(String(newModel.zipCode));
       }
 
+      if (!newModel.latitude || !newModel.longitude) {
+        newModel.latitude = -30.1093317;
+        newModel.longitude = -51.3204208;
+      } else {
+        newModel.latitude = Number(Number(newModel.latitude).toFixed(7));
+        newModel.longitude = Number(Number(newModel.longitude).toFixed(7));
+      }
+
       setModel(newModel);
 
       setCarregando(false);
@@ -395,6 +404,13 @@ export const ImovelPage = () => {
       toast.error("Houve um erro ao buscar o Imovel.");
       setCarregando(false);
     }
+  }
+
+  const inicializarModel = () => {
+    const newModel = Object.assign({}, model);
+    newModel.latitude = -30.1093317;
+    newModel.longitude = -51.3204208;
+    setModel(newModel);
   }
 
   useEffect(() => {
@@ -411,6 +427,8 @@ export const ImovelPage = () => {
   useEffect(() => {
     if (modelId) {
       buscar(modelId);
+    } else {
+      inicializarModel();
     }
   }, [modelId]);
 
@@ -604,7 +622,7 @@ export const ImovelPage = () => {
           <div className="card-header">Endereço</div>
           <div className="card-body">
             <div className="row">
-              <div className="col-md-4">
+              <div className="col-md-3">
                 <div className="form-floating mb-3">
                   <select
                     className="form-control"
@@ -635,7 +653,8 @@ export const ImovelPage = () => {
                   <label htmlFor="input-federativeUnit">UF</label>
                 </div>
               </div>
-              <div className="col-md-4">
+
+              <div className="col-md-3">
                 <div className="form-floating mb-3">
                   <select
                     className="form-control"
@@ -663,7 +682,8 @@ export const ImovelPage = () => {
                   <label htmlFor="input-city">Cidade</label>
                 </div>
               </div>
-              <div className="col-md-4">
+
+              <div className="col-md-3">
                 <div className="form-floating mb-3">
                   <select
                     className="form-control"
@@ -693,7 +713,7 @@ export const ImovelPage = () => {
                 </div>
               </div>
 
-              <div className="col-md-4">
+              <div className="col-md-3">
                 <Input
                   id="input-zipCode"
                   label="CEP"
@@ -706,7 +726,7 @@ export const ImovelPage = () => {
                 />
               </div>
 
-              <div className="col-md-8">
+              <div className="col-md-6">
                 <div className="form-floating mb-3">
                   <input
                     className="form-control"
@@ -723,7 +743,7 @@ export const ImovelPage = () => {
                 </div>
               </div>
 
-              <div className="col-md-4">
+              <div className="col-md-3">
                 <div className="form-floating mb-3">
                   <input
                     className="form-control"
@@ -739,7 +759,7 @@ export const ImovelPage = () => {
                 </div>
               </div>
 
-              <div className="col-md-4">
+              <div className="col-md-3">
                 <div className="form-floating mb-3">
                   <input
                     className="form-control"
@@ -755,35 +775,63 @@ export const ImovelPage = () => {
                 </div>
               </div>
 
-              <div className="col-md-4">
-                <div className="form-floating mb-3">
-                  <input
-                    className="form-control"
-                    id="input-latitude"
-                    type="text"
-                    placeholder="Latitude"
-                    value={model.latitude || ""}
-                    onChange={(event) =>
-                      atualizarModel("latitude", event.target.value)
-                    }
-                  />
-                  <label htmlFor="input-latitude">Latitude</label>
-                </div>
-              </div>
+              <div className="col-md-12">
+                <div className="row">
+                  <div className="col-md-8">
+                    {model && model.latitude && model.longitude ? (
+                      <MapaComponent
+                        style={{ width: "100%", height: '500px' }}
+                        latLngLiteral={{
+                          lat: model.latitude,
+                          lng: model.longitude
+                        }}
+                        onChangeAddress={(value) => atualizarModel("enderecoAproximado", value)}
+                        onChangeLatLng={({ lat, lng }) => {
+                          setModel((value: any) => ({
+                            ...value,
+                            latitude: Number(lat.toFixed(7)),
+                            longitude: Number(lng.toFixed(7))
+                          }))
+                        }} />
+                    ) : null}
+                  </div>
+                  <div className="col-md-4">
+                    <div className="form-floating mb-3">
+                      <input
+                        className="form-control"
+                        id="input-enderecoAproximado"
+                        type="text"
+                        placeholder="Endereço Aproximado"
+                        value={model.enderecoAproximado || ""}
+                        disabled
+                      />
+                      <label htmlFor="input-enderecoAproximado">Endereço Aproximado</label>
+                    </div>
 
-              <div className="col-md-4">
-                <div className="form-floating mb-3">
-                  <input
-                    className="form-control"
-                    id="input-longitude"
-                    type="text"
-                    placeholder="Longitude"
-                    value={model.longitude || ""}
-                    onChange={(event) =>
-                      atualizarModel("longitude", event.target.value)
-                    }
-                  />
-                  <label htmlFor="input-longitude">Longitude</label>
+                    <div className="form-floating mb-3">
+                      <input
+                        className="form-control"
+                        id="input-latitude"
+                        type="text"
+                        placeholder="Latitude"
+                        value={model.latitude || ""}
+                        disabled
+                      />
+                      <label htmlFor="input-latitude">Latitude</label>
+                    </div>
+
+                    <div className="form-floating mb-3">
+                      <input
+                        className="form-control"
+                        id="input-longitude"
+                        type="text"
+                        placeholder="Longitude"
+                        value={model.longitude || ""}
+                        disabled
+                      />
+                      <label htmlFor="input-longitude">Longitude</label>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
