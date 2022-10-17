@@ -15,6 +15,7 @@ import {Router} from '@angular/router';
 import {TransactionEnum} from '../../shared/enum/transaction.enum';
 import {ZoneModel} from '../../navbar/search/model/zone.model';
 import {PropertyZoneEnum} from '../../navbar/search/enum/property-zone.enum';
+import { converterParaMoeda } from '../../shared/utils/parser.utils';
 
 @Component({
   selector: 'app-list-properties',
@@ -43,6 +44,8 @@ export class ListPropertiesComponent implements OnInit, OnChanges {
   public propertiesCounter: number;
   public actualPage = 1;
   public perPage = 12;
+
+  public converterParaMoeda = converterParaMoeda;
 
   constructor(
       private formBuilder: FormBuilder,

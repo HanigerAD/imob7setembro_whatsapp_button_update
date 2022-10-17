@@ -52,16 +52,6 @@ export const VisualizarImovelModal = ({ code: modelId }: { code: string }) => {
       newModel.photo = photo;
       newModel.documents = documents;
 
-      if (newModel.price) {
-        newModel.price = converterParaMoeda(String(newModel.price));
-      }
-
-      if (newModel.condominiumPrice) {
-        newModel.condominiumPrice = converterParaMoeda(
-          String(newModel.condominiumPrice)
-        );
-      }
-
       if (newModel.zipCode) {
         newModel.zipCode = converterParaCep(String(newModel.zipCode));
       }
@@ -158,7 +148,7 @@ export const VisualizarImovelModal = ({ code: modelId }: { code: string }) => {
                 <div className="align-items-center align-content-center col-md-3 border-left mt-1">
                   <div className="d-flex flex-row align-items-center">
                     <h4 className="mr-1">
-                      R$ {converterParaMoeda(model.price || 0)}
+                      R$ {converterParaMoeda(model.price || 0, false)}
                     </h4>
                   </div>
 

@@ -26,7 +26,8 @@
                                 <h6 class="text-capitalize"> Cód. {{ featuredProperties[0]?.internalCode }} - {{
                                     featuredProperties[0]?.title }} - {{ featuredProperties[0]?.neighborhood }}, {{
                                     featuredProperties[0]?.city }} </h6>
-                                <p class="text-capitalize"> {{ featuredProperties[0]?.price | currency: 'R$ ' }}</p>
+                                <p class="text-capitalize"> R$ {{ converterParaMoeda(featuredProperties[0]?.price,
+                                    false) }}</p>
                                 <span class="financeable-label text-white" *ngIf="featuredProperties[0]?.financeable">
                                     Financiável </span>
                             </div>
@@ -50,7 +51,8 @@
                                     <div class="desc">
                                         <h6 class="text-capitalize"> Cód. {{ property.internalCode }} - {{
                                             property.title }} - {{ property.neighborhood }}, {{ property.city }} </h6>
-                                        <p class="text-capitalize"> {{ property.price | currency: 'R$ ' }} </p>
+                                        <p class="text-capitalize"> R$ {{ converterParaMoeda(property.price, false) }}
+                                        </p>
                                         <span class="financeable-label text-white" *ngIf="property.financeable">
                                             Financiável </span>
                                     </div>

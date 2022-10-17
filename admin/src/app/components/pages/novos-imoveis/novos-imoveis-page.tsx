@@ -177,7 +177,7 @@ export const NovosImoveisPage = () => {
                       <div className="align-items-center align-content-center col-md-3 border-left mt-1">
                         <div className="d-flex flex-row align-items-center">
                           <h4 className="mr-1">
-                            R$ {converterParaMoeda(model.price || 0)}
+                            R$ {converterParaMoeda(model.price || 0, false)}
                           </h4>
                         </div>
 

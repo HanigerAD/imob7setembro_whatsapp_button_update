@@ -17,6 +17,7 @@ import { StorageEnum } from '../../shared/storage.enum';
 import { ZoneModel } from '../../navbar/search/model/zone.model';
 import { PropertyZoneEnum } from '../../navbar/search/enum/property-zone.enum';
 import { TransactionEnum } from '../../shared/enum/transaction.enum';
+import { converterParaMoeda } from '../../shared/utils/parser.utils';
 
 @Component({
   selector: 'app-view-property',
@@ -42,6 +43,7 @@ export class ViewPropertyComponent implements OnInit, OnDestroy, OnChanges, Afte
   public optionsSlider: Options;
   public similarProperties: PropertyModel[] = [];
   public ruralZoneSelected = false;
+  public converterParaMoeda = converterParaMoeda;
 
   private subscriptions: Subscription = new Subscription();
 

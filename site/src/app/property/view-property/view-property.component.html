@@ -28,7 +28,7 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="single__detail-area-price">
-                    <h4 class="text-capitalize text-gray"> {{ property?.price | currency: 'R$ ' }} </h4>
+                    <h4 class="text-capitalize text-gray"> R$ {{ converterParaMoeda(property?.price, false) }} </h4>
                     <h6 class="text-capitalize text-white" *ngIf="property?.financeable"> <span
                             class="financeable-label"> Financiável </span> </h6>
                 </div>
@@ -109,7 +109,7 @@
                                     <div class="col-md-6 col-lg-6">
                                         <ul class="property__detail-info-list list-unstyled">
                                             <li><b>Código do Imóvel:</b> {{ property?.internalCode }} </li>
-                                            <li><b>Preço:</b> {{ property?.price | currency: 'R$ '}} </li>
+                                            <li><b>Preço:</b> R$ {{ converterParaMoeda(property?.price, false) }} </li>
                                             <li><b>Área:</b> {{ property?.totalArea }}m² </li>
                                             <li><b>Quartos:</b> {{ property?.dormitory }} </li>
                                             <li><b>Banheiros:</b> {{ property?.bathroom }} </li>
@@ -360,8 +360,9 @@
                                             </figure>
                                             <ul class="list-inline my-auto ml-auto">
                                                 <li class="list-inline-item">
-                                                    <h6 class="text-primary"> {{ property.price | currency:
-                                                        'R$':'symbol' }} </h6>
+                                                    <h6 class="text-primary">
+                                                        R$ {{ converterParaMoeda(property.price, false) }}
+                                                    </h6>
                                                 </li>
 
                                             </ul>

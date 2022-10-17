@@ -36,11 +36,14 @@ export function converterBooleanParaString(
   return value;
 }
 
-export function converterParaMoeda(value: string) {
-  return value
-    .replace(/\D/g, "")
-    .replace(/(\d)(\d{2})$/, "$1,$2")
-    .replace(/(?=(\d{3})+(\D))\B/g, ".");
+export function converterParaMoeda(value: string, comDecimal = true) {
+  let str = value.replace(/\D/g, "");
+
+  if (comDecimal) {
+    return str.replace(/(\d)(\d{2})$/, "$1,$2").replace(/(?=(\d{3})+(\D))\B/g, ".");
+  } else {
+    return str.slice(0, str.length - 2).split(/(?=(?:...)*$)/).join(".");
+  }
 }
 
 export function converterParaCep(value: string) {
