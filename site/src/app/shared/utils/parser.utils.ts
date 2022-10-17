@@ -37,7 +37,7 @@ export function converterBooleanParaString(
 }
 
 export function converterParaMoeda(value: string, comDecimal = true) {
-  let str = value.replace(/\D/g, "");
+  let str = String(value).replace(/\D/g, "");
 
   if (comDecimal) {
     return str.replace(/(\d)(\d{2})$/, "$1,$2").replace(/(?=(\d{3})+(\D))\B/g, ".");

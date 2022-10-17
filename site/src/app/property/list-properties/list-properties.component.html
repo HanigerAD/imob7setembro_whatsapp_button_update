@@ -346,7 +346,7 @@
                                                     <div class="card__image-footer">
                                                         <ul class="list-inline my-auto ml-auto">
                                                             <li class="list-inline-item">
-                                                                <h6 class="text-primary"> R$ {{ converterParaMoeda(property.price, false) }} </h6>
+                                                                <h6 class="text-primary"> R$ {{ converterParaMoeda(property.price || 0, false) }} </h6>
                                                             </li>
 
                                                         </ul>

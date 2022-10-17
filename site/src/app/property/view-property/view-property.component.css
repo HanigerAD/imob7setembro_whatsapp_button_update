@@ -1,3 +1,97 @@
+/* Slideshow container */
+.slideshow-container {
+    position: relative;
+    margin: auto;
+}
+
+/* Hide the images by default */
+.mySlides {
+    display: none;
+}
+
+/* Next & previous buttons */
+.prev,
+.next {
+    border: 0;
+    cursor: pointer;
+    position: absolute;
+    top: 50%;
+    width: auto;
+    margin-top: -22px;
+    padding: 16px;
+    background-color: #333;
+    color: white;
+    font-weight: bold;
+    font-size: 18px;
+    transition: 0.6s ease;
+    border-radius: 0 3px 3px 0;
+    user-select: none;
+}
+
+/* Position the "next button" to the right */
+.next {
+    right: 0;
+    border-radius: 3px 0 0 3px;
+}
+
+/* On hover, add a black background color with a little bit see-through */
+.prev:hover,
+.next:hover {
+    background-color: rgba(0, 0, 0, 0.8);
+}
+
+/* Caption text */
+.text {
+    color: #f2f2f2;
+    font-size: 15px;
+    padding: 8px 12px;
+    position: absolute;
+    bottom: 8px;
+    width: 100%;
+    text-align: center;
+}
+
+/* Number text (1/3 etc) */
+.numbertext {
+    color: #f2f2f2;
+    font-size: 12px;
+    padding: 8px 12px;
+    position: absolute;
+    top: 0;
+}
+
+/* The dots/bullets/indicators */
+.dot {
+    cursor: pointer;
+    height: 15px;
+    width: 15px;
+    margin: 0 2px;
+    background-color: #bbb;
+    border-radius: 50%;
+    display: inline-block;
+    transition: background-color 0.6s ease;
+}
+
+.active,
+.dot:hover {
+    background-color: #717171;
+}
+
+/* Fading animation */
+.custom-fade {
+    animation-name: custom-fade;
+    animation-duration: 1.5s;
+}
+
+@keyframes custom-fade {
+    from {
+        opacity: .4
+    }
+
+    to {
+        opacity: 1
+    }
+}
 
 .show-more {
     min-height: 200px;
@@ -7,12 +101,15 @@
     75% {
         left: 0;
     }
+
     95% {
         left: 100%;
     }
+
     98% {
         left: 100%;
     }
+
     99% {
         left: 0;
     }
@@ -22,12 +119,15 @@
     75% {
         left: 0;
     }
+
     95% {
         left: -300%;
     }
+
     98% {
         left: -300%;
     }
+
     99% {
         left: 0;
     }
@@ -37,12 +137,15 @@
     96% {
         scroll-snap-align: center;
     }
+
     97% {
         scroll-snap-align: none;
     }
+
     99% {
         scroll-snap-align: none;
     }
+
     100% {
         scroll-snap-align: center;
     }
@@ -57,7 +160,8 @@ body {
 
 * {
     box-sizing: border-box;
-    scrollbar-color: transparent transparent; /* thumb and track color */
+    scrollbar-color: transparent transparent;
+    /* thumb and track color */
     scrollbar-width: 0px;
 }
 
@@ -78,7 +182,8 @@ body {
     -ms-overflow-style: none;
 }
 
-ol, li {
+ol,
+li {
     list-style: none;
     margin: 0;
     padding: 0;
@@ -167,7 +272,7 @@ ol, li {
     }
 
     .watermark-large {
-        position:relative;
+        position: relative;
         top: -175px;
         height: 167px;
         opacity: 0.3
@@ -193,7 +298,7 @@ ol, li {
     }
 
     .watermark-large {
-        position:relative;
+        position: relative;
         top: -540px;
         height: 120px;
         opacity: 0.3
@@ -219,7 +324,7 @@ ol, li {
     }
 
     .watermark-large {
-        position:relative;
+        position: relative;
         top: -540px;
         height: 120px;
         opacity: 0.3
@@ -233,7 +338,7 @@ ol, li {
     }
 
     .watermark-large {
-        position:relative;
+        position: relative;
         top: -605px;
         height: 230px;
         opacity: 0.3
@@ -248,6 +353,7 @@ ol, li {
 }
 
 @media (min-width:540px) {
+
     /* smartphones, Android phones, landscape iPhone */
     .property-image {
         width: 530px;
@@ -255,7 +361,7 @@ ol, li {
     }
 
     .watermark-large {
-        position:relative;
+        position: relative;
         top: -680px;
         height: 230px;
         opacity: 0.3
@@ -263,6 +369,7 @@ ol, li {
 }
 
 @media (min-width:768px) {
+
     /* smartphones, Android phones, landscape iPhone */
     .property-image {
         width: 760px;
@@ -270,7 +377,7 @@ ol, li {
     }
 
     .watermark-large {
-        position:relative;
+        position: relative;
         top: -700px;
         height: 230px;
         opacity: 0.3
@@ -278,6 +385,7 @@ ol, li {
 }
 
 @media (min-width:1024px) {
+
     /* smartphones, Android phones, landscape iPhone */
     .property-image {
         width: 950px;
@@ -285,7 +393,7 @@ ol, li {
     }
 
     .watermark-large {
-        position:relative;
+        position: relative;
         top: -800px;
         height: 230px;
         opacity: 0.3
@@ -293,6 +401,7 @@ ol, li {
 }
 
 @media (min-width:1280px) {
+
     /* smartphones, Android phones, landscape iPhone */
     .property-image {
         width: 1160px;
@@ -300,7 +409,7 @@ ol, li {
     }
 
     .watermark-large {
-        position:relative;
+        position: relative;
         top: -865px;
         height: 230px;
         opacity: 0.3;
@@ -348,7 +457,7 @@ ol, li {
     position: absolute;
     top: 50%;
     left: 50%;
-    transform: translate3d(-50%,-40%,70px);
+    transform: translate3d(-50%, -40%, 70px);
     color: #fff;
     font-size: 2em;
 }
@@ -482,19 +591,19 @@ ol, li {
 }
 
 .image-watermark {
-    margin-bottom:-150px;
-    overflow:hidden;
+    margin-bottom: -150px;
+    overflow: hidden;
 }
 
 .watermark {
-    position:relative;
+    position: relative;
     top: -50px;
     height: 50px;
 }
 
 
 .watermark-small {
-    position:relative;
+    position: relative;
     top: -200px;
     height: 50px;
 }

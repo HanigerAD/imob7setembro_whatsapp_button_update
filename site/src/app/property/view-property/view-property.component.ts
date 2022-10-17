@@ -44,6 +44,7 @@ export class ViewPropertyComponent implements OnInit, OnDestroy, OnChanges, Afte
   public similarProperties: PropertyModel[] = [];
   public ruralZoneSelected = false;
   public converterParaMoeda = converterParaMoeda;
+  public slideIndex = 0;
 
   private subscriptions: Subscription = new Subscription();
 
@@ -312,4 +313,25 @@ export class ViewPropertyComponent implements OnInit, OnDestroy, OnChanges, Afte
     this.configureSlider();
   }
 
+  public prevSlides() {
+    console.log('prevSlides');
+    this.showSlides(this.slideIndex - 1);
+  }
+
+  public plusSlides() {
+    console.log('plusSlides');
+    this.showSlides(this.slideIndex + 1);
+  }
+
+  public showSlides(n) {
+    let slides = document.getElementsByClassName("mySlides");
+
+    if (n >= slides.length) {
+      this.slideIndex = 0;
+    } else if (n < 0) {
+      this.slideIndex = slides.length - 1;
+    } else {
+      this.slideIndex = n;
+    }
+  }
 }
