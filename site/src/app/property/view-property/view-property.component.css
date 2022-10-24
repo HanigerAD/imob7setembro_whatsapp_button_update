@@ -591,7 +591,6 @@ li {
 }
 
 .image-watermark {
-    margin-bottom: -150px;
     overflow: hidden;
 }
 
@@ -629,4 +628,9 @@ li {
 
 .icon-to-share-wa {
     margin-left: 10px;
+}
+
+#pills-tab-one.active,
+#pills-tab-two.active {
+  background-color: transparent!important;
 }
