@@ -49,3 +49,8 @@ header .ngx-slider .ngx-slider-bubble {
 .btn {
     border-radius: 6px;
 }
+
+.h-250 {
+  min-height: 250px;
+  height: auto !important;
+}

@@ -12,6 +12,7 @@ import * as moment from 'moment';
 import {NewsService} from '../../news/service/news.service';
 import {ConfigurationModel} from '../../shared/model/configuration.model';
 import {StorageEnum} from '../../shared/storage.enum';
+import { converterParaMoeda } from '../../shared/utils/parser.utils';
 
 @Component({
   selector: 'app-homepage',
@@ -27,6 +28,8 @@ export class HomepageComponent implements OnInit, OnDestroy {
 
   public featuredProperties: PropertyModel[] = [];
   public posts: PostModel[] = [];
+
+  public converterParaMoeda = converterParaMoeda;
 
   constructor(
       private service: HomepageService,
@@ -47,6 +50,10 @@ export class HomepageComponent implements OnInit, OnDestroy {
 
   public getConfiguration(): void {
     this.siteInfo = JSON.parse(localStorage.getItem(StorageEnum.SITE_INFO));
+  }
+
+  public getPropertyImage(path: string): string {
+    return this.propertyService.getPropertyImage(path);
   }
 
   private getFeaturedProperties(): void {
