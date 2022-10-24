@@ -271,11 +271,12 @@ export const ImovelPage = () => {
       toast.success("Registro salvo com sucesso");
       setCarregando(false);
 
-      if (code != modelId) {
-        navigate(`/admin/imoveis/${code}`);
-      } else {
-        buscar(code);
-      }
+      // if (code != modelId) {
+      //   navigate(`/admin/imoveis/${code}`);
+      // } else {
+      //   buscar(code);
+      // }
+      navigate(`/admin/imoveis`);
     } catch (error) {
       console.log({ error });
       toast.error(
