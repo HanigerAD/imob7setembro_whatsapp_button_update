@@ -52,17 +52,17 @@ async function copiarArquivosParaServerAdmin() {
 }
 
 async function main() {
-  console.log("Realizando build do Site");
-  await buildSite();
-  console.log("Build do Site realizado");
+  // console.log("Realizando build do Site");
+  // await buildSite();
+  // console.log("Build do Site realizado");
 
-  console.log("Realizando build do Admin");
-  await buildAdmin();
-  console.log("Build do Admin realizado");
+  // console.log("Realizando build do Admin");
+  // await buildAdmin();
+  // console.log("Build do Admin realizado");
 
-  console.log("Realizando build da Api");
-  await buildApi();
-  console.log("Build da Api realizado");
+  // console.log("Realizando build da Api");
+  // await buildApi();
+  // console.log("Build da Api realizado");
 
   console.log("Limpando Server Site");
   await limparServerSite();

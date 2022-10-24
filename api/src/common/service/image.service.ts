@@ -109,7 +109,7 @@ export class ImageService {
       })
       .toFormat('jpeg', {
         progressive: true,
-        quality: 80,
+        quality: 70,
       })
       .toBuffer();
   }
