@@ -35,8 +35,6 @@ export const Pagination = ({
     return Math.ceil(totalItems / itemsPerPage);
   }, [totalItems, itemsPerPage]);
 
-  useEffect(() => {}, [totalItems, itemsPerPage]);
-
   return totalItems > 0 ? (
     <div className="d-flex justify-content-end align-items-center">
       <div style={{ marginRight: "10px" }}>
@@ -69,15 +67,11 @@ export const Pagination = ({
             </button>
           </li>
 
-          <li
-            className={`page-item ${
-              currentPage + 1 >= lastPage ? "disabled" : ""
-            }`}
-          >
+          <li className={`page-item ${currentPage + 1 > lastPage ? "disabled" : ""}`}>
             <button
               className="page-link btn-sm"
               type="button"
-              disabled={currentPage + 1 >= lastPage}
+              disabled={currentPage + 1 > lastPage}
               onClick={() => nextPage()}
             >
               <i className="fas fa-angle-right"></i>
@@ -85,14 +79,11 @@ export const Pagination = ({
           </li>
 
           <li
-            className={`page-item ${
-              currentPage + 1 >= lastPage ? "disabled" : ""
-            }`}
-          >
+            className={`page-item ${currentPage >= lastPage ? "disabled" : ""}`}>
             <button
               className="page-link btn-sm"
               type="button"
-              disabled={currentPage + 1 >= lastPage}
+              disabled={currentPage >= lastPage}
               onClick={() => paginate(lastPage)}
             >
               <i className="fas fa-solid fa-angles-right"></i>
