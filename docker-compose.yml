@@ -16,11 +16,6 @@ services:
     volumes:
       - ./database/init:/docker-entrypoint-initdb.d
       - ./database/data:/var/lib/mysql
-    deploy:
-      resources:
-        limits:
-          cpus: "0.50"
-          memory: 512M
 
   # admin-database:
   #   container_name: imob7-admin-database
@@ -46,59 +41,29 @@ services:
 
   api:
     container_name: imob7-api
-    build: ./api
-    command: npm run start:dev
-    restart: always
-    ports:
-      - "3000:3000"
-    volumes:
-      - ./api:/usr/app
+    extends:
+      file: ./api/docker-compose.yml
+      service: api
     links:
       - database
     depends_on:
       - database
-    deploy:
-      resources:
-        limits:
-          cpus: "0.50"
-          memory: 512M
 
   admin:
     container_name: imob7-admin
-    build: ./admin
-    command: npm run start
-    environment:
-      - WATCHPACK_POLLING=true
-    restart: always
-    ports:
-      - "3002:3000"
-    volumes:
-      - ./admin:/usr/app
+    extends:
+      file: ./admin/docker-compose.yml
+      service: frontend
     depends_on:
       - api
-    deploy:
-      resources:
-        limits:
-          cpus: "0.50"
-          memory: 512M
 
   site:
     container_name: imob7-site
-    build: ./site
-    command: npm run start
-    restart: always
-    ports:
-      - "4200:4200"
-      - "49153:49153"
-    volumes:
-      - ./site:/usr/app
+    extends:
+      file: ./site/docker-compose.yml
+      service: frontend
     depends_on:
       - api
-    deploy:
-      resources:
-        limits:
-          cpus: "0.50"
-          memory: 512M
 
 volumes:
   imob7-data:

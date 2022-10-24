@@ -1,0 +1,15 @@
+version: '3'
+
+name: integrador
+
+services:
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: always
+    ports:
+      - "3002:3000"
+    volumes:
+      - ./:/home/app
+      - ./command.sh:/home/utils/command.sh

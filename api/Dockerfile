@@ -1,12 +1,12 @@
 FROM node:16
 
-WORKDIR /usr/app
+RUN mkdir -p /home/utils
+RUN chmod -R +x /home/utils
 
-COPY package*.json ./
-RUN npm install
+RUN mkdir -p /home/temp
 
-COPY . .
+WORKDIR /home/app
 
 EXPOSE 3000
 
-CMD npm run start:dev
+CMD [ "sh", "/home/utils/command.sh" ]
