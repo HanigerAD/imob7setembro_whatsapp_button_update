@@ -156,6 +156,14 @@ export class PropertyRepository {
                         if (filter == 'exibir') {
                             queryBuilder.where('exibir', '=', filters[filter]);
                         }
+
+                        if (filter == 'internalCode') {
+                            queryBuilder.where('codigo_interno', '=', filters[filter]);
+                        }
+
+                        if (filter == 'code') {
+                            queryBuilder.where('codigo', '=', filters[filter]);
+                        }
                     }
                 });
             })

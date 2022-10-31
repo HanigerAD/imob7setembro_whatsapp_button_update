@@ -26,25 +26,25 @@ export class PartnerController {
 
   @Post()
   @UseGuards(JwtAuthGuard)
-  public insert(@Body() request: PartnerRequest): Promise<number> {
+  public async insert(@Body() request: PartnerRequest): Promise<number> {
     return this.service.insert(request);
   }
 
   @Get()
-  public getAll(): Promise<PartnerResponse[]> {
+  public async getAll(): Promise<PartnerResponse[]> {
     return this.service.getAll();
   }
 
   @Get(":code")
   @UseGuards(JwtAuthGuard)
-  public getSingle(@Param("code") code: number): Promise<PartnerResponse> {
+  public async getSingle(@Param("code") code: number): Promise<PartnerResponse> {
     return this.service.getSingle(code);
   }
 
   @Patch(":code")
   @UseGuards(JwtAuthGuard)
   @HttpCode(HttpStatus.OK)
-  public update(
+  public async update(
     @Param("code") code: number,
     @Body() request: PartnerRequest
   ): Promise<number> {
@@ -54,7 +54,7 @@ export class PartnerController {
   @Delete(":code")
   @UseGuards(JwtAuthGuard)
   @HttpCode(HttpStatus.OK)
-  public delete(@Param("code") code: number): Promise<number> {
+  public async delete(@Param("code") code: number): Promise<number> {
     return this.service.delete(code);
   }
 
@@ -62,7 +62,7 @@ export class PartnerController {
   @UseGuards(JwtAuthGuard)
   @HttpCode(HttpStatus.OK)
   @UseInterceptors(FileInterceptor("file"))
-  public uploadFile(
+  public async uploadFile(
     @Param("code") code: number,
     @UploadedFile() file: Express.Multer.File,
     @Res() res: Response

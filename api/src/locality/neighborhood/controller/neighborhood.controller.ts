@@ -9,30 +9,30 @@ import { PaginationDTO } from './../../../common/dto/pagination.dto';
 
 @Controller('neighborhood')
 export class NeighborhoodController {
-    constructor(
-        private service: NeighborhoodService
-    ) {
-    }
+  constructor(
+    private service: NeighborhoodService
+  ) {
+  }
 
-    @Post('neighborhoods')
-    @UseGuards(JwtAuthGuard)
-    public insert(@Body() request: NeighborhoodRequest): Promise<number> {
-        return this.service.insert(request);
-    }
+  @Post('neighborhoods')
+  @UseGuards(JwtAuthGuard)
+  public async insert(@Body() request: NeighborhoodRequest): Promise<number> {
+    return this.service.insert(request);
+  }
 
-    @Get('neighborhoods')
-    public async getAll(@Query() pagination: PaginationDTO, @Res() res: Response): Promise<void> {
-        res.send(await this.service.getAll(pagination, res));
-    }
+  @Get('neighborhoods')
+  public async getAll(@Query() pagination: PaginationDTO, @Res() res: Response): Promise<void> {
+    res.send(await this.service.getAll(pagination, res));
+  }
 
-    @Get('neighborhoods/:code')
-    public getSingle(@Param('code') code: number): Promise<NeighborhoodResponse> {
-        return this.service.getSingle(code);
-    }
+  @Get('neighborhoods/:code')
+  public async getSingle(@Param('code') code: number): Promise<NeighborhoodResponse> {
+    return this.service.getSingle(code);
+  }
 
-    @Patch('neighborhoods/:code')
-    @UseGuards(JwtAuthGuard)
-    public update(@Param('code') code: number, @Body() request: NeighborhoodRequest): Promise<number> {
-        return this.service.update(code, request);
-    }
+  @Patch('neighborhoods/:code')
+  @UseGuards(JwtAuthGuard)
+  public async update(@Param('code') code: number, @Body() request: NeighborhoodRequest): Promise<number> {
+    return this.service.update(code, request);
+  }
 }

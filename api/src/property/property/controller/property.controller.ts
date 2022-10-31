@@ -47,7 +47,7 @@ export class PropertyController {
 
   @Post("properties")
   @UseGuards(JwtAuthGuard)
-  public insertProperty(@Body() request: PropertyRequest): Promise<number> {
+  public async insertProperty(@Body() request: PropertyRequest): Promise<number> {
     return this.service.insertProperty(request);
   }
 
@@ -62,81 +62,80 @@ export class PropertyController {
   @Post("properties/:code/images")
   @UseInterceptors(FilesInterceptor("files"))
   @HttpCode(HttpStatus.OK)
-  public insertImages(
+  public async insertImages(
     @Param("code") code: number,
     @UploadedFiles() files: Express.Multer.File[],
     @Res() res: Response
-  ): void {
-    this.service.insertPropertyImages(files, code, res);
+  ): Promise<void> {
+    return this.service.insertPropertyImages(files, code, res);
   }
 
   @Put("properties/:code/images")
   @UseInterceptors(FilesInterceptor("files"))
   @HttpCode(HttpStatus.OK)
-  public updateImages(
+  public async updateImages(
     @Param("code") code: number,
     @UploadedFiles() files: Express.Multer.File[],
     @Res() res: Response
-  ): void {
-    this.service.insertPropertyImages(files, code, res);
+  ): Promise<void> {
+    return this.service.insertPropertyImages(files, code, res);
   }
 
   @Post("properties/:code/image")
   @UseInterceptors(FilesInterceptor("file"))
   @HttpCode(HttpStatus.OK)
-  public insertImage(
+  public async insertImage(
     @Param("code") code: number,
     @Query("order") order: number,
     @UploadedFiles() file: Express.Multer.File,
     @Res() res: Response
-  ): void {
-    this.service.insertPropertyImage(file, code, res, order);
+  ): Promise<void> {
+    return this.service.insertPropertyImage(file, code, res, order);
   }
 
   @Put("properties/images-sort")
   @UseGuards(JwtAuthGuard)
   @HttpCode(HttpStatus.OK)
-  public updateImagesSort(@Body() imagesSort: ImageSortRequest[]): void {
-    this.service.updateImagesSort(imagesSort);
+  public async updateImagesSort(@Body() imagesSort: ImageSortRequest[]): Promise<void> {
+    return this.service.updateImagesSort(imagesSort);
   }
 
   @Patch("properties/:code/delete-images")
   @UseGuards(JwtAuthGuard)
   @HttpCode(HttpStatus.OK)
-  public deleteImages(
+  public async deleteImages(
     @Param("code") code: number,
     @Body() deletedImages: string[]
-  ): void {
-    this.service.deleteImages(deletedImages);
+  ): Promise<void> {
+    return this.service.deleteImages(deletedImages);
   }
 
   @Patch("properties/:code/delete-documents")
   @UseGuards(JwtAuthGuard)
   @HttpCode(HttpStatus.OK)
-  public deleteDocuments(
+  public async deleteDocuments(
     @Param("code") code: number,
     @Body() deletedDocuments: string[]
-  ): void {
-    this.service.deleteDocuments(deletedDocuments);
+  ): Promise<void> {
+    return this.service.deleteDocuments(deletedDocuments);
   }
 
   @Delete("properties/:code")
   @UseGuards(JwtAuthGuard)
   @HttpCode(HttpStatus.OK)
-  public deleteProperty(@Param("code") code: number): Promise<number> {
+  public async deleteProperty(@Param("code") code: number): Promise<number> {
     return this.service.delete(code);
   }
 
   @Get("properties")
   public async getAllProperty(
-    @Query() filter: PropertyFilterRequest,
-    @Res() res: Response
+    @Query() filter: PropertyFilterRequest
   ): Promise<any> {
-    res.send(await this.service.getAllProperties(filter, res));
+    return this.service.getAllProperties(filter);
   }
 
   @Get("properties/:code")
-  public getSingleProperty(
+  public async getSingleProperty(
     @Param("code") code: number
   ): Promise<PropertyDetailResponse> {
     return this.service.getSingle(code);
@@ -145,7 +144,7 @@ export class PropertyController {
   @Patch("properties/:code")
   @UseGuards(JwtAuthGuard)
   @HttpCode(HttpStatus.OK)
-  public updateProperty(
+  public async updateProperty(
     @Param("code") code: number,
     @Body() request: PropertyRequest
   ): Promise<number> {
@@ -155,7 +154,7 @@ export class PropertyController {
   @Post("properties/:code/document")
   @UseInterceptors(FilesInterceptor("file"))
   @HttpCode(HttpStatus.OK)
-  public insertDocument(
+  public async insertDocument(
     @Param("code") code: number,
     @UploadedFiles() file: Express.Multer.File
   ): Promise<void> {
@@ -166,7 +165,7 @@ export class PropertyController {
   @UseGuards(JwtAuthGuard)
   @HttpCode(HttpStatus.OK)
   @UseInterceptors(FilesInterceptor("files"))
-  public insertDocuments(
+  public async insertDocuments(
     @Param("code") code: number,
     @UploadedFiles() files: Express.Multer.File[],
     @Res() response: Response
@@ -175,86 +174,76 @@ export class PropertyController {
   }
 
   @Get("counter/rent")
-  public getRentCounter(): Promise<number> {
+  public async getRentCounter(): Promise<number> {
     return this.service.getRentCounter();
   }
 
   @Get("counter/sell")
-  public getSellCounter(): Promise<number> {
+  public async getSellCounter(): Promise<number> {
     return this.service.getSellCounter();
   }
 
-  // @Get('properties/:code/image')
-  // public async getPropertyImage(@Param('code') code: number, @Res() res): Promise<Express.Multer.File> {
-  // const image = await this.service.getPropertyImage(code);
-  // return res.sendFile(image, { root: 'uploads' })
-  // }
-
   @Get("properties/:code/images/urls")
   public async getPropertyImageUrl(
-    @Param("code") code: number,
-    @Res() res
+    @Param("code") code: number
   ): Promise<string[]> {
-    const images = await this.service.getPropertyImagesUrls(code);
-    return res.send(images);
+    return this.service.getPropertyImagesUrls(code);
   }
 
   @Get("properties/:code/documents")
   public async getPropertyDocuments(
-    @Param("code") code: number,
-    @Res() res
+    @Param("code") code: number
   ): Promise<PropertyDocumentResponse[]> {
-    const documents = await this.service.getPropertyDocuments(code);
-    return res.send(documents);
+    return this.service.getPropertyDocuments(code);
   }
 
   @Get("/transactions")
-  public getTransactions(): Promise<TransactionResponse[]> {
+  public async getTransactions(): Promise<TransactionResponse[]> {
     return this.basicDataService.getTransactions();
   }
 
   @Get("/zones")
-  public getZones(): Promise<ZoneResponse[]> {
+  public async getZones(): Promise<ZoneResponse[]> {
     return this.basicDataService.getZones();
   }
 
   @Get("/categories")
-  public getCategories(): Promise<CategoryResponse[]> {
+  public async getCategories(): Promise<CategoryResponse[]> {
     return this.basicDataService.getCategories();
   }
 
   @Get("/types")
-  public getTypes(): Promise<TypeResponse[]> {
+  public async getTypes(): Promise<TypeResponse[]> {
     return this.basicDataService.getTypes();
   }
 
   @Get("/conservation-states")
-  public getConservationStates(): Promise<ConservationStateResponse[]> {
+  public async getConservationStates(): Promise<ConservationStateResponse[]> {
     return this.basicDataService.getConservationStates();
   }
 
   @Get("/situations")
-  public getSituations(): Promise<SituationResponse[]> {
+  public async getSituations(): Promise<SituationResponse[]> {
     return this.basicDataService.getSituations();
   }
 
   @Get("/profiles")
-  public getProfiles(): Promise<ProfileResponse[]> {
+  public async getProfiles(): Promise<ProfileResponse[]> {
     return this.basicDataService.getProfiles();
   }
 
   @Post("/logs")
-  public insertLogs(@Body() logsRequest: LogRequest[]): void {
-    this.service.insertLogs(logsRequest);
+  public async insertLogs(@Body() logsRequest: LogRequest[]): Promise<void> {
+    return this.service.insertLogs(logsRequest);
   }
 
   @Get("/logs/:code")
-  public getLogs(@Param("code") propertyCode: number): Promise<LogResponse[]> {
+  public async getLogs(@Param("code") propertyCode: number): Promise<LogResponse[]> {
     return this.service.getLogs(propertyCode);
   }
 
   @Get("/logs/description/:field/:value")
-  public getValueLog(
+  public async getValueLog(
     @Param("field") field: string,
     @Param("value") value: number
   ): Promise<any> {

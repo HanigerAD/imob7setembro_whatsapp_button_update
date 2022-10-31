@@ -18,4 +18,16 @@ async function bootstrap() {
   await app.listen(3000);
 }
 
-bootstrap().then().catch(console.log);
+async function run() {
+  try {
+    console.log('INICIANDO APLICAÇÃO');
+    await bootstrap();
+  } catch (error) {
+    console.log('!!!ERRO NÃO TRATADO QUE DERRUBOU A APLICAÇÃO!!!');
+    console.log(error);
+    console.log('Reiniciando aplicação...');
+    return run();
+  }
+}
+
+run();

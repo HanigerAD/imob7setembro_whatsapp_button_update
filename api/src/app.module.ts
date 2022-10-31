@@ -52,9 +52,9 @@ import { PartnerModule } from "./partners/partners.module";
     LocalityModule,
     PropertyModule,
     CommercialEntityModule,
-    ServeStaticModule.forRoot({
-      rootPath: join(__dirname, "..", "uploads"),
-    }),
+    // ServeStaticModule.forRoot({
+    //   rootPath: join(__dirname, "..", "uploads"),
+    // }),
     CommomModule,
     ContactModule,
   ],

@@ -18,13 +18,13 @@ import { BannerResponse } from "../integration/response/banner.response";
 
 @Controller("banner")
 export class BannerController {
-  constructor(private service: BannerService) {}
+  constructor(private service: BannerService) { }
 
   @Post("")
   @UseGuards(JwtAuthGuard)
   @HttpCode(HttpStatus.OK)
   @UseInterceptors(FileInterceptor("file"))
-  public insert(
+  public async insert(
     @UploadedFile() file: Express.Multer.File,
     @Res() res
   ): Promise<number> {
@@ -32,14 +32,14 @@ export class BannerController {
   }
 
   @Get()
-  public getAll(): Promise<BannerResponse[]> {
+  public async getAll(): Promise<BannerResponse[]> {
     return this.service.getAll();
   }
 
   @Delete(":image")
   @UseGuards(JwtAuthGuard)
   @HttpCode(HttpStatus.OK)
-  public delete(@Param("image") image: string): Promise<number> {
+  public async delete(@Param("image") image: string): Promise<number> {
     return this.service.delete(image);
   }
 }
