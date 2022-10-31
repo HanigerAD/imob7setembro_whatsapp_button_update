@@ -19,6 +19,8 @@ import { PropertyZoneEnum } from '../../navbar/search/enum/property-zone.enum';
 import { TransactionEnum } from '../../shared/enum/transaction.enum';
 import { converterParaMoeda } from '../../shared/utils/parser.utils';
 
+declare const google: any;
+
 @Component({
   selector: 'app-view-property',
   templateUrl: './view-property.component.html',
@@ -132,25 +134,25 @@ export class ViewPropertyComponent implements OnInit, OnDestroy, OnChanges, Afte
   }
 
   private initMap(): void {
-    this.map = L.map('map', {
-      center: [Number(this.property.latitude), Number(this.property.longitude)],
-      zoom: 14
-    });
+    const map = new google.maps.Map(
+      document.getElementById("map") as HTMLElement,
+      {
+        zoom: 16,
+        center: { lat: Number(this.property.latitude), lng: Number(this.property.longitude) },
+        mapTypeId: "terrain",
+      }
+    );
 
-    const tiles = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      maxZoom: 18,
-      minZoom: 3,
+    const cityCircle = new google.maps.Circle({
+      strokeColor: "#3051A0",
+      strokeOpacity: 0.8,
+      strokeWeight: 2,
+      fillColor: "#3051A0",
+      fillOpacity: 0.35,
+      map,
+      center: { lat: Number(this.property.latitude), lng: Number(this.property.longitude) },
+      radius: 150,
     });
-
-    const circle = L.circle([Number(this.property.latitude), Number(this.property.longitude)], {
-      color: 'lightpurple',
-      fillColor: '#6959CD',
-      fillOpacity: 0.5,
-      radius: 500
-    });
-
-    circle.addTo(this.map);
-    tiles.addTo(this.map);
   }
 
   private getFilters(): void {
