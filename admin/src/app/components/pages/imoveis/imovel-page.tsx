@@ -1,5 +1,5 @@
 import _ from "lodash";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import TextEditor from "react-quill";
 import { toast } from "react-toastify";
@@ -16,6 +16,7 @@ import {
   converterParaMoeda,
 } from "../../../utils/parser.utils";
 import { MapaComponent } from "../../shared/mapa/mapa-component";
+import { PropertyTypeEnum } from "./property-type.enum";
 
 export const ImovelPage = () => {
   const navigate = useNavigate();
@@ -414,11 +415,30 @@ export const ImovelPage = () => {
     setModel(newModel);
   }
 
+  const ehEmpreendimento = useMemo(() => {
+    return model?.type && model?.type?.code == PropertyTypeEnum.EMPREENDIMENTO
+  }, [model.type]);
+
   useEffect(() => {
     if (model.city && model.city.code) {
       buscarBairros(model.city.code);
     }
   }, [model.city]);
+
+  useEffect(() => {
+    if (ehEmpreendimento) {
+      const novoValor = {
+        privativeArea: 0,
+        totalArea: 0,
+        price: 0,
+        condominiumPrice: 0
+      };
+
+      setModel((modelAnt: any) => {
+        return { ...modelAnt, ...novoValor };
+      });
+    }
+  }, [ehEmpreendimento]);
 
   useEffect(() => {
     buscarCidades();
@@ -910,6 +930,7 @@ export const ImovelPage = () => {
                     id="input-privativeArea"
                     type="number"
                     placeholder="Área Privada"
+                    disabled={ehEmpreendimento}
                     value={model.privativeArea || ""}
                     onChange={(event) =>
                       atualizarModel("privativeArea", event.target.value)
@@ -925,6 +946,7 @@ export const ImovelPage = () => {
                     id="input-totalArea"
                     type="number"
                     placeholder="Área Total"
+                    disabled={ehEmpreendimento}
                     value={model.totalArea || ""}
                     onChange={(event) =>
                       atualizarModel("totalArea", event.target.value)
@@ -990,6 +1012,7 @@ export const ImovelPage = () => {
                   mask="currency"
                   prefix="R$"
                   value={model.price || ""}
+                  disabled={ehEmpreendimento}
                   onChange={(e) =>
                     atualizarModel("price", e.currentTarget.value)
                   }
@@ -1004,6 +1027,7 @@ export const ImovelPage = () => {
                   mask="currency"
                   prefix="R$"
                   value={model.condominiumPrice || ""}
+                  disabled={ehEmpreendimento}
                   onChange={(e) =>
                     atualizarModel("condominiumPrice", e.currentTarget.value)
                   }

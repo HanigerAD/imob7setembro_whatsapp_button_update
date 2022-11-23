@@ -1,7 +1,7 @@
 
 export enum PropertyTypeEnum {
-    RESIDENTIAL = 0,
-    COMMERCIAL = 1,
-    LAND = 2,
+    RESIDENTIAL = 1,
+    COMMERCIAL = 2,
+    LAND = 3,
     EMPREENDIMENTO = 4
 }

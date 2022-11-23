@@ -10,7 +10,7 @@ export class PostMapper {
             .titulo(request.title)
             .texto(request.text)
             .keywords(request.keywords)
-            .data_cadastro(DateTime.now().toString())
+            .data_cadastro((new Date()).toISOString().slice(0, 18))
             .usuario(request.user)
             .build()
     }

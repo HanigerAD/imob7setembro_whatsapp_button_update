@@ -73,6 +73,10 @@ export class ViewPostComponent implements OnInit, OnDestroy {
     return moment(date).format('DD/MM/YYYY');
   }
 
+  public getImage(path: string): string {
+    return this.service.getImage(path);
+  }
+
   public redirectToHome(): void {
     this.service.redirectToHome();
   }

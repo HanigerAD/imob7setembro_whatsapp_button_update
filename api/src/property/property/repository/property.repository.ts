@@ -119,7 +119,8 @@ export class PropertyRepository {
             .joinRaw('JOIN transacao_imovel ON imovel.transacao = transacao_imovel.codigo')
             .joinRaw('JOIN foto_imovel ON imovel.codigo = foto_imovel.imovel AND foto_imovel.ordem = 1')
             .modify(queryBuilder => {
-                Object.keys(filters).forEach(filter => {
+                const filtersKeys = Object.keys(filters);
+                filtersKeys.forEach(filter => {
                     if (filters[filter]) {
                         if (filter != 'paginacao' && filter != 'preco' && filters[filter] && filter != 'transacao'
                             && filter != 'categoria' && filter != 'hectare') {
@@ -127,7 +128,11 @@ export class PropertyRepository {
                         }
 
                         if (filter == 'preco') {
-                            queryBuilder.whereBetween('valor', [filters[filter].minPrice, filters[filter].maxPrice])
+                          queryBuilder.whereBetween('valor', [filters[filter].minPrice, filters[filter].maxPrice])
+
+                          if (filtersKeys.includes('tipo') && filters['tipo'] == 4) {
+                            queryBuilder.orWhere('valor', '=', '0.00')
+                          }
                         }
 
                         if (filter == 'transacao') {

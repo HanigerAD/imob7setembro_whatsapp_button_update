@@ -93,6 +93,12 @@ export class NavbarComponent implements OnInit {
     this.redirectToProperties();
     this.navbarIsCollapsed = false;
   }
+  
+  public redirectToEnterprise(): void {
+    this.searchService.saveFiltersStorage(this.service.enterpriseFilter);
+    this.redirectToProperties();
+    this.navbarIsCollapsed = false;
+  }
 
   public redirectToRent(): void {
     this.searchService.saveFiltersStorage(this.service.rentFilter);

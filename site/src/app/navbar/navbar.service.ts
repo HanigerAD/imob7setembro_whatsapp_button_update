@@ -3,6 +3,7 @@ import {Router} from '@angular/router';
 import {SearchModel} from './search/model/search.model';
 import {Builder} from 'builder-pattern';
 import {PropertyZoneEnum} from './search/enum/property-zone.enum';
+import { PropertyTypeEnum } from './search/enum/property-type.enum';
 
 @Injectable()
 export class NavbarService {
@@ -46,6 +47,19 @@ export class NavbarService {
         .finality(0)
         .type(0)
         .zone(PropertyZoneEnum.RURAL)
+        .city(0)
+        .neighborhood(0)
+        .hectare(0)
+        .minPrice(10000)
+        .maxPrice(2000000)
+    .build();
+  }
+
+  get enterpriseFilter(): SearchModel {
+    return Builder<SearchModel>()
+        .finality(0)
+        .type(PropertyTypeEnum.EMPREENDIMENTO)
+        .zone(PropertyZoneEnum.URBAN)
         .city(0)
         .neighborhood(0)
         .hectare(0)

@@ -34,13 +34,13 @@
             </p>
             <ul class="list-inline card__content">
               <li class="list-inline-item"></li>
-              <li class="list-inline-item">
+              <li class="list-inline-item" *ngIf="property.bedroom">
                 <span>
                   Dormitórios <br>
                   <i class="fa fa-bed"></i> {{ property.bedroom }}
                 </span>
               </li>
-              <li class="list-inline-item">
+              <li class="list-inline-item" *ngIf="property.totalArea">
                 <span>
                   Área <br>
                   <i class="fa fa-map"></i> {{ property.totalArea }}m²
@@ -51,10 +51,10 @@
           <div class="card__image-footer">
             <ul class="list-inline my-auto ml-auto">
               <li class="list-inline-item">
-                <h6 class="text-primary"> R$ {{ converterParaMoeda(property.price || 0, false) }}
+                <h6 class="text-primary">
+                  {{ property.price && property.price !== "0.00" ? 'R$' + converterParaMoeda(property.price, false) : 'A CONSULTAR' }}
                 </h6>
               </li>
-
             </ul>
           </div>
         </div>
@@ -88,111 +88,6 @@
     </div>
   </div>
 </section>
-
-<!-- TESTIMONIAL -->
-<!-- <section>
-    <div class="container">
-        <div class="row">
-            <div class="col-md-8 col-lg-6 mx-auto">
-                <div class="title__head">
-                    <h2 class="text-center text-capitalize">
-                        O que nossos clientes dizem
-                    </h2>
-                    <p class="text-center text-capitalize">"Obrigado a vocês por me ajudarem a escolher a minha casa dos sonhos. Nós estamos impressionados com a qualidade do serviço e do imóvel, além de ser por preços acessíveis."</p>
-                </div>
-            </div>
-            <div class="clearfix"></div>
-        </div>
-        <div class="testimonial owl-carousel owl-theme">
-            <div class="item testimonial__block">
-                <div class="testimonial__block-card bg-reviews">
-                    <p>
-                        Thank you walls property help me, choice dream home We were impressed with the build
-                        quality, Plus they are competitively priced.
-                    </p>
-                </div>
-                <div class="testimonial__block-users">
-                    <div class="testimonial__block-users-img">
-                        <img src="../../../assets/images/80x80.jpg" alt="" class="img-fluid">
-                    </div>
-                    <div class="testimonial__block-users-name">
-                        jhon doe <br>
-                        <span>owner, digital agency</span>
-                    </div>
-                </div>
-            </div>
-            <div class="item testimonial__block">
-                <div class="testimonial__block-card bg-reviews">
-                    <p>
-                        Thank you walls property help me, choice dream home We were impressed with the build
-                        quality, Plus they are competitively priced.
-                    </p>
-                </div>
-                <div class="testimonial__block-users">
-                    <div class="testimonial__block-users-img">
-                        <img src="../../../assets/images/80x80.jpg" alt="" class="img-fluid">
-                    </div>
-                    <div class="testimonial__block-users-name">
-                        jhon doe <br>
-                        <span>owner, digital agency</span>
-                    </div>
-                </div>
-            </div>
-            <div class="item testimonial__block">
-                <div class="testimonial__block-card bg-reviews">
-                    <p>
-                        Thank you walls property help me, choice dream home We were impressed with the build
-                        quality, Plus they are competitively priced.
-                    </p>
-                </div>
-                <div class="testimonial__block-users">
-                    <div class="testimonial__block-users-img">
-                        <img src="../../../assets/images/80x80.jpg" alt="" class="img-fluid">
-                    </div>
-                    <div class="testimonial__block-users-name">
-                        jhon doe <br>
-                        <span>owner, digital agency</span>
-                    </div>
-                </div>
-            </div>
-            <div class="item testimonial__block">
-                <div class="testimonial__block-card bg-reviews">
-                    <p>
-                        Thank you walls property help me, choice dream home We were impressed with the build
-                        quality, Plus they are competitively priced.
-                    </p>
-                </div>
-                <div class="testimonial__block-users">
-                    <div class="testimonial__block-users-img">
-                        <img src="../../../assets/images/80x80.jpg" alt="" class="img-fluid">
-                    </div>
-                    <div class="testimonial__block-users-name">
-                        jhon doe <br>
-                        <span>owner, digital agency</span>
-                    </div>
-                </div>
-            </div>
-            <div class="item testimonial__block">
-                <div class="testimonial__block-card bg-reviews">
-                    <p>
-                        Thank you walls property help me, choice dream home We were impressed with the build
-                        quality, Plus they are competitively priced.
-                    </p>
-                </div>
-                <div class="testimonial__block-users">
-                    <div class="testimonial__block-users-img">
-                        <img src="../../../assets/images/80x80.jpg" alt="" class="img-fluid">
-                    </div>
-                    <div class="testimonial__block-users-name">
-                        jhon doe <br>
-                        <span>owner, digital agency</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section> -->
-<!-- END TESTIMONIAL -->
 
 <!-- CALL TO ACTION -->
 <section class="bg-theme-v1" [style]="banner">

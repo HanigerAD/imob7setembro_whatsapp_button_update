@@ -47,9 +47,13 @@ export function converterParaMoeda(value: string, comDecimal = true) {
 }
 
 export function converterMoedaParaNumero(value: string) {
-  return value
-    .replace(/\D/g, "")
-    .replace(/(\d)(\d{2})$/, "$1.$2");
+  if (!value) {
+    return '0.00';
+  } else {
+    return value
+      .replace(/\D/g, "")
+      .replace(/(\d)(\d{2})$/, "$1.$2");
+  }
 }
 
 export function converterParaCep(value: string) {

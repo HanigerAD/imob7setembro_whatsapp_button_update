@@ -24,3 +24,17 @@
     box-shadow: 0 2px 3pxhsla(0,0%,39%,.1);
     background-color: #b2c1c185;
 }
+
+.navbar-brand .logo-sete {
+  max-width: 150px;
+}
+
+.navbar-brand .logo-sete {
+  max-width: 150px;
+}
+
+@media (min-width: 992px) and (max-width: 1199px) {
+  .navbar-nav .nav-item a {
+    font-size: 10px;
+  }
+}

@@ -15,10 +15,10 @@
             </button>
             <div class="collapse navbar-collapse" id="main_nav99" [ngbCollapse]="!navbarIsCollapsed">
                 <ul class="navbar-nav mx-auto ">
-                    <li class="nav-item dropdown">
+                    <li class="nav-item">
                         <a class="nav-link active" data-toggle="dropdown" (click)="redirectToHome()"> Home </a>
                     </li>
-                    <li class="nav-item dropdown">
+                    <li class="nav-item">
                         <a class="nav-link active" data-toggle="dropdown" (click)="redirectToAboutUs()"> Sobre nós </a>
                     </li>
                     <li class="nav-item dropdown">
@@ -31,6 +31,10 @@
                         </ul>
                     </li>
 
+                    <li class="nav-item">
+                      <a class="nav-link active" data-toggle="dropdown" (click)="redirectToEnterprise()"> Empreendimentos </a>
+                    </li>
+
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" data-toggle="dropdown" (click)="redirectToServices()">
                             Serviços </a>
@@ -41,7 +45,7 @@
                         </ul>
                     </li>
 
-                    <li class="nav-item dropdown">
+                    <li class="nav-item">
                         <a class="nav-link active" data-toggle="dropdown" (click)="redirectToNews()"> Notícias </a>
                     </li>
 
@@ -120,7 +124,9 @@
                         </ul>
                     </li>
 
-
+                    <li class="nav-item">
+                      <a class="nav-link active" data-toggle="dropdown" (click)="redirectToEnterprise()"> Empreendimentos </a>
+                    </li>
 
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" data-toggle="dropdown" (click)="redirectToServices()">
