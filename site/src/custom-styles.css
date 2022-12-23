@@ -54,3 +54,27 @@ header .ngx-slider .ngx-slider-bubble {
   min-height: 250px;
   height: auto !important;
 }
+
+.custom-card-info {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.custom-card-info .custom-card-info-item {
+    padding: 2px 5px;
+    background-color: #002247;
+    box-shadow: 1px 2px 1px rgb(94 93 99 / 8%), 0 1px 2px rgb(61 60 66 / 12%);
+    text-transform: capitalize;
+    letter-spacing: 1px;
+    font-size: 14px;
+    color: #fff;
+    font-family: "Open Sans",sans-serif;
+    margin-left: 10px;
+}
+
+.custom-card-info .custom-card-info-item-bankable {
+    background-color: green;
+}

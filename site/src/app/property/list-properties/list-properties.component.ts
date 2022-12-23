@@ -16,6 +16,7 @@ import {TransactionEnum} from '../../shared/enum/transaction.enum';
 import {ZoneModel} from '../../navbar/search/model/zone.model';
 import {PropertyZoneEnum} from '../../navbar/search/enum/property-zone.enum';
 import { converterParaMoeda } from '../../shared/utils/parser.utils';
+import { Builder } from 'builder-pattern';
 
 @Component({
   selector: 'app-list-properties',
@@ -102,21 +103,37 @@ export class ListPropertiesComponent implements OnInit, OnChanges {
 
   private getFilters(): void {
     this.filters = JSON.parse(localStorage.getItem(StorageEnum.FILTERS));
+    if (!this.filters) {
+      const newFilters = Builder<SearchModel>()
+      .finality(0)
+      .type(0)
+      .city(0)
+      .neighborhood(0)
+      .zone(0)
+      .minPrice(10000)
+      .maxPrice(2000000)
+      .build();
+
+      this.searchService.saveFiltersStorage(newFilters);
+      this.filters = newFilters;
+    }
   }
 
   private generateForm(): void {
-    this.searchForm = this.formBuilder.group({
-      financeable: this.filters.financeable,
-      finality: this.filters.finality,
-      type: this.filters.type,
-      city: this.filters.city,
-      neighborhood: this.filters.neighborhood,
-      hectare: this.filters.hectare,
-      code: this.filters.code,
-      minPrice: this.filters.minPrice,
-      maxPrice: this.filters.maxPrice,
-      zone: this.filters.zone
-    });
+    if (this.filters) {
+      this.searchForm = this.formBuilder.group({
+        financeable: this.filters.financeable,
+        finality: this.filters.finality,
+        type: this.filters.type,
+        city: this.filters.city,
+        zone: this.filters.zone,
+        neighborhood: this.filters.neighborhood,
+        hectare: this.filters.neighborhood,
+        code: this.filters.code,
+        minPrice: this.filters.minPrice,
+        maxPrice: this.filters.maxPrice
+      });
+    }
 
     this.ruralZoneSelected = this.searchForm.get('zone').value === PropertyZoneEnum.RURAL;
   }

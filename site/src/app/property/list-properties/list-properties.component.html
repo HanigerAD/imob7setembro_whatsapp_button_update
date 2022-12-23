@@ -180,8 +180,10 @@
                                 <img [src]="getPropertyImage(property.photo)" alt=""
                                   class="img-fluid w100 img-transition">
                               </div>
-                              <div class="info info-bankable" *ngIf="property.financeable"> Financiável </div>
-                              <div class="info"> {{ property.transaction }} </div>
+                              <div class="custom-card-info">
+                                <div class="custom-card-info-item custom-card-info-item-bankable" *ngIf="property.financeable"> Financiável </div>
+                                <div class="custom-card-info-item"> {{ property.transaction }} </div>
+                              </div>
                             </div>
                             <div class="card__image-body">
                               <span class="badge badge-primary text-capitalize mb-2"> {{ property.category }} </span>

@@ -1,4 +1,4 @@
-FROM node:16
+FROM node:14.17.5
 
 RUN mkdir -p /home/utils
 RUN chmod -R +x /home/utils

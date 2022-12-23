@@ -1,9 +1,9 @@
-<!--<meta property="og:title" [content]="property.title" />-->
+<!--<meta property="og:title" [content]="property?.title" />-->
 <!--<meta property="og:type" content="article" />-->
 <!--<meta property="og:image" content="http://cdn-imobiliaria7setembro-com-br.umbler.net/e3ddc533-9683-4ab7-b907-0ea521933d3a.jpg" />-->
 <!--<meta property="og:url" [content]="urlToShareFacebook" />-->
 <!--<meta property="og:site_name" content="Imobiliária 7 de Setembro" />-->
-<!--<meta property="og:description" [content]="property.description" />-->
+<!--<meta property="og:description" [content]="property?.description" />-->
 
 <div class="bg-light fadein-page">
   <div class="container">
@@ -28,7 +28,7 @@
       <div class="col-md-12">
         <div class="single__detail-area-price">
           <h4 class="text-capitalize text-gray">
-            {{ property.price && property.price !== "0.00" ? 'R$' + converterParaMoeda(property.price, false) : 'A CONSULTAR' }}
+            {{ property?.price && property?.price !== "0.00" ? 'R$' + converterParaMoeda(property?.price, false) : 'A CONSULTAR' }}
           </h4>
           <h6 class="text-capitalize text-white" *ngIf="property?.financeable"> <span class="financeable-label">
               Financiável </span> </h6>
@@ -96,7 +96,7 @@
                   <div class="col-md-6 col-lg-6">
                     <ul class="property__detail-info-list list-unstyled">
                       <li *ngIf="property?.internalCode"><b>Código do Imóvel:</b> {{ property?.internalCode }} </li>
-                      <li><b>Preço:</b>{{ property.price && property.price !== "0.00" ? 'R$' + converterParaMoeda(property.price, false) : 'A CONSULTAR' }}</li>
+                      <li><b>Preço:</b>{{ property?.price && property?.price !== "0.00" ? 'R$' + converterParaMoeda(property?.price, false) : 'A CONSULTAR' }}</li>
                       <li *ngIf="property?.totalArea"><b>Área:</b> {{ property?.totalArea }}m² </li>
                       <li *ngIf="property?.dormitory"><b>Quartos:</b> {{ property?.dormitory }} </li>
                       <li *ngIf="property?.bathroom"><b>Banheiros:</b> {{ property?.bathroom }} </li>
@@ -277,8 +277,8 @@
                         <div class="card__image__header h-250">
                           <a href="#">
                             <div class="ribbon text-capitalize">solda out</div>
-                            <img [src]="getPropertyImage(property.photo)" class="img-fluid w100 img-transition">
-                            <div class="info"> {{ property.transaction }}</div>
+                            <img [src]="getPropertyImage(property?.photo)" class="img-fluid w100 img-transition">
+                            <div class="info"> {{ property?.transaction }}</div>
                           </a>
                         </div>
                       </div>
@@ -292,39 +292,40 @@
             <div class="tab-pane fade show active" id="pills-tab-two" role="tabpanel" aria-labelledby="pills-tab-two">
               <div class="row">
                 <div class="col-md-4 col-lg-4" *ngFor="let property of similarProperties.slice(0,2)"
-                  (click)="seePropertyDetails(property.code)">
+                  (click)="seePropertyDetails(property?.code)">
                   <div class="card__image card__box-v1">
                     <div class="card__image-header h-250 img-space">
                       <!--                                                    <div class="ribbon text-capitalize">sold out</div>-->
                       <div class="image-watermark">
-                        <img [src]="getPropertyImage(property.photo)" alt="" class="img-fluid w100 img-transition">
+                        <img [src]="getPropertyImage(property?.photo)" alt="" class="img-fluid w100 img-transition">
                       </div>
-                      <div class="info info-bankable" *ngIf="property.financeable"> Financiável
+                      <div class="custom-card-info">
+                        <div class="custom-card-info-item custom-card-info-item-bankable" *ngIf="property?.financeable"> Financiável </div>
+                        <div class="custom-card-info-item"> {{ property?.transaction }} </div>
                       </div>
-                      <div class="info"> {{ property.transaction }} </div>
                     </div>
                     <div class="card__image-body">
-                      <span class="badge badge-primary text-capitalize mb-2"> {{ property.category
+                      <span class="badge badge-primary text-capitalize mb-2"> {{ property?.category
                         }} </span>
                       <h6 class="text-capitalize">
-                        <a href="#"> {{ property.title }}</a>
+                        <a href="#"> {{ property?.title }}</a>
                       </h6>
 
                       <p class="text-capitalize">
                         <i class="fa fa-map-marker"></i>
-                        {{ property.neighborhood }}, {{ property.city }}
+                        {{ property?.neighborhood }}, {{ property?.city }}
                       </p>
                       <ul class="list-inline card__content">
-                        <li class="list-inline-item" *ngIf="property.bedroom">
+                        <li class="list-inline-item" *ngIf="property?.bedroom">
                           <span>
                             Dormitórios <br>
-                            <i class="fa fa-bed"></i> {{ property.bedroom }}
+                            <i class="fa fa-bed"></i> {{ property?.bedroom }}
                           </span>
                         </li>
-                        <li class="list-inline-item" *ngIf="property.totalArea">
+                        <li class="list-inline-item" *ngIf="property?.totalArea">
                           <span>
                             Área <br>
-                            <i class="fa fa-map"></i> {{ property.totalArea }}m²
+                            <i class="fa fa-map"></i> {{ property?.totalArea }}m²
                           </span>
                         </li>
                       </ul>
@@ -336,7 +337,7 @@
                       <ul class="list-inline my-auto ml-auto">
                         <li class="list-inline-item">
                           <h6 class="text-primary">
-                            {{ property.price && property.price !== "0.00" ? 'R$' + converterParaMoeda(property.price, false) : 'A CONSULTAR' }}
+                            {{ property?.price && property?.price !== "0.00" ? 'R$' + converterParaMoeda(property?.price, false) : 'A CONSULTAR' }}
                           </h6>
                         </li>
 
