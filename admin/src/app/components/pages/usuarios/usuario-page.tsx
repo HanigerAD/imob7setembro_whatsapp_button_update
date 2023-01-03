@@ -154,6 +154,8 @@ export const UsuarioPage = () => {
     if (modelId) {
       console.log({ modelId });
       buscar(modelId);
+    } else {
+      atualizarModel('permission', []);
     }
   }, [modelId]);
 
