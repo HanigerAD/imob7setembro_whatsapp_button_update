@@ -83,12 +83,30 @@ export class UserRepository {
         );
     }
 
-    public delete(code: number): Observable<number> {
-        return from(
-            this.knex
-                .update({ situacao: SituationEnum.INACTIVE })
-                .from('usuario')
-                .where('codigo', '=', code)
+    public async delete(code: number): Promise<number> {
+        return this.knex.transaction(
+            (trx) => {
+                return this.knex
+                    .delete()
+                    .from('blog')
+                    .where('usuario', code)
+                    .transacting(trx)
+                    .then(
+                        () => this.knex
+                            .delete()
+                            .from('permissao_usuario')
+                            .where('usuario', code)
+                            .transacting(trx)
+                            .then(
+                                () => this.knex
+                                    .delete()
+                                    .from('usuario')
+                                    .where('codigo', code)
+                                    .transacting(trx)
+                            )
+                    )
+                    .catch(trx.rollback)
+            }
         );
     }
 

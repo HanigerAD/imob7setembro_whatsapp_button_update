@@ -81,7 +81,7 @@ export class UserController {
   @Delete('users/:code')
   @UseGuards(JwtAuthGuard)
   @HttpCode(HttpStatus.OK)
-  public delete(@Param('code') code: number): Observable<number> {
+  public async delete(@Param('code') code: number): Promise<number> {
     return this.service.delete(code);
   }
 

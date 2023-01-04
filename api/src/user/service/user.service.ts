@@ -85,7 +85,7 @@ export class UserService {
         return this.repository.updatePassword(code, password.password);
     }
 
-    public delete(code: number): Observable<number> {
+    public async delete(code: number): Promise<number> {
         return this.repository.delete(code);
     }
 
