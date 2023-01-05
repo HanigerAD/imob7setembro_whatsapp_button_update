@@ -6,7 +6,7 @@ import { Pagination } from "../../layouts/admin/components/pagination";
 import { toast } from "react-toastify";
 import { usePagination } from "../../../hooks/usePagination";
 
-export const BairrosPage = () => {
+export const CategoriasPage = () => {
   const [models, setModels] = useState([]);
   const [carregando, setCarregando] = useState(false);
   const paginationProps = usePagination({ currentPage: 1, itemsPerPage: 5 });
@@ -22,7 +22,7 @@ export const BairrosPage = () => {
             try {
               setCarregando(true);
               await apiService.delete(
-                `/neighborhood/neighborhoods/${model.code}`
+                `/property/categories/${model.code}`
               );
               toast.success("Registro removido com sucesso");
               buscar();
@@ -47,7 +47,7 @@ export const BairrosPage = () => {
 
     try {
       const filters = {};
-      const resposta = await apiService.get("/neighborhood/neighborhoods", {
+      const resposta = await apiService.get("/property/categories", {
         params: filters,
       });
       setModels(resposta.data);
@@ -74,19 +74,19 @@ export const BairrosPage = () => {
   return (
     <div className="container-fluid px-4">
       <div className="mt-4 d-flex justify-content-between align-items-center">
-        <h1>Bairros</h1>
+        <h1>Categorias</h1>
 
-        <Link className="btn btn-primary btn-sm" to="/admin/bairros/cadastrar">
+        <Link className="btn btn-primary btn-sm" to="/admin/categorias/cadastrar">
           Cadastrar
         </Link>
       </div>
 
       <ol className="breadcrumb mb-4">
-        <li className="breadcrumb-item active">Bairros</li>
+        <li className="breadcrumb-item active">Categorias</li>
       </ol>
 
       <div className="card mb-4">
-        <div className="card-header">Bairros</div>
+        <div className="card-header">Categorias</div>
 
         <div className="card-body">
           {carregando ? (
@@ -99,7 +99,6 @@ export const BairrosPage = () => {
                     <tr>
                       <th scope="col">#</th>
                       <th scope="col">Descrição</th>
-                      <th scope="col">Cidade</th>
                       <th scope="col" style={{ minWidth: 60 }}>
                         Opções
                       </th>
@@ -111,12 +110,11 @@ export const BairrosPage = () => {
                         <tr key={model.code}>
                           <th scope="row">{model.code}</th>
                           <td>{model.description}</td>
-                          <td>{model.city ? model.city : ""}</td>
                           <td>
                             <Link
                               className="btn btn-link text-dark p-0"
                               title="Editar"
-                              to={`/admin/bairros/${model.code}`}
+                              to={`/admin/categorias/${model.code}`}
                             >
                               <i className="fas fa-pen-to-square fa-fw"></i>
                             </Link>

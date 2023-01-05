@@ -62,4 +62,10 @@ export class NeighborhoodRepository {
             .first();
     }
 
+    public delete(code: number): Promise<number> {
+        return this.knex
+            .delete()
+            .from('bairro')
+            .where('codigo', '=', code);
+    }
 }

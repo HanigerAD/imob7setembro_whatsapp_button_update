@@ -52,4 +52,7 @@ export class NeighborhoodService {
         return builder.build();
     }
 
+    public delete(code: number): Promise<number> {
+        return this.repository.delete(code);
+    }
 }

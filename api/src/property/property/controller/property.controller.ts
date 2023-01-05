@@ -37,6 +37,7 @@ import { ImageSortRequest } from "../integration/request/image-sort.request";
 import { PropertyDocumentResponse } from "../integration/response/property-document.response";
 import { LogRequest } from "../integration/request/log.request";
 import { LogResponse } from "../integration/response/log.response";
+import { CategoryRequest } from "../../../property/category/integration/response/category.request";
 
 @Controller("property")
 export class PropertyController {
@@ -210,6 +211,31 @@ export class PropertyController {
   @Get("/categories")
   public async getCategories(): Promise<CategoryResponse[]> {
     return this.basicDataService.getCategories();
+  }
+
+  @Post('/categories')
+  @UseGuards(JwtAuthGuard)
+  public async insert(@Body() request: CategoryRequest): Promise<number> {
+    return this.service.insertCategory(request);
+  }
+
+  @Get('/categories/:code')
+  public async getCategory(@Param('code') code: number): Promise<CategoryResponse> {
+    return this.service.getCategory(code);
+  }
+
+  @Patch('/categories/:code')
+  @UseGuards(JwtAuthGuard)
+  @HttpCode(HttpStatus.OK)
+  public async updateCategory(@Param('code') code: number, @Body() request: CategoryRequest): Promise<number> {
+    return this.service.updateCategory(code, request);
+  }
+
+  @Delete('/categories/:code')
+  @UseGuards(JwtAuthGuard)
+  @HttpCode(HttpStatus.OK)
+  public async deleteCategory(@Param('code') code: number): Promise<number> {
+    return this.service.deleteCategory(code);
   }
 
   @Get("/types")

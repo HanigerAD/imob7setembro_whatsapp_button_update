@@ -3,6 +3,8 @@ import { AdminLayout } from "../components/layouts/admin/admin-layout";
 import { GuestLayout } from "../components/layouts/guest/guest-layout";
 import { BairroPage } from "../components/pages/bairros/bairro-page";
 import { BairrosPage } from "../components/pages/bairros/bairros-page";
+import { CategoriaPage } from "../components/pages/categorias/categoria-page";
+import { CategoriasPage } from "../components/pages/categorias/categorias-page";
 import { CidadePage } from "../components/pages/cidades/cidade-page";
 import { CidadesPage } from "../components/pages/cidades/cidades-page";
 import { ConfiguracoesPage } from "../components/pages/configuracoes/configuracoes-page";
@@ -51,6 +53,9 @@ export const Routes = () => (
       <Route path="bairros/cadastrar" element={<BairroPage />} />
       <Route path="bairros/:code" element={<BairroPage />} />
       <Route path="bairros" element={<BairrosPage />} />
+      <Route path="categorias/cadastrar" element={<CategoriaPage />} />
+      <Route path="categorias/:code" element={<CategoriaPage />} />
+      <Route path="categorias" element={<CategoriasPage />} />
       <Route path="perfil" element={<PerfilPage />} />
       <Route path="novos-imoveis/cadastrar" element={<NovoImovelPage />} />
       <Route path="novos-imoveis/:code" element={<NovoImovelPage />} />

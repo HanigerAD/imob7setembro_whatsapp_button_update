@@ -50,6 +50,7 @@ import { SituationResponse } from "../../../user/integration/response/situation.
 import { SituationMapper } from "../../../user/mapper/situation.mapper";
 import { ConfigurationService } from 'src/configuration/service/configuration.service';
 import { ImageWatermark } from 'src/common/integration/request/image-watermark';
+import { CategoryRequest } from '../../../property/category/integration/response/category.request';
 
 
 
@@ -68,6 +69,18 @@ export class PropertyService {
 
   public async insertProperty(request: PropertyRequest): Promise<number> {
     return this.repository.insertProperty(PropertyMapper.requestToEntity(request));
+  }
+
+  public async insertCategory(request: CategoryRequest): Promise<number> {
+    return this.repository.insertCategory(CategoryMapper.requestToEntity(request));
+  }
+
+  public updateCategory(code: number, request: CategoryRequest): Promise<number> {
+    return this.repository.updateCategory(code, CategoryMapper.requestToEntity(request));
+  }
+
+  public deleteCategory(code: number): Promise<number> {
+    return this.repository.deleteCategory(code);
   }
 
   public update(code: number, request: PropertyRequest): Promise<number> {

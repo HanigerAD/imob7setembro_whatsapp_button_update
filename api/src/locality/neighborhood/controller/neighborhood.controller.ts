@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Patch, Post, Query, Res, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post, Query, Res, UseGuards } from '@nestjs/common';
 import { Response } from 'express';
 
 import { JwtAuthGuard } from '../../../authentication/config/jwt-auth.guard';
@@ -34,5 +34,11 @@ export class NeighborhoodController {
   @UseGuards(JwtAuthGuard)
   public async update(@Param('code') code: number, @Body() request: NeighborhoodRequest): Promise<number> {
     return this.service.update(code, request);
+  }
+
+  @Delete('neighborhoods/:code')
+  @UseGuards(JwtAuthGuard)
+  public async delete(@Param('code') code: number): Promise<number> {
+    return this.service.delete(code);
   }
 }

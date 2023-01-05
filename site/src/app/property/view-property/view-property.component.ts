@@ -304,9 +304,9 @@ export class ViewPropertyComponent implements OnInit, OnDestroy, OnChanges, Afte
       }
 
       case (TransactionEnum.RENT || TransactionEnum.SEASON): {
-        this.minPrice = 300;
+        this.minPrice = 0;
         this.maxPrice = 50000;
-        this.minPriceConfig = 300;
+        this.minPriceConfig = 0;
         this.maxPriceConfig = 50000;
         break;
       }
