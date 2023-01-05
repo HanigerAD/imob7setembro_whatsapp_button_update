@@ -216,6 +216,15 @@ export class PropertyRepository {
             .first();
     }
 
+    public getCategoryByProperty(code: number): Promise<CategoryEntity> {
+        return this.knex
+            .select('categoria_imovel.*')
+            .from('imovel')
+            .joinRaw('JOIN categoria_imovel ON categoria_imovel.codigo = imovel.categoria')
+            .where('imovel.codigo', '=', code)
+            .first();
+    }
+
     public insertCategory(entity: CategoryEntity): Promise<number> {
         return this.knex
             .insert(entity)

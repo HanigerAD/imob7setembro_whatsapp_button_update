@@ -123,7 +123,7 @@ export class PropertyService {
     const builder = new PropertyDetailBuilder();
     builder.setProperty(property);
     builder.setAgent(await this.getAgent(property.code));
-    builder.setCategory(await this.getCategory(property.code));
+    builder.setCategory(await this.getCategoryByProperty(property.code));
     builder.setConservationState(await this.getConservationState(property.code));
     builder.setProfile(await this.getprofile(property.code));
     builder.setType(await this.getType(property.code));
@@ -146,6 +146,11 @@ export class PropertyService {
 
   public getCategory(code: number): Promise<CategoryResponse> {
     return this.repository.getCategory(code)
+      .then(result => CategoryMapper.entityToResponse(result));
+  }
+
+  public getCategoryByProperty(code: number): Promise<CategoryResponse> {
+    return this.repository.getCategoryByProperty(code)
       .then(result => CategoryMapper.entityToResponse(result));
   }
 
