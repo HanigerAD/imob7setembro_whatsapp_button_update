@@ -1,18 +1,19 @@
 <!-- MOST POPULAR PLACES -->
-<section class="wrap__heading " *ngIf="featuredProperties.length">
-  <div class="container">
+<section class="wrap__heading" *ngIf="featuredPropertiesToRent.length || featuredPropertiesToSell.length">
+  <div class="container" *ngIf="featuredPropertiesToRent.length">
     <div class="row">
       <div class="col-md-8 col-lg-6 mx-auto">
         <div class="title__head">
           <h2 class="text-center text-capitalize">
-            Imóveis destaque
+            Imóveis destaque para Alguel
           </h2>
         </div>
       </div>
       <div class="clearfix"></div>
     </div>
+
     <div class="row">
-      <div class="col-md-4 col-lg-4" *ngFor="let property of featuredProperties"
+      <div class="col-md-4 col-lg-4" *ngFor="let property of featuredPropertiesToRent"
         (click)="seePropertyDetails(property.code)">
         <div class="card__image card__box-v1">
           <div class="card__image-header h-250 img-space">
@@ -20,7 +21,8 @@
               <img [src]="getPropertyImage(property.photo)" alt="" class="img-fluid w100 img-transition">
             </div>
             <div class="custom-card-info">
-              <div class="custom-card-info-item custom-card-info-item-bankable" *ngIf="property.financeable"> Financiável </div>
+              <div class="custom-card-info-item custom-card-info-item-bankable" *ngIf="property.financeable">
+                Financiável </div>
               <div class="custom-card-info-item"> {{ property.transaction }} </div>
             </div>
           </div>
@@ -54,7 +56,75 @@
             <ul class="list-inline my-auto ml-auto">
               <li class="list-inline-item">
                 <h6 class="text-primary">
-                  {{ property.price && property.price !== "0.00" ? 'R$' + converterParaMoeda(property.price, false) : 'A CONSULTAR' }}
+                  {{ property.price && property.price !== "0.00" ? 'R$' + converterParaMoeda(property.price, false) : 'A
+                  CONSULTAR' }}
+                </h6>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="container" *ngIf="featuredPropertiesToSell.length">
+
+    <div class="row mt-5">
+      <div class="col-md-8 col-lg-6 mx-auto">
+        <div class="title__head">
+          <h2 class="text-center text-capitalize">
+            Imóveis destaque para Venda
+          </h2>
+        </div>
+      </div>
+      <div class="clearfix"></div>
+    </div>
+
+    <div class="row">
+      <div class="col-md-4 col-lg-4" *ngFor="let property of featuredPropertiesToSell"
+        (click)="seePropertyDetails(property.code)">
+        <div class="card__image card__box-v1">
+          <div class="card__image-header h-250 img-space">
+            <div class="image-watermark">
+              <img [src]="getPropertyImage(property.photo)" alt="" class="img-fluid w100 img-transition">
+            </div>
+            <div class="custom-card-info">
+              <div class="custom-card-info-item custom-card-info-item-bankable" *ngIf="property.financeable">
+                Financiável </div>
+              <div class="custom-card-info-item"> {{ property.transaction }} </div>
+            </div>
+          </div>
+          <div class="card__image-body">
+            <span class="badge badge-primary text-capitalize mb-2"> {{ property.category }} </span>
+            <h6 class="text-capitalize">
+              <a href="#"> Cód. {{ property.internalCode }} - {{ property.title }}</a>
+            </h6>
+
+            <p class="text-capitalize">
+              <i class="fa fa-map-marker"></i>
+              {{ property.neighborhood }}, {{ property.city }}
+            </p>
+            <ul class="list-inline card__content">
+              <li class="list-inline-item"></li>
+              <li class="list-inline-item" *ngIf="property.bedroom">
+                <span>
+                  Dormitórios <br>
+                  <i class="fa fa-bed"></i> {{ property.bedroom }}
+                </span>
+              </li>
+              <li class="list-inline-item" *ngIf="property.totalArea">
+                <span>
+                  Área <br>
+                  <i class="fa fa-map"></i> {{ property.totalArea }}m²
+                </span>
+              </li>
+            </ul>
+          </div>
+          <div class="card__image-footer">
+            <ul class="list-inline my-auto ml-auto">
+              <li class="list-inline-item">
+                <h6 class="text-primary">
+                  {{ property.price && property.price !== "0.00" ? 'R$' + converterParaMoeda(property.price, false) : 'A
+                  CONSULTAR' }}
                 </h6>
               </li>
             </ul>

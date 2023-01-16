@@ -13,6 +13,7 @@ import {NewsService} from '../../news/service/news.service';
 import {ConfigurationModel} from '../../shared/model/configuration.model';
 import {StorageEnum} from '../../shared/storage.enum';
 import { converterParaMoeda } from '../../shared/utils/parser.utils';
+import { TransactionEnum } from 'src/app/shared/enum/transaction.enum';
 
 @Component({
   selector: 'app-homepage',
@@ -26,7 +27,8 @@ export class HomepageComponent implements OnInit, OnDestroy {
 
   private subscriptions: Subscription = new Subscription();
 
-  public featuredProperties: PropertyModel[] = [];
+  public featuredPropertiesToRent: PropertyModel[] = [];
+  public featuredPropertiesToSell: PropertyModel[] = [];
   public posts: PostModel[] = [];
 
   public converterParaMoeda = converterParaMoeda;
@@ -58,10 +60,20 @@ export class HomepageComponent implements OnInit, OnDestroy {
 
   private getFeaturedProperties(): void {
     this.subscriptions.add(
-        this.propertyService.getProperties(FeaturedPropertiesMapper.mapFilterFeaturedProperties()).subscribe(
-            properties => this.featuredProperties = properties
+        this.propertyService.getProperties(FeaturedPropertiesMapper.mapFilterFeaturedProperties(2)).subscribe(
+            properties => {
+              this.featuredPropertiesToRent = properties.filter(property => property.transaction == 'Aluguel');
+            }
         )
     );
+
+    this.subscriptions.add(
+      this.propertyService.getProperties(FeaturedPropertiesMapper.mapFilterFeaturedProperties(1)).subscribe(
+          properties => {
+            this.featuredPropertiesToSell = properties.filter(property => property.transaction == 'Venda');
+          }
+      )
+  );
   }
 
   private getBlogPosts(): void {
