@@ -65,3 +65,8 @@ export function converterParaTelefone(value: string) {
     .replace(/(\d{1})(\d{8})/, "$1 $2")
     .replace(/(\d{4})(\d)/, "$1-$2");
 }
+
+export function converterParaWhatsapp(value: string) {
+  return '55' + value
+    .replace(/\D/g, "");
+}

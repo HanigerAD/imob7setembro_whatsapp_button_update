@@ -3,7 +3,7 @@ import { AboutUsService } from './service/about-us.service';
 import { ConfigurationModel } from '../shared/model/configuration.model';
 import { StorageEnum } from '../shared/storage.enum';
 import { AgentModel } from './model/agent.model';
-import { converterParaTelefone } from '../shared/utils/parser.utils';
+import { converterParaTelefone, converterParaWhatsapp } from '../shared/utils/parser.utils';
 import { PartnerModel } from '../shared/model/partner.model';
 
 @Component({
@@ -52,4 +52,7 @@ export class AboutUsComponent implements OnInit {
     return `background-image:url(${banner});`;
   }
 
+  public converterParaWhatsapp(phone: string): string {
+    return converterParaWhatsapp(phone);
+  }
 }

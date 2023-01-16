@@ -85,8 +85,7 @@
                 </div>
                 <div class="card-body">
                     <h5 class="card-title">{{ agent.name }}</h5>
-                    <p class="card-text">{{ converterTelefone(agent.phone) }}</p>
-                    <a (click)="redirectToSocialMedia('https://wa.me/{{ agent.phone }}')"
+                    <a href="https://wa.me/{{ converterParaWhatsapp(agent.phone) }}" target="_blank"
                         class="btn btn-social rounded text-white whatsapp">
                         <i class="fa fa-whatsapp"></i>
                     </a>
