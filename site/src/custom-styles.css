@@ -28,6 +28,10 @@
     }
 }
 
+.single__Detail p,
+.property__detail-info-list li b {
+    font-size: 16px;
+}
 
 .app .form-control {
     border: 1px solid #d1d5da !important;
@@ -51,8 +55,8 @@ header .ngx-slider .ngx-slider-bubble {
 }
 
 .h-250 {
-  min-height: 250px;
-  height: auto !important;
+    min-height: 250px;
+    height: auto !important;
 }
 
 .custom-card-info {
@@ -71,7 +75,7 @@ header .ngx-slider .ngx-slider-bubble {
     letter-spacing: 1px;
     font-size: 14px;
     color: #fff;
-    font-family: "Open Sans",sans-serif;
+    font-family: "Open Sans", sans-serif;
     margin-left: 10px;
 }
 

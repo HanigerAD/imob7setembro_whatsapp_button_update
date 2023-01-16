@@ -82,14 +82,14 @@
         <div class="row">
           <div class="col-lg-12">
             <div class="single__detail-desc">
-              <h5 class="text-capitalize detail-heading mt-0">Descrição</h5>
-              <div [innerHTML]="property?.description"></div>
+              <h2 class="text-capitalize detail-heading mt-0">Descrição</h2>
+              <div style="font-size: 1.5rem !important;" [innerHTML]="property?.description"></div>
             </div>
             <div class="clearfix"></div>
 
             <!-- PROPERTY DETAILS SPEC -->
             <div class="single__detail-features">
-              <h5 class="text-capitalize detail-heading">Detalhes</h5>
+              <h2 class="text-capitalize detail-heading">Detalhes</h2>
               <!-- INFO PROPERTY DETAIL -->
               <div class="property__detail-info">
                 <div class="row">
@@ -121,7 +121,7 @@
 
             <!-- LOCATION -->
             <div class="single__detail-features">
-              <h5 class="text-capitalize detail-heading">Localização</h5>
+              <h2 class="text-capitalize detail-heading">Localização</h2>
 
               <div class="map-frame">
                 <div id="map"></div>
@@ -142,7 +142,7 @@
             <div class="products__filter mb-30">
               <div class="products__filter__group">
                 <div class="products__filter__header">
-                  <h5 class="text-center text-capitalize">Suas preferências</h5>
+                  <h2 class="text-center text-capitalize">Suas preferências</h2>
                 </div>
                 <div class="products__filter__body">
 
@@ -260,7 +260,7 @@
     </div>
 
     <!-- SIMILIAR PROPERTY -->
-    <div class="row">
+    <div class="row" *ngIf="similarProperties.length">
       <div class="col-lg-12">
         <div class="similiar__item">
           <h6 class="text-capitalize detail-heading">
