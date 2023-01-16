@@ -14,8 +14,7 @@ import { PartnerMapper } from 'src/app/shared/mapper/partner.mapper';
 export class AboutUsService {
 
   constructor(
-    private agentRest: AgentRestService,
-    private partnerRest: PartnerRestService
+    private agentRest: AgentRestService
   ) { }
 
   public getSiteInfoStorage(): ConfigurationModel {
@@ -25,12 +24,6 @@ export class AboutUsService {
   public getAgents(): Observable<AgentModel[]> {
     return this.agentRest.getAgents().pipe(
       map(response => AgentMapper.mapAgentsArrayResponseToModel(response))
-    );
-  }
-
-  public getPartners(): Observable<PartnerModel[]> {
-    return this.partnerRest.getPartners().pipe(
-      map(response => PartnerMapper.mapPartnersArrayResponseToModel(response))
     );
   }
 }

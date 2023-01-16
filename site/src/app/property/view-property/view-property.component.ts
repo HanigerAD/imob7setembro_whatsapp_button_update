@@ -18,6 +18,7 @@ import { ZoneModel } from '../../navbar/search/model/zone.model';
 import { PropertyZoneEnum } from '../../navbar/search/enum/property-zone.enum';
 import { TransactionEnum } from '../../shared/enum/transaction.enum';
 import { converterParaMoeda } from '../../shared/utils/parser.utils';
+import { PartnerModel } from 'src/app/shared/model/partner.model';
 
 declare const google: any;
 
@@ -47,6 +48,7 @@ export class ViewPropertyComponent implements OnInit, OnDestroy, OnChanges, Afte
   public ruralZoneSelected = false;
   public converterParaMoeda = converterParaMoeda;
   public slideIndex = 0;
+  public partners: PartnerModel[] = [];
 
   private subscriptions: Subscription = new Subscription();
 
@@ -69,6 +71,7 @@ export class ViewPropertyComponent implements OnInit, OnDestroy, OnChanges, Afte
     this.configureSlider();
     this.getPropertyCode();
     this.verifyMinAndMaxFilterValues();
+    this.getPartners();
     window.scroll(0, 0);
   }
 
@@ -335,5 +338,11 @@ export class ViewPropertyComponent implements OnInit, OnDestroy, OnChanges, Afte
     } else {
       this.slideIndex = n;
     }
+  }
+
+  public getPartners(): void {
+    this.service.getPartners().subscribe(response => {
+      this.partners = response;
+    });
   }
 }

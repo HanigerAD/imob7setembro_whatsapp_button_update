@@ -15,7 +15,6 @@ export class AboutUsComponent implements OnInit {
 
   public siteInfo: ConfigurationModel;
   public agents: AgentModel[] = [];
-  public partners: PartnerModel[] = [];
 
   constructor(
     private service: AboutUsService
@@ -24,7 +23,6 @@ export class AboutUsComponent implements OnInit {
   public ngOnInit(): void {
     this.getSiteInfo();
     this.getAgents();
-    this.getPartners();
   }
 
   public getSiteInfo(): void {
@@ -34,12 +32,6 @@ export class AboutUsComponent implements OnInit {
   public getAgents(): void {
     this.service.getAgents().subscribe(response => {
       this.agents = response;
-    });
-  }
-
-  public getPartners(): void {
-    this.service.getPartners().subscribe(response => {
-      this.partners = response;
     });
   }
 
