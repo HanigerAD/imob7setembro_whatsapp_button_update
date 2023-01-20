@@ -5,7 +5,7 @@ const apiService = axios.create({
   baseURL:
     process.env.NODE_ENV === "development"
       ? "http://localhost:3000"
-      : "http://xbcopu.hospedagemelastica.com.br",
+      : "https://api.imobiliaria7setembro.com.br",
   headers: {
     "Content-type": "application/json",
   },
