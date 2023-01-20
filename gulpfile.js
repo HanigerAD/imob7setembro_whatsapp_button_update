@@ -4,7 +4,7 @@ const { src, dest } = require("gulp");
 
 async function buildSite() {
   return new Promise((resolve, reject) => {
-    exec("cd site && npm run build", (error, stdout) => {
+    exec("docker exec imob7-site npm run build", (error, stdout) => {
       if (error) reject(error);
       resolve(stdout);
     });
@@ -13,7 +13,7 @@ async function buildSite() {
 
 async function buildAdmin() {
   return new Promise((resolve, reject) => {
-    exec("cd admin && npm run build", (error, stdout) => {
+    exec("docker exec imob7-admin npm run build", (error, stdout) => {
       if (error) reject(error);
       resolve(stdout);
     });
@@ -22,7 +22,7 @@ async function buildAdmin() {
 
 async function buildApi() {
   return new Promise((resolve, reject) => {
-    exec("cd api && npm run build", (error, stdout) => {
+    exec("docker exec imob7-api npm run build", (error, stdout) => {
       if (error) reject(error);
       resolve(stdout);
     });
@@ -52,17 +52,17 @@ async function copiarArquivosParaServerAdmin() {
 }
 
 async function main() {
-  // console.log("Realizando build do Site");
-  // await buildSite();
-  // console.log("Build do Site realizado");
+  console.log("Realizando build do Site");
+  await buildSite();
+  console.log("Build do Site realizado");
 
-  // console.log("Realizando build do Admin");
-  // await buildAdmin();
-  // console.log("Build do Admin realizado");
+  console.log("Realizando build do Admin");
+  await buildAdmin();
+  console.log("Build do Admin realizado");
 
-  // console.log("Realizando build da Api");
-  // await buildApi();
-  // console.log("Build da Api realizado");
+  console.log("Realizando build da Api");
+  await buildApi();
+  console.log("Build da Api realizado");
 
   console.log("Limpando Server Site");
   await limparServerSite();
