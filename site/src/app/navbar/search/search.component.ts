@@ -1,15 +1,15 @@
-import {Component, Input, OnDestroy, OnInit} from '@angular/core';
-import {Options} from '@angular-slider/ngx-slider';
-import {LoginModel} from '../../shared/model/login.model';
-import {Subscription} from 'rxjs';
-import {SearchService} from './services/search.service';
-import {CityModel} from './model/city.model';
-import {NeighborhoodModel} from './model/neighborhood.model';
-import {FormBuilder, FormGroup} from '@angular/forms';
-import {SearchTabsEnum} from './enum/search-tabs.enum';
-import {FinalityModel} from './model/finality.model';
-import {TypeModel} from './model/type.model';
-import {PropertyZoneEnum} from './enum/property-zone.enum';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Options } from '@angular-slider/ngx-slider';
+import { LoginModel } from '../../shared/model/login.model';
+import { Subscription } from 'rxjs';
+import { SearchService } from './services/search.service';
+import { CityModel } from './model/city.model';
+import { NeighborhoodModel } from './model/neighborhood.model';
+import { FormBuilder, FormGroup } from '@angular/forms';
+import { SearchTabsEnum } from './enum/search-tabs.enum';
+import { FinalityModel } from './model/finality.model';
+import { TypeModel } from './model/type.model';
+import { PropertyZoneEnum } from './enum/property-zone.enum';
 
 @Component({
   selector: 'app-search',
@@ -34,8 +34,8 @@ export class SearchComponent implements OnInit, OnDestroy {
   private subscriptions: Subscription = new Subscription();
 
   constructor(
-      private service: SearchService,
-      private formBuilder: FormBuilder
+    private service: SearchService,
+    private formBuilder: FormBuilder
   ) { }
 
   public ngOnInit(): void {
@@ -75,52 +75,61 @@ export class SearchComponent implements OnInit, OnDestroy {
 
   private getFinalities(): void {
     this.subscriptions.add(
-        this.service.getFinalities().subscribe(
-            finalities => this.finalities = finalities
-        )
+      this.service.getFinalities().subscribe(
+        finalities => this.finalities = finalities
+      )
     );
   }
 
   private getTypes(): void {
     this.subscriptions.add(
-        this.service.getTypes().subscribe(
-            types => this.types = types
-        )
+      this.service.getTypes().subscribe(
+        types => this.types = types
+      )
     );
   }
 
   private getCities(): void {
     this.subscriptions.add(
-        this.service.getCities().subscribe(
-            cities => this.cities = cities
-        )
+      this.service.getCities().subscribe(
+        cities => this.cities = cities
+      )
     );
   }
 
   public getNeighborhoods(): void {
     this.subscriptions.add(
-        this.service.getNeighborhoods(this.searchForm.get('city').value).subscribe(
-            neighborhoods => this.neighborhoods = neighborhoods
-        )
+      this.service.getNeighborhoods(this.searchForm.get('city').value).subscribe(
+        neighborhoods => this.neighborhoods = neighborhoods
+      )
     );
   }
 
   public search(): void {
-    this.searchForm.get('minPrice').setValue(this.minPrice);
-    this.searchForm.get('maxPrice').setValue(this.maxPrice);
-    this.manageSelectedZone();
+    this.manageSelectedValues();
 
     this.service.saveFiltersStorage(this.searchForm.getRawValue());
     this.service.redirectToListProperties();
   }
 
-  private manageSelectedZone(): void {
-    if (this.activatedTab === SearchTabsEnum.URBAN) {
-      this.searchForm.get('zone').setValue(PropertyZoneEnum.URBAN);
-    }
+  private manageSelectedValues(): void {
+    switch (this.activatedTab) {
+      case SearchTabsEnum.URBAN: {
+        this.searchForm.get('minPrice').setValue(this.minPrice);
+        this.searchForm.get('maxPrice').setValue(this.maxPrice);
+        this.searchForm.get('zone').setValue(PropertyZoneEnum.URBAN);
+        break;
+      }
 
-    if (this.activatedTab === SearchTabsEnum.RURAL) {
-      this.searchForm.get('zone').setValue(PropertyZoneEnum.RURAL);
+      case SearchTabsEnum.RURAL: {
+        this.searchForm.get('minPrice').setValue(this.minPrice);
+        this.searchForm.get('maxPrice').setValue(this.maxPrice);
+        this.searchForm.get('zone').setValue(PropertyZoneEnum.RURAL);
+        break;
+      }
+
+      default:
+        break;
     }
   }
 
@@ -139,7 +148,7 @@ export class SearchComponent implements OnInit, OnDestroy {
   }
 
   private roundValue(value: number): number {
-    return Math.trunc(Math.round(value  * 100) / 1000000 ) * 10000;
+    return Math.trunc(Math.round(value * 100) / 1000000) * 10000;
   }
 
 }
