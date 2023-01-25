@@ -1,4 +1,4 @@
-import { Body, Controller, Get, HttpCode, HttpStatus, Param, Patch, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Patch, Post, UseGuards } from '@nestjs/common';
 import { JwtAuthGuard } from "../../../authentication/config/jwt-auth.guard";
 import { CityRequest } from "../integration/request/city.request";
 import { CityService } from "../service/city.service";
@@ -40,5 +40,9 @@ export class CityController {
     return this.service.update(code, request);
   }
 
-
+  @Delete(':code')
+  @UseGuards(JwtAuthGuard)
+  public async delete(@Param('code') code: number): Promise<number> {
+    return this.service.delete(code);
+  }
 }

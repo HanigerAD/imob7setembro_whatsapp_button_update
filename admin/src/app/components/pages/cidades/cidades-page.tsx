@@ -21,11 +21,14 @@ export const CidadesPage = () => {
           onClick: async () => {
             try {
               setCarregando(true);
-              await apiService.delete(`/locality/city/${model.code}`);
+              await apiService.delete(
+                `/locality/city/${model.code}`
+              );
               toast.success("Registro removido com sucesso");
               buscar();
             } catch (error) {
               console.log({ error });
+              toast.error("Algo inesperado ocorreu! Verifique se o registro selecionado não está sendo utilizado");
               setCarregando(false);
             }
           },

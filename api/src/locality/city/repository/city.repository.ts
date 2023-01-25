@@ -65,5 +65,10 @@ export class CityRepository {
             .first();
     }
 
-
+    public delete(code: number): Promise<number> {
+        return this.knex
+            .delete()
+            .from('municipio')
+            .where('codigo', '=', code);
+    }
 }
