@@ -11,6 +11,7 @@ import AddImage from "../../../assets/images/add-image.jpg";
 import { imageFallback } from "../../../helpers/image-fallback";
 import Input from "../../shared/input-generico";
 import { converterParaTelefone } from "../../../utils/parser.utils";
+import { SeletorBooleanoGenerico } from "../../shared/seletor-booleano-generico";
 
 export const CorretorPage = () => {
   const navigate = useNavigate();
@@ -46,7 +47,7 @@ export const CorretorPage = () => {
   function removeCamposSalvar(data: any) {
     let newModel = Object.assign({}, data);
 
-    newModel = ObjectHelper.mantemSomenteCampos(newModel, ["name", "phone"]);
+    newModel = ObjectHelper.mantemSomenteCampos(newModel, ["name", "phone", "flagVisivelSite"]);
 
     newModel.user = newModel.user
       ? ObjectHelper.mantemSomenteCampos(newModel.user, ["code"])
@@ -223,6 +224,17 @@ export const CorretorPage = () => {
                         onChange={(e) =>
                           atualizarModel("phone", e.currentTarget.value)
                         }
+                      />
+                    </div>
+                  </div>
+
+                  <div className="col-md-12">
+                    <div className="form-floating mb-3">
+                      <SeletorBooleanoGenerico
+                        id="input-flagVisivelSite"
+                        label="Visivel no site"
+                        value={model?.flagVisivelSite}
+                        onChange={(value) => atualizarModel("flagVisivelSite", value)}
                       />
                     </div>
                   </div>

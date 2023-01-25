@@ -31,7 +31,7 @@ export class AboutUsComponent implements OnInit {
 
   public getAgents(): void {
     this.service.getAgents().subscribe(response => {
-      this.agents = response;
+      this.agents = response ? response.filter(({ flagVisivelSite }) => flagVisivelSite) : [];
     });
   }
 

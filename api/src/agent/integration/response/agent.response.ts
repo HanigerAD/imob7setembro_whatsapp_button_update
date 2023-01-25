@@ -3,4 +3,5 @@ export class AgentResponse {
     public name?: string;
     public phone?: string;
     public image?: string;
+    public flagVisivelSite?: boolean;
 }
