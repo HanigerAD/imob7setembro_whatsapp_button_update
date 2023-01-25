@@ -27,9 +27,9 @@ export class ListPropertiesComponent implements OnInit, OnChanges {
 
   private subscriptions: Subscription = new Subscription();
   public searchForm: FormGroup;
-  public minPrice: number = 10000;
+  public minPrice: number = 100;
   public maxPrice: number = 2000000;
-  public minPriceConfig: number = 10000;
+  public minPriceConfig: number = 100;
   public maxPriceConfig: number = 2000000;
   public optionsSlider: Options;
   public filters: SearchModel;
@@ -82,9 +82,9 @@ export class ListPropertiesComponent implements OnInit, OnChanges {
     switch (transactionCode) {
 
       case (0 || TransactionEnum.SALE): {
-        this.minPrice = 10000;
+        this.minPrice = 100;
         this.maxPrice = 10000000;
-        this.minPriceConfig = 10000;
+        this.minPriceConfig = 100;
         this.maxPriceConfig = 10000000;
         break;
       }
@@ -110,7 +110,7 @@ export class ListPropertiesComponent implements OnInit, OnChanges {
       .city(0)
       .neighborhood(0)
       .zone(0)
-      .minPrice(10000)
+      .minPrice(100)
       .maxPrice(2000000)
       .build();
 

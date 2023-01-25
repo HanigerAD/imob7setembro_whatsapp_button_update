@@ -39,9 +39,9 @@ export class ViewPropertyComponent implements OnInit, OnDestroy, OnChanges, Afte
   public types: TypeModel[] = [];
   public cities: CityModel[] = [];
   public neighborhoods: NeighborhoodModel[] = [];
-  public minPrice: number = 10000;
+  public minPrice: number = 100;
   public maxPrice: number = 10000000;
-  public minPriceConfig: number = 10000;
+  public minPriceConfig: number = 100;
   public maxPriceConfig: number = 10000000;
   public optionsSlider: Options;
   public similarProperties: PropertyModel[] = [];
@@ -186,7 +186,7 @@ export class ViewPropertyComponent implements OnInit, OnDestroy, OnChanges, Afte
         zone: 0,
         hectare: null,
         code: null,
-        minPrice: 10000,
+        minPrice: 100,
         maxPrice: 2000000
       });
     }
@@ -240,7 +240,7 @@ export class ViewPropertyComponent implements OnInit, OnDestroy, OnChanges, Afte
   }
 
   private getValueRange(): void {
-    this.minPrice = this.filters?.minPrice ? this.filters.minPrice : 10000;
+    this.minPrice = this.filters?.minPrice ? this.filters.minPrice : 100;
     this.maxPrice = this.filters?.maxPrice ? this.filters.maxPrice : 2000000;
   }
 
@@ -299,9 +299,9 @@ export class ViewPropertyComponent implements OnInit, OnDestroy, OnChanges, Afte
     switch (transactionCode) {
 
       case (0 || TransactionEnum.SALE): {
-        this.minPrice = 10000;
+        this.minPrice = 100;
         this.maxPrice = 10000000;
-        this.minPriceConfig = 10000;
+        this.minPriceConfig = 100;
         this.maxPriceConfig = 10000000;
         break;
       }

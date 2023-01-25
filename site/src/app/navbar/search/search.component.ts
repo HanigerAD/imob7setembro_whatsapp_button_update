@@ -22,7 +22,7 @@ export class SearchComponent implements OnInit, OnDestroy {
   public siteInfo: LoginModel;
 
   public searchForm: FormGroup;
-  public minPrice: number = 10000;
+  public minPrice: number = 100;
   public maxPrice: number = 2000000;
   public optionsSlider: Options;
   public finalities: FinalityModel[] = [];
@@ -126,7 +126,7 @@ export class SearchComponent implements OnInit, OnDestroy {
 
   private configureSlider(): void {
     this.optionsSlider = {
-      floor: 10000,
+      floor: 100,
       ceil: 2000000,
       animate: true,
       translate: (value: number): string => {
