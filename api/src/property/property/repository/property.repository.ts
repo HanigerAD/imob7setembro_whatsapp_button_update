@@ -1,5 +1,6 @@
-import { Catch, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectKnex, Knex } from 'nestjs-knex';
+import { QueryBuilder } from 'knex';
 
 import { TransactionEnum } from '../../../common/enum/transaction.enum';
 import { CategoryEntity } from '../../category/entity/category.entity';
@@ -14,11 +15,8 @@ import { AgentEntity } from './../../../agent/entity/agent.entity';
 import { PropertyFilterEntity } from './../entity/property-filter.entity';
 import { ImageSortRequest } from "../integration/request/image-sort.request";
 import { PropertyDocumentEntity } from "../entity/property-document.entity";
-import { log } from "util";
 import { LogEntity } from "../entity/log.entity";
-import { LogResponse } from "../integration/response/log.response";
 import { SituationEntity } from "../../../user/entity/situation.entity";
-import { RepositoryException } from "src/common/exceptions/repository-exception";
 
 @Injectable()
 export class PropertyRepository {
@@ -86,20 +84,88 @@ export class PropertyRepository {
             .first();
     }
 
+    private getAllQueryBuilder(queryBuilder: QueryBuilder<unknown, any>, filters) {
+        const filtersKeys = Object.keys(filters);
+
+        let filtersList = filtersKeys.map(filterkey => ({ key: filterkey, value: filters[filterkey] }));
+        filtersList = filtersList.filter(filter => filter.key !== 'paginacao');
+
+        filtersList.forEach(({ key: filterKey, value: filterValue }) => {
+            switch (filterKey) {
+                case 'preco': {
+                    let { minPrice, maxPrice } = filterValue;
+                    const filterOfType = filtersList.find(({ key }) => key === 'tipo');
+
+                    if (filterOfType && filterOfType.value == 4) {
+                        queryBuilder.where('valor', '=', 0)
+                    } else {
+                        queryBuilder.whereBetween('valor', [minPrice, maxPrice])
+                    }
+
+                    break;
+                }
+
+                case 'transacao': {
+                    queryBuilder.where('transacao_imovel.codigo', '=', filterValue);
+                    break;
+                }
+
+                case 'categoria': {
+                    const category = String(filterValue).toUpperCase();
+
+                    if (category == 'RURAL') {
+                        queryBuilder.whereIn('categoria_imovel.codigo', [9, 10, 11]);
+                    }
+
+                    break;
+                }
+
+                case 'zona': {
+                    queryBuilder.where('zona_imovel.codigo', '=', filterValue)
+                    break;
+                }
+
+                // case 'hectare': {
+                //     if (Number(filters[filter]) == 1) {
+                //         queryBuilder.where('hectare', '<', 100);
+                //     } else if (Number(filters[filter]) == 2) {
+                //         queryBuilder.where('hectare', '>=', 100);
+                //     }
+                //     break;
+                // }
+                //
+                // case 'exibir': {
+                //     queryBuilder.where('exibir', '=', filterValue);
+                //     break;
+                // }
+                // 
+                // case 'internalCode': {
+                //     queryBuilder.where('codigo_interno', '=', filterValue);
+                //     break; 
+                // }
+                // 
+                // case 'code': {
+                //     queryBuilder.where('codigo', '=', filterValue);
+                //     break;
+                // }
+
+                default: {
+                    queryBuilder.where(`imovel.${filterKey}`, '=', filterValue);
+                    break;
+                }
+            }
+        });
+
+    }
+
     public getAll(filters: PropertyFilterEntity): Promise<PropertyEntity[]> {
         const since = (filters?.paginacao?.pagina - 1) * filters?.paginacao?.porPagina;
         const perPage = filters?.paginacao?.porPagina;
 
         return this.knex
             .select(
-                'codigo_interno',
-                'titulo',
-                'imovel.codigo',
-                'valor',
-                'dormitorio',
-                'vaga',
+                'imovel.*',
                 'area_total as areaTotal',
-                'hectare',
                 'bairro.descricao as bairro',
                 'municipio.descricao as municipio',
                 'transacao_imovel.descricao as transacao',
@@ -108,7 +174,6 @@ export class PropertyRepository {
                 'unidade_federativa.descricao as unidadeFederativa',
                 'zona_imovel.descricao as zona',
                 'categoria_imovel.descricao as categoria',
-                'imovel.financiavel as financiavel'
             )
             .from('imovel')
             .joinRaw('JOIN categoria_imovel ON imovel.categoria = categoria_imovel.codigo')
@@ -118,63 +183,27 @@ export class PropertyRepository {
             .joinRaw('JOIN unidade_federativa ON municipio.unidade_federativa = unidade_federativa.codigo')
             .joinRaw('JOIN transacao_imovel ON imovel.transacao = transacao_imovel.codigo')
             .joinRaw('JOIN foto_imovel ON imovel.codigo = foto_imovel.imovel AND foto_imovel.ordem = 1')
-            .modify(queryBuilder => {
-                const filtersKeys = Object.keys(filters);
-                filtersKeys.forEach(filter => {
-                    if (filters[filter]) {
-                        if (filter != 'paginacao' && filter != 'preco' && filters[filter] && filter != 'transacao'
-                            && filter != 'categoria' && filter != 'hectare') {
-                            queryBuilder.where(`imovel.${filter}`, '=', filters[filter]);
-                        }
-
-                        if (filter == 'preco') {
-                          queryBuilder.whereBetween('valor', [filters[filter].minPrice, filters[filter].maxPrice])
-
-                          if (filtersKeys.includes('tipo') && filters['tipo'] == 4) {
-                            queryBuilder.orWhere('valor', '=', '0.00')
-                          }
-                        }
-
-                        if (filter == 'transacao') {
-                            queryBuilder.where('transacao_imovel.codigo', '=', filters[filter]);
-                        }
-
-                        if (filter == 'hectare') {
-
-                            if (Number(filters[filter]) == 1) {
-                                queryBuilder.where('hectare', '<', 100);
-                            } else if (Number(filters[filter]) == 2) {
-                                queryBuilder.where('hectare', '>=', 100);
-                            }
-                        }
-
-                        if (filter == 'categoria') {
-                            if (filters[filter].toUpperCase() == 'RURAL') {
-                                queryBuilder.whereIn('categoria_imovel.codigo', [9, 10, 11]);
-                            }
-                        }
-
-                        if (filter == 'zona') {
-                            queryBuilder.where('zona_imovel.codigo', '=', filters[filter])
-                        }
-
-                        if (filter == 'exibir') {
-                            queryBuilder.where('exibir', '=', filters[filter]);
-                        }
-
-                        if (filter == 'internalCode') {
-                            queryBuilder.where('codigo_interno', '=', filters[filter]);
-                        }
-
-                        if (filter == 'code') {
-                            queryBuilder.where('codigo', '=', filters[filter]);
-                        }
-                    }
-                });
-            })
+            .modify(queryBuilder => this.getAllQueryBuilder(queryBuilder, filters))
             .offset(since)
             .limit(perPage)
             .orderBy('imovel.codigo', 'DESC');
+    }
+
+    public async getAllCounter(filters: PropertyFilterEntity): Promise<number> {
+        const { total } = await this.knex
+            .count('imovel.codigo as total')
+            .from('imovel')
+            .joinRaw('JOIN categoria_imovel ON imovel.categoria = categoria_imovel.codigo')
+            .joinRaw('JOIN zona_imovel ON imovel.zona = zona_imovel.codigo')
+            .joinRaw('JOIN bairro ON imovel.bairro = bairro.codigo')
+            .joinRaw('JOIN municipio on imovel.municipio = municipio.codigo')
+            .joinRaw('JOIN unidade_federativa ON municipio.unidade_federativa = unidade_federativa.codigo')
+            .joinRaw('JOIN transacao_imovel ON imovel.transacao = transacao_imovel.codigo')
+            .joinRaw('JOIN foto_imovel ON imovel.codigo = foto_imovel.imovel AND foto_imovel.ordem = 1')
+            .modify(queryBuilder => this.getAllQueryBuilder(queryBuilder, filters))
+            .first();
+
+        return total ? total : 0;
     }
 
     public getAllQuery(filter: PropertyFilterEntity): Promise<PropertyDetailEntity[]> {

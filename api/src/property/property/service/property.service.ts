@@ -94,6 +94,12 @@ export class PropertyService {
       .then(properties => PropertyMapper.entityListToResponse(properties));
   }
 
+  public getAllPropertiesCounter(filter: PropertyFilterRequest): Promise<any> {
+    const filters = PropertyFilterMapper.requestToEntity(filter);
+
+    return this.repository.getAllCounter(UtilsService.clearObject(filters));
+  }
+
   public async generateImagesWithWatermark(res: Response): Promise<void> {
     // buscar todas as imagens originais das propriedades
     let allImagesOfPropertiesResponse = await this.repository.getAllPropertiesImagesUrls();
@@ -107,8 +113,6 @@ export class PropertyService {
     // buscar logo
     const { logo: logoImageName } = await this.configurationService.get();
     const logoUrl = `${process.env.CDN_URL}/${logoImageName}`;
-
-    console.log('1', allImagesOfProperties);
 
     return this.imageService.applyWatermarkAndSubmitToCdn(allImagesOfProperties, logoUrl, res);
   }

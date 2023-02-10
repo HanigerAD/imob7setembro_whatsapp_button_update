@@ -15,4 +15,7 @@ export class PropertyFilterEntity {
     public financiavel?: number;
     public categoria?: string;
     public exibir?: number;
+    public banheiro?: number;
+    public vaga?: number;
+    public dormitorio?: number;
 }

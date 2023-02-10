@@ -37,4 +37,18 @@ export class PropertyRestService {
     return this.http.get<any>(`${this.endpoint}/properties`, { params });
   }
 
+  public getPropertiesCounter(filters: SearchModel): Observable<number> {
+    let params: HttpParams = new HttpParams();
+
+    if (filters) {
+      Object.keys(filters).forEach(filter => {
+        if (filters[filter]) {
+          params = params.append(filter, filters[filter]);
+        }
+      });
+    }
+
+    return this.http.get<any>(`${this.endpoint}/counter/properties`, { params });
+  }
+
 }

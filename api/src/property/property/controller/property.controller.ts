@@ -1,6 +1,5 @@
 import {
   Body,
-  Catch,
   Controller,
   Delete,
   Get,
@@ -13,7 +12,6 @@ import {
   Query,
   Res,
   UploadedFiles,
-  UseFilters,
   UseGuards,
   UseInterceptors,
 } from "@nestjs/common";
@@ -133,6 +131,13 @@ export class PropertyController {
     @Query() filter: PropertyFilterRequest
   ): Promise<any> {
     return this.service.getAllProperties(filter);
+  }
+
+  @Get("counter/properties")
+  public async getAllPropertiesCounter(
+    @Query() filter: PropertyFilterRequest
+  ): Promise<number> {
+    return this.service.getAllPropertiesCounter(filter);
   }
 
   @Get("properties/:code")

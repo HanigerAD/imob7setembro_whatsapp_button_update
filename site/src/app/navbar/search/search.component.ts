@@ -135,7 +135,7 @@ export class SearchComponent implements OnInit, OnDestroy {
 
   private configureSlider(): void {
     this.optionsSlider = {
-      floor: 100,
+      floor: 0,
       ceil: 2000000,
       animate: true,
       translate: (value: number): string => {

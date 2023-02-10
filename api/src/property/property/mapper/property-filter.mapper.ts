@@ -21,7 +21,10 @@ export class PropertyFilterMapper {
             .financiavel(request.financeable ? 1 : 0)
             .exibir(request?.showSite ? request.showSite : 0)
             .categoria(request.category)
-            .zona(Number(request.zone))
+            .zona(request.zone)
+            .dormitorio(request?.bedroom)
+            .vaga(request?.parkingVacancy)
+            .banheiro(request?.bathroom)
             .build();
     }
 

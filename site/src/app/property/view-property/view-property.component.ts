@@ -39,9 +39,9 @@ export class ViewPropertyComponent implements OnInit, OnDestroy, OnChanges, Afte
   public types: TypeModel[] = [];
   public cities: CityModel[] = [];
   public neighborhoods: NeighborhoodModel[] = [];
-  public minPrice: number = 100;
+  public minPrice: number = 0;
   public maxPrice: number = 10000000;
-  public minPriceConfig: number = 100;
+  public minPriceConfig: number = 0;
   public maxPriceConfig: number = 10000000;
   public optionsSlider: Options;
   public similarProperties: PropertyModel[] = [];
@@ -174,7 +174,10 @@ export class ViewPropertyComponent implements OnInit, OnDestroy, OnChanges, Afte
         hectare: this.filters.neighborhood,
         code: this.filters.code,
         minPrice: this.filters.minPrice,
-        maxPrice: this.filters.maxPrice
+        maxPrice: this.filters.maxPrice,
+        bedroom: this.filters.bedroom,
+        parkingVacancy: this.filters.parkingVacancy,
+        bathroom: this.filters.bathroom,
       });
     } else {
       this.searchForm = this.formBuilder.group({
@@ -186,8 +189,11 @@ export class ViewPropertyComponent implements OnInit, OnDestroy, OnChanges, Afte
         zone: 0,
         hectare: null,
         code: null,
-        minPrice: 100,
-        maxPrice: 2000000
+        minPrice: 0,
+        maxPrice: 2000000,
+        bedroom: null,
+        parkingVacancy: null,
+        bathroom: null,
       });
     }
 
@@ -240,7 +246,7 @@ export class ViewPropertyComponent implements OnInit, OnDestroy, OnChanges, Afte
   }
 
   private getValueRange(): void {
-    this.minPrice = this.filters?.minPrice ? this.filters.minPrice : 100;
+    this.minPrice = this.filters?.minPrice ? this.filters.minPrice : 0;
     this.maxPrice = this.filters?.maxPrice ? this.filters.maxPrice : 2000000;
   }
 
@@ -263,10 +269,14 @@ export class ViewPropertyComponent implements OnInit, OnDestroy, OnChanges, Afte
   }
 
   public search(): void {
-    this.searchForm.get('minPrice').setValue(this.minPrice);
-    this.searchForm.get('maxPrice').setValue(this.maxPrice);
+    this.filters = this.searchForm.getRawValue();
+    this.filters.minPrice = this.minPrice;
+    this.filters.maxPrice = this.maxPrice;
+    this.filters.bathroom = this.filters.bathroom ? Number(this.filters.bathroom) : undefined;
+    this.filters.bedroom = this.filters.bedroom ? Number(this.filters.bedroom) : undefined;
+    this.filters.parkingVacancy = this.filters.parkingVacancy ? Number(this.filters.parkingVacancy) : undefined;
 
-    this.searchService.saveFiltersStorage(this.searchForm.getRawValue());
+    this.searchService.saveFiltersStorage(this.filters);
     this.searchService.redirectToListProperties();
   }
 
@@ -299,9 +309,9 @@ export class ViewPropertyComponent implements OnInit, OnDestroy, OnChanges, Afte
     switch (transactionCode) {
 
       case (0 || TransactionEnum.SALE): {
-        this.minPrice = 100;
+        this.minPrice = 0;
         this.maxPrice = 10000000;
-        this.minPriceConfig = 100;
+        this.minPriceConfig = 0;
         this.maxPriceConfig = 10000000;
         break;
       }
@@ -319,12 +329,10 @@ export class ViewPropertyComponent implements OnInit, OnDestroy, OnChanges, Afte
   }
 
   public prevSlides() {
-    console.log('prevSlides');
     this.showSlides(this.slideIndex - 1);
   }
 
   public plusSlides() {
-    console.log('plusSlides');
     this.showSlides(this.slideIndex + 1);
   }
 

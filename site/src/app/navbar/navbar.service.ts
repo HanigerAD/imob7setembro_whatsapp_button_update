@@ -65,6 +65,7 @@ export class NavbarService {
         .hectare(0)
         .minPrice(0)
         .maxPrice(2000000)
+        .financeable(true)
     .build();
   }
 }

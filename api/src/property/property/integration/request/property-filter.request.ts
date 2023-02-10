@@ -14,4 +14,7 @@ export class PropertyFilterRequest {
     public financeable: number;
     public showSite?: number;
     public category: string;
+    public bedroom?: number;
+    public parkingVacancy?: number;
+    public bathroom?: number;
 }
