@@ -24,7 +24,7 @@ export class NavbarService {
         .neighborhood(0)
         .type(0)
         .hectare(0)
-        .minPrice(100)
+        .minPrice(0)
         .maxPrice(2000000)
     .build();
   }
@@ -50,7 +50,7 @@ export class NavbarService {
         .city(0)
         .neighborhood(0)
         .hectare(0)
-        .minPrice(100)
+        .minPrice(0)
         .maxPrice(2000000)
     .build();
   }
@@ -63,7 +63,7 @@ export class NavbarService {
         .city(0)
         .neighborhood(0)
         .hectare(0)
-        .minPrice(100)
+        .minPrice(0)
         .maxPrice(2000000)
     .build();
   }
