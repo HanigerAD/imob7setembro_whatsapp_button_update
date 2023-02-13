@@ -27,8 +27,8 @@ import { PartnerModule } from "./partners/partners.module";
         config: {
           client: "mysql",
           useNullAsDefault: true,
-          debug: false,
-          asyncStackTraces: false,
+          debug: true,
+          asyncStackTraces: true,
           connection: {
             host: configService.get<string>("DB_HOST"),
             port: configService.get<string>("DB_PORT"),
