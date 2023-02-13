@@ -1,15 +1,32 @@
-import { useEffect, useMemo, useState } from "react";
+import { useContext, useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import { confirmAlert } from "react-confirm-alert";
 import { apiService } from "../../../services/api.service";
 import { Pagination } from "../../layouts/admin/components/pagination";
 import { toast } from "react-toastify";
 import { usePagination } from "../../../hooks/usePagination";
+import { ErrorModalContext } from "../../shared/ErrorModal";
+
+const ErrorContent = ({ properties }: { properties: any[] }) => (
+  <>
+    {properties && properties.length ? <h3>Imoveis ({properties.length} Registros)</h3> : ''}
+    {properties && properties.length ? properties.map(
+      (property: any) =>
+      (
+        <div key={`properties-${property.code}`}>
+          <Link target="_blank" to={`/admin/imoveis/${property.code}`}>Código {property.internalCode} - {property.title}</Link>
+          <br />
+        </div>
+      )
+    ) : ''}
+  </>
+);
 
 export const CategoriasPage = () => {
   const [models, setModels] = useState([]);
   const [carregando, setCarregando] = useState(false);
   const paginationProps = usePagination({ currentPage: 1, itemsPerPage: 5 });
+  const { showError } = useContext<any>(ErrorModalContext);
 
   async function deletar(model: any) {
     confirmAlert({
@@ -26,16 +43,29 @@ export const CategoriasPage = () => {
               );
               toast.success("Registro removido com sucesso");
               buscar();
-            } catch (error) {
+            } catch (error: any) {
               console.log({ error });
-              toast.error("Algo inesperado ocorreu! Verifique se o registro selecionado não está sendo utilizado");
+              if (error && error?.response && error?.response?.data) {
+                let message = "Algo inesperado ocorreu! Verifique se o registro selecionado não está sendo utilizado";
+
+                if (error?.response?.data?.message) {
+                  message = error?.response?.data?.message;
+                }
+
+                if (error?.response?.data?.properties) {
+                  let content = <ErrorContent properties={error?.response?.data?.properties} />;
+                  showError(message, content);
+                } else {
+                  toast.error(`${message}`);
+                }
+              }
               setCarregando(false);
             }
           },
         },
         {
           label: "Não",
-          onClick: () => {},
+          onClick: () => { },
         },
       ],
     });

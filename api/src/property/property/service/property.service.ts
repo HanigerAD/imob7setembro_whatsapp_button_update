@@ -1,5 +1,5 @@
 import { ImageResponse } from './../integration/response/photo.response';
-import { HttpService, Injectable } from '@nestjs/common';
+import { BadRequestException, ConflictException, HttpService, Injectable } from '@nestjs/common';
 import { Builder } from 'builder-pattern';
 import { Response } from 'express';
 
@@ -51,6 +51,7 @@ import { SituationMapper } from "../../../user/mapper/situation.mapper";
 import { ConfigurationService } from 'src/configuration/service/configuration.service';
 import { ImageWatermark } from 'src/common/integration/request/image-watermark';
 import { CategoryRequest } from '../../../property/category/integration/response/category.request';
+import { PropertyResponse } from '../integration/response/property.response';
 
 
 
@@ -79,8 +80,22 @@ export class PropertyService {
     return this.repository.updateCategory(code, CategoryMapper.requestToEntity(request));
   }
 
-  public deleteCategory(code: number): Promise<number> {
-    return this.repository.deleteCategory(code);
+  public async deleteCategory(code: number): Promise<number> {
+    const properties = await this.getPropertiesByCategory(code);
+
+    if ((properties && properties.length)) {
+      const message = 'Não foi possivel deletar o registro pois o mesmo contem outros registros vinculados.';
+      throw new BadRequestException({
+        message,
+        properties,
+      }, message);
+    } else {
+      try {
+        return this.repository.deleteCategory(code);
+      } catch (error) {
+        throw new ConflictException(error, 'Erro ao executar comando no banco de dados')
+      }
+    }
   }
 
   public update(code: number, request: PropertyRequest): Promise<number> {
@@ -146,6 +161,11 @@ export class PropertyService {
 
   public getNeighborhood(code: number): Promise<NeighborhoodResponse> {
     return this.neighborhoodService.getSingle(code);
+  }
+
+  public getPropertiesByCategory(code: number): Promise<PropertyResponse[]> {
+    return this.repository.getAll({ paginacao: { pagina: 1, porPagina: 1000 }, categoria: String(code) })
+      .then(result => PropertyMapper.entityListToResponse(result));
   }
 
   public getCategory(code: number): Promise<CategoryResponse> {

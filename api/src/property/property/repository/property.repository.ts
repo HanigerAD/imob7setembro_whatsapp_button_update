@@ -110,11 +110,28 @@ export class PropertyRepository {
                     break;
                 }
 
+                case 'municipio': {
+                    queryBuilder.where('municipio.codigo', '=', filterValue);
+                    break;
+                }
+
+                case 'bairro': {
+                    queryBuilder.where('bairro.codigo', '=', filterValue);
+                    break;
+                }
+
+                case 'agenciador': {
+                    queryBuilder.where('agenciador.codigo', '=', filterValue);
+                    break;
+                }
+
                 case 'categoria': {
                     const category = String(filterValue).toUpperCase();
 
                     if (category == 'RURAL') {
                         queryBuilder.whereIn('categoria_imovel.codigo', [9, 10, 11]);
+                    } else {
+                        queryBuilder.where('categoria_imovel.codigo', '=', filterValue);
                     }
 
                     break;
@@ -133,22 +150,6 @@ export class PropertyRepository {
                 //     }
                 //     break;
                 // }
-                //
-                // case 'exibir': {
-                //     queryBuilder.where('exibir', '=', filterValue);
-                //     break;
-                // }
-                // 
-                // case 'internalCode': {
-                //     queryBuilder.where('codigo_interno', '=', filterValue);
-                //     break; 
-                // }
-                // 
-                // case 'code': {
-                //     queryBuilder.where('codigo', '=', filterValue);
-                //     break;
-                // }
-
                 default: {
                     queryBuilder.where(`imovel.${filterKey}`, '=', filterValue);
                     break;
@@ -180,6 +181,7 @@ export class PropertyRepository {
             .joinRaw('LEFT JOIN zona_imovel ON imovel.zona = zona_imovel.codigo')
             .joinRaw('LEFT JOIN bairro ON imovel.bairro = bairro.codigo')
             .joinRaw('LEFT JOIN municipio on imovel.municipio = municipio.codigo')
+            .joinRaw('LEFT JOIN agenciador on imovel.agenciador = agenciador.codigo')
             .joinRaw('LEFT JOIN unidade_federativa ON municipio.unidade_federativa = unidade_federativa.codigo')
             .joinRaw('LEFT JOIN transacao_imovel ON imovel.transacao = transacao_imovel.codigo')
             .joinRaw('LEFT JOIN foto_imovel ON imovel.codigo = foto_imovel.imovel AND foto_imovel.ordem = 1')

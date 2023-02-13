@@ -18,4 +18,5 @@ export class PropertyFilterEntity {
     public banheiro?: number;
     public vaga?: number;
     public dormitorio?: number;
+    public agenciador?: number;
 }
