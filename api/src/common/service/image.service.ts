@@ -9,6 +9,10 @@ import { ImageRequest } from "../integration/request/image.request";
 import { CdnService } from "./cdn.service";
 import { CdnDto } from "../dto/cdn.dto";
 import { ImageWatermark } from "../integration/request/image-watermark";
+import { ImagemUtils } from "../utils/imagem-utils";
+import { ImageSizeEnum } from "../enum/image-size.enum";
+import fetch from "node-fetch";
+import axios from "axios";
 
 @Injectable()
 export class ImageService {
@@ -18,11 +22,20 @@ export class ImageService {
     return ["image/png", "image/jpg", "image/jpeg"];
   }
 
+  public static isValidUrl(string) {
+    try {
+      new URL(string);
+      return true;
+    } catch (err) {
+      return false;
+    }
+  }
+
   public async saveImages(
     images: ImageRequest[],
-    res: Response,
     addWatermask = false,
-    logoUrl = ''
+    logoUrl = '',
+    kbytes?: number
   ): Promise<void> {
     if (images?.length) {
       const validImages = images.filter((image) =>
@@ -30,22 +43,22 @@ export class ImageService {
       );
 
       const cdnDtos = await Promise.all(
-        validImages.map((image) => this.prepararImagensParaCdn(image, addWatermask, logoUrl))
+        validImages.map((image) => this.prepararImagensParaCdn(image, addWatermask, logoUrl, kbytes))
       ).then(promissesResponse => promissesResponse.reduce((previousValue, currentValue) => {
         return previousValue.concat(currentValue)
       }, []));
 
-      return this.cdnService.sendMultipleFilesToFTP(cdnDtos, res);
+      return this.cdnService.sendMultipleFilesToFTP(cdnDtos);
     }
 
     return null;
   }
 
-  public async saveImage(image: ImageRequest, res: Response, addWatermask = false, logoUrl = ''): Promise<void> {
-    const cdnDtos = await this.prepararImagensParaCdn(image, addWatermask, logoUrl);
+  public async saveImage(image: ImageRequest, addWatermask = false, logoUrl = '', kbytes?: number): Promise<void> {
+    const cdnDtos = await this.prepararImagensParaCdn(image, addWatermask, logoUrl, kbytes);
 
     if (cdnDtos.length) {
-      return this.cdnService.sendMultipleFilesToFTP(cdnDtos, res);
+      return this.cdnService.sendMultipleFilesToFTP(cdnDtos);
     }
 
     return null;
@@ -61,23 +74,22 @@ export class ImageService {
     }
 
     if (cdnDtos.length) {
-      return this.cdnService.sendMultipleFilesToFTP(cdnDtos, res);
+      return this.cdnService.sendMultipleFilesToFTP(cdnDtos);
     }
 
     return null;
   }
 
-  private async prepararImagensParaCdn(image: ImageRequest, addWatermask = false, logoUrl = ''): Promise<CdnDto[]> {
+  private async prepararImagensParaCdn(image: ImageRequest, addWatermask = false, logoUrl = '', kbytes?: number): Promise<CdnDto[]> {
     if (image && this.acceptedFormats.includes(image.file.mimetype)) {
       const extensaoDaImagem = path.extname(image.file.originalname);
       const nomeDaImagem = this.gerarNomeParaImagem('', '', extensaoDaImagem);
       image.file.filename = nomeDaImagem;// altera nome do arquivo no contexto
 
-      const bufferImagemTratada = await this.tratarImagem(image.file.buffer, image.width, image.height);
+      const bufferImagemTratada = await this.tratarImagem(image.file.buffer, image.width, image.height, kbytes);
 
       if (addWatermask) {
         const cdnDtoImagemTratada = this.buildCdnDto(bufferImagemTratada, `original-${nomeDaImagem}`);
-
         const bufferImagemComMarcaDagua = await this.aplicarMarcaDagua(bufferImagemTratada, logoUrl);
         const cdnDtoImagemTratadaComMarcaDagua = this.buildCdnDto(bufferImagemComMarcaDagua, nomeDaImagem);
 
@@ -92,46 +104,57 @@ export class ImageService {
     return [];
   }
 
-  private async tratarImagem(imageBuffer: Buffer, maxWidth: number, maxHeight: number): Promise<Buffer> {
-    const { width: originalWidth, height: originalHeight } = await sharp(imageBuffer).metadata();
-    let width = maxWidth;
-    let height = maxHeight;
-
-    if (originalWidth <= maxWidth && originalHeight <= maxHeight) {
-      width = originalWidth;
-      height = originalHeight;
-    }
-
-    return await sharp(imageBuffer)
-      .resize(width, height, {
-        fit: 'inside',
-        withoutEnlargement: true,
-      })
-      .toFormat('jpeg', {
-        progressive: true,
-        quality: 70,
-      })
-      .toBuffer();
+  private async tratarImagem(imageBuffer: Buffer, maxWidth: number, maxHeight: number, maxKbytes = ImageSizeEnum.MAX_KBYTES): Promise<Buffer> {
+    const imagemUtils = new ImagemUtils();
+    const imagemTratada = await imagemUtils.tratarImagem(imageBuffer, { maxWidth, maxHeight, maxKbytes });
+    return imagemTratada;
   }
 
-  private async aplicarMarcaDagua(imageContent: any, logoUrl): Promise<Buffer> {
-    let image = await Jimp.read(imageContent);
-    let watermark = await Jimp.read(logoUrl);
+  private async loadImageBuffer(image: string | Buffer): Promise<Buffer> {
+    if (Buffer.isBuffer(image)) {
+      return image;
+    } else {
+      const { data } = await axios({ url: image, responseType: "arraybuffer" });
+      return data as Buffer;
+    }
+  }
 
-    watermark.resize(image.bitmap.width / 5, Jimp.AUTO);
+  private async aplicarMarcaDagua(image: string | Buffer, logo: string | Buffer): Promise<Buffer> {
+    const baseImageBuffer = await this.loadImageBuffer(image);
+    const baseImage = await sharp(baseImageBuffer).withMetadata();
 
-    const X = (image.bitmap.width / 2) - (watermark.bitmap.width / 2);
-    const Y = (image.bitmap.height / 2) - (watermark.bitmap.height / 2);
+    const watermarkBuffer = await this.loadImageBuffer(logo);
+    const watermark = await sharp(watermarkBuffer).withMetadata();
 
-    const mimeImage = image.getMIME();
+    const { width: baseImageWidth, height: baseImageHeight } = await baseImage.metadata();
+    let { width: watermarkWidth, height: watermarkHeight } = await watermark.metadata();
 
-    image = image.composite(watermark, X, Y, {
-      mode: Jimp.BLEND_SOURCE_OVER,
-      opacityDest: 1,
-      opacitySource: 0.5
-    });
+    let newWatermarkWidth = baseImageWidth / 5;
+    let newWatermarkHeight = 0;
 
-    return await image.getBufferAsync(mimeImage);
+    if (watermarkWidth > newWatermarkWidth) {
+      newWatermarkHeight = (watermarkHeight * ((newWatermarkWidth * 100) / watermarkWidth)) / 100;
+    } else {
+      newWatermarkHeight = (watermarkHeight * ((watermarkWidth * 100) / newWatermarkWidth)) / 100;
+    }
+
+    const newWatermarkBuffer = await watermark.resize(Math.round(newWatermarkWidth), Math.round(newWatermarkHeight), {
+      fit: 'inside'
+    })
+      .withMetadata()
+      .png()
+      .toBuffer();
+
+    const X = (baseImageWidth / 2) - (watermarkWidth / 2);
+    const Y = (baseImageHeight / 2) - (watermarkHeight / 2);
+
+    const imageToComposite = { input: newWatermarkBuffer, top: Math.round(X), left: Math.round(Y) } as sharp.OverlayOptions;
+
+    const compositeImage = await baseImage.composite([imageToComposite]).withMetadata();
+
+    const finalImage = await compositeImage.toBuffer();
+
+    return finalImage;
   }
 
   private gerarNomeParaImagem(prefix: string, suffix: string, ext: string): string {

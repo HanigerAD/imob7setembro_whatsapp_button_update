@@ -42,7 +42,7 @@ export class AgentService {
     res: Response
   ): Promise<number> {
     return this.imageService
-      .saveImages(Array.of(this.buildAgentImage(image)), res)
+      .saveImages(Array.of(this.buildAgentImage(image)))
       .then(() => this.repository.setImage(code, image.filename));
   }
 

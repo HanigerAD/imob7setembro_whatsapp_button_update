@@ -11,11 +11,12 @@ import {
   Put,
   Query,
   Res,
+  UploadedFile,
   UploadedFiles,
   UseGuards,
   UseInterceptors,
 } from "@nestjs/common";
-import { FilesInterceptor } from "@nestjs/platform-express";
+import { FileInterceptor, FilesInterceptor } from "@nestjs/platform-express";
 import { Response } from "express";
 
 import { JwtAuthGuard } from "../../../authentication/config/jwt-auth.guard";
@@ -63,10 +64,9 @@ export class PropertyController {
   @HttpCode(HttpStatus.OK)
   public async insertImages(
     @Param("code") code: number,
-    @UploadedFiles() files: Express.Multer.File[],
-    @Res() res: Response
-  ): Promise<void> {
-    return this.service.insertPropertyImages(files, code, res);
+    @UploadedFiles() files: Express.Multer.File[]
+  ): Promise<boolean> {
+    return this.service.insertPropertyImages(files, code);
   }
 
   @Put("properties/:code/images")
@@ -74,22 +74,20 @@ export class PropertyController {
   @HttpCode(HttpStatus.OK)
   public async updateImages(
     @Param("code") code: number,
-    @UploadedFiles() files: Express.Multer.File[],
-    @Res() res: Response
-  ): Promise<void> {
-    return this.service.insertPropertyImages(files, code, res);
+    @UploadedFiles() files: Express.Multer.File[]
+  ): Promise<boolean> {
+    return this.service.insertPropertyImages(files, code);
   }
 
   @Post("properties/:code/image")
-  @UseInterceptors(FilesInterceptor("file"))
+  @UseInterceptors(FileInterceptor("file"))
   @HttpCode(HttpStatus.OK)
   public async insertImage(
     @Param("code") code: number,
     @Query("order") order: number,
-    @UploadedFiles() file: Express.Multer.File,
-    @Res() res: Response
-  ): Promise<void> {
-    return this.service.insertPropertyImage(file, code, res, order);
+    @UploadedFile() file: Express.Multer.File
+  ): Promise<boolean> {
+    return this.service.insertPropertyImage(file, code, order);
   }
 
   @Put("properties/images-sort")
@@ -158,11 +156,11 @@ export class PropertyController {
   }
 
   @Post("properties/:code/document")
-  @UseInterceptors(FilesInterceptor("file"))
+  @UseInterceptors(FileInterceptor("file"))
   @HttpCode(HttpStatus.OK)
   public async insertDocument(
     @Param("code") code: number,
-    @UploadedFiles() file: Express.Multer.File
+    @UploadedFile() file: Express.Multer.File
   ): Promise<void> {
     return this.service.insertPropertyDocument(file, code);
   }

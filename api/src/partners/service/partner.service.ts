@@ -38,7 +38,7 @@ export class PartnerService {
     res: Response
   ): Promise<number> {
     return this.imageService
-      .saveImages(Array.of(this.buildPartnerImage(image)), res)
+      .saveImages(Array.of(this.buildPartnerImage(image)))
       .then(() => this.repository.setImage(code, image.filename));
   }
 

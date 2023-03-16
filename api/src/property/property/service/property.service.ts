@@ -238,24 +238,29 @@ export class PropertyService {
       .then(documents => documents.map(document => PropertyDocumentMapper.mapPropertyDocumentEntityToResponse(document)));
   }
 
-  public async insertPropertyImages(files: Express.Multer.File[], propertyCode: number, res: Response): Promise<void> {
+  public async insertPropertyImages(files: Express.Multer.File[], propertyCode: number): Promise<boolean> {
     const { logo: logoImageName } = await this.configurationService.get();
     const logoUrl = `${process.env.CDN_URL}/${logoImageName}`;
 
-    return this.imageService.saveImages(this.buildPropertyImage(files), res, true, logoUrl)
-      .then(() => Promise.all(files.map((file, i) => this.repository.insertPropertyImages(file.filename, i, propertyCode))))
-      .then(() => {
-      })
-
+    await this.imageService.saveImages(this.buildPropertyImage(files), true, logoUrl, ImageSizeEnum.PROPERTY_KBYTES)
+    await Promise.all(files.map((file, i) => this.repository.insertPropertyImages(file.filename, i, propertyCode)))
+    
+    return true;
   }
 
-  public async insertPropertyImage(file: Express.Multer.File, propertyCode: number, res: Response, order: number): Promise<void> {
+  public async insertPropertyImage(file: Express.Multer.File, propertyCode: number, order: number): Promise<boolean> {
     const { logo: logoImageName } = await this.configurationService.get();
     const logoUrl = `${process.env.CDN_URL}/${logoImageName}`;
 
-    return this.imageService.saveImage(this.buildPropertyImageRequest(file), res, true, logoUrl)
-      .then(() => this.repository.insertPropertyImage(file[0].filename, order, propertyCode))
-      .then(() => { });
+    try {
+      await this.imageService.saveImage(this.buildPropertyImageRequest(file), true, logoUrl, ImageSizeEnum.PROPERTY_KBYTES)
+      await this.repository.insertPropertyImage(file.filename, order, propertyCode)
+    } catch (error) {
+      console.log('insertPropertyImage', { error })
+      throw error;
+    }
+
+    return true;
   }
 
   public async updateImagesSort(imagesSort: ImageSortRequest[]): Promise<void> {
@@ -274,7 +279,7 @@ export class PropertyService {
   }
 
   public buildPropertyDocument(file: Express.Multer.File): Express.Multer.File {
-    return file[0];
+    return file;
   }
 
   public buildPropertyImage(files: Express.Multer.File[]): ImageRequest[] {
@@ -289,7 +294,7 @@ export class PropertyService {
 
   public buildPropertyImageRequest(file: Express.Multer.File): ImageRequest {
     return Builder<ImageRequest>()
-      .file(file[0])
+      .file(file)
       .width(ImageSizeEnum.PROPERTY_WIDTH)
       .height(ImageSizeEnum.PROPERTY_HEIGHT)
       .build();
