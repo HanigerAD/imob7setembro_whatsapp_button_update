@@ -17,6 +17,7 @@ import {
 } from "../../../utils/parser.utils";
 import { MapaComponent } from "../../shared/mapa/mapa-component";
 import { PropertyTypeEnum } from "./property-type.enum";
+import { ToastHelper } from "../../../helpers/toast.helper";
 
 export const ImovelPage = () => {
   const navigate = useNavigate();
@@ -263,24 +264,21 @@ export const ImovelPage = () => {
 
   async function salvar(data: any) {
     setCarregando(true);
+    const toastHelper = new ToastHelper();
+    toastHelper.loading('Processando...');
 
     try {
       let code = await salvarImovel(data);
       await salvarImagensDoImovel(code, data.images);
       await salvarDocumentosDoImovel(code, data.documents);
 
-      toast.success("Registro salvo com sucesso");
+      toastHelper.success('Registro salvo com sucesso');
       setCarregando(false);
 
-      // if (code != modelId) {
-      //   navigate(`/admin/imoveis/${code}`);
-      // } else {
-      //   buscar(code);
-      // }
       navigate(`/admin/imoveis`);
     } catch (error) {
       console.log({ error });
-      toast.error(
+      toastHelper.error(
         "Houve um erro ao salvar o Imovel. Verifique se os campos foram preenchidos corretamente"
       );
       setCarregando(false);
