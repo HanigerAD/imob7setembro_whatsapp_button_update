@@ -1,5 +1,5 @@
 import { ImageResponse } from './../integration/response/photo.response';
-import { BadRequestException, ConflictException, HttpService, Injectable } from '@nestjs/common';
+import { BadRequestException, ConflictException, Injectable } from '@nestjs/common';
 import { Builder } from 'builder-pattern';
 import { Response } from 'express';
 
@@ -69,7 +69,8 @@ export class PropertyService {
   }
 
   public async insertProperty(request: PropertyRequest): Promise<number> {
-    return this.repository.insertProperty(PropertyMapper.requestToEntity(request));
+    const propertyDetailEntity = PropertyMapper.requestToEntity(request);
+    return this.repository.insertProperty(propertyDetailEntity);
   }
 
   public async insertCategory(request: CategoryRequest): Promise<number> {
@@ -98,8 +99,9 @@ export class PropertyService {
     }
   }
 
-  public update(code: number, request: PropertyRequest): Promise<number> {
-    return this.repository.update(code, PropertyMapper.requestToEntity(request));
+  public async update(code: number, request: PropertyRequest): Promise<number> {
+    const propertyDetailEntity = PropertyMapper.requestToEntity(request);
+    return this.repository.update(code, propertyDetailEntity);
   }
 
   public getAllProperties(filter: PropertyFilterRequest): Promise<any> {
@@ -244,7 +246,7 @@ export class PropertyService {
 
     await this.imageService.saveImages(this.buildPropertyImage(files), true, logoUrl, ImageSizeEnum.PROPERTY_KBYTES)
     await Promise.all(files.map((file, i) => this.repository.insertPropertyImages(file.filename, i, propertyCode)))
-    
+
     return true;
   }
 

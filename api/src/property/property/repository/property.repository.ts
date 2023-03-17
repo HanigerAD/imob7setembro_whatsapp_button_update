@@ -55,12 +55,7 @@ export class PropertyRepository {
     public getById(code: number): Promise<ProfileEntity> {
         return this.knex
             .select(
-                'codigo_interno',
-                'titulo',
-                'imovel.codigo',
-                'valor',
-                'dormitorio',
-                'vaga',
+                'imovel.*',
                 'area_total as areaTotal',
                 'bairro.descricao as bairro',
                 'municipio.descricao as municipio',
@@ -69,14 +64,14 @@ export class PropertyRepository {
                 'foto_imovel.foto as foto',
                 'unidade_federativa.descricao as unidadeFederativa',
                 'zona_imovel.descricao as zona',
-                'categoria_imovel.descricao as categoria',
-                'imovel.financiavel as financiavel'
+                'categoria_imovel.descricao as categoria'
             )
             .from('imovel')
             .joinRaw('LEFT JOIN categoria_imovel ON imovel.categoria = categoria_imovel.codigo')
             .joinRaw('LEFT JOIN zona_imovel ON imovel.zona = zona_imovel.codigo')
             .joinRaw('LEFT JOIN bairro ON imovel.bairro = bairro.codigo')
             .joinRaw('LEFT JOIN municipio on imovel.municipio = municipio.codigo')
+            .joinRaw('LEFT JOIN agenciador on imovel.agenciador = agenciador.codigo')
             .joinRaw('LEFT JOIN unidade_federativa ON municipio.unidade_federativa = unidade_federativa.codigo')
             .joinRaw('LEFT JOIN transacao_imovel ON imovel.transacao = transacao_imovel.codigo')
             .joinRaw('LEFT JOIN foto_imovel ON imovel.codigo = foto_imovel.imovel')
@@ -142,14 +137,6 @@ export class PropertyRepository {
                     break;
                 }
 
-                // case 'hectare': {
-                //     if (Number(filters[filter]) == 1) {
-                //         queryBuilder.where('hectare', '<', 100);
-                //     } else if (Number(filters[filter]) == 2) {
-                //         queryBuilder.where('hectare', '>=', 100);
-                //     }
-                //     break;
-                // }
                 default: {
                     queryBuilder.where(`imovel.${filterKey}`, '=', filterValue);
                     break;
