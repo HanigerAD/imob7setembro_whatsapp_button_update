@@ -1,7 +1,7 @@
-import { toast, Id, UpdateOptions } from 'react-toastify'
+import { toast, Id, UpdateOptions, ToastOptions } from 'react-toastify'
 
 const TOAST_OPTIONS_DEFAULT = {
-  style: { whiteSpace: 'pre-line' }, isLoading: false, closeButton: true,
+  style: { whiteSpace: 'pre-line' }, isLoading: false, closeButton: true, closeOnClick: true
 } as UpdateOptions;
 
 export class ToastHelper {
@@ -25,10 +25,10 @@ export class ToastHelper {
 
   error(conteudo: string) {
     if (this.toastLoadingId) {
-      toast.update(this.toastLoadingId, { ...TOAST_OPTIONS_DEFAULT, render: conteudo, type: 'error' });
+      toast.update(this.toastLoadingId, { ...TOAST_OPTIONS_DEFAULT, render: conteudo, type: 'error', autoClose: false });
       this.toastLoadingId = undefined;
     } else {
-      toast.error(conteudo);
+      toast.error(conteudo, { ...TOAST_OPTIONS_DEFAULT, autoClose: false } as ToastOptions);
     }
   }
 

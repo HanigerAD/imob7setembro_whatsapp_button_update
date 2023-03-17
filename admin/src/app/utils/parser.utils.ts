@@ -6,15 +6,15 @@ function isTrue(value: any): Boolean {
   return value === "true" || value === true || value === "1" || value === 1
 }
 
-export function converterStringParaBoolean(str: any): Boolean | null {
+export function converterStringParaBoolean(str: any): Number | Boolean | null {
   let value = null;
 
   if (isFalse(str)) {
-    value = false;
+    value = 0;
   }
 
   if (isTrue(str)) {
-    value = true;
+    value = 1;
   }
 
   return value;

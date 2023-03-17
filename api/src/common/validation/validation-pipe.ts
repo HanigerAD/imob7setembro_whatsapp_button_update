@@ -6,6 +6,7 @@ const exceptionFactory = (errors: ValidationError[]): any => {
 
   for (const error of errors) {
     for (const key in error.constraints) {
+      console.log(error.constraints, key);
       const message = error.constraints[key];
       errorsMapper.push({ property: error.property, message: message });
     }

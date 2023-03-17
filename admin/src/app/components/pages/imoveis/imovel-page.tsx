@@ -88,7 +88,6 @@ export const ImovelPage = () => {
       "description",
       "privateInfo",
       "reserved",
-      "expirationDate",
       "hectare",
       "constuctionYear",
       "featured",
@@ -96,7 +95,7 @@ export const ImovelPage = () => {
       "suite",
       "rented",
       "condominiumPrice",
-      "showPrice",
+      "showValue",
       "zipCode",
       "city",
       "neighborhood",
@@ -107,8 +106,25 @@ export const ImovelPage = () => {
       "longitude",
       "transaction",
       "situation",
-      "linkYoutube",
+      "linkYoutube"
     ]);
+
+    [
+      'internalCode',
+      'dormitory',
+      'unitAvailable',
+      'bathroom',
+      'parkingVacancy',
+      'pavement',
+      'financeable',
+      'hectare',
+      'constuctionYear',
+      'suite',
+    ].forEach(key => {
+      if (!!newModel[key]) {
+        newModel[key] = Number(newModel[key]);
+      }
+    });
 
     newModel.city = newModel.city
       ? ObjectHelper.mantemSomenteCampos(newModel.city, ["code"])
@@ -394,11 +410,11 @@ export const ImovelPage = () => {
       }
 
       if (!newModel.latitude || !newModel.longitude) {
-        newModel.latitude = -30.1093317;
-        newModel.longitude = -51.3204208;
+        newModel.latitude = '-30.1093317';
+        newModel.longitude = '-51.3204208';
       } else {
-        newModel.latitude = Number(Number(newModel.latitude).toFixed(7));
-        newModel.longitude = Number(Number(newModel.longitude).toFixed(7));
+        newModel.latitude = String(Number(newModel.latitude).toFixed(7));
+        newModel.longitude = String(Number(newModel.longitude).toFixed(7));
       }
 
       setModel(newModel);
@@ -413,8 +429,8 @@ export const ImovelPage = () => {
 
   const inicializarModel = () => {
     const newModel = Object.assign({}, model);
-    newModel.latitude = -30.1093317;
-    newModel.longitude = -51.3204208;
+    newModel.latitude = "-30.1093317";
+    newModel.longitude = "-51.3204208";
     setModel(newModel);
   }
 
@@ -806,15 +822,15 @@ export const ImovelPage = () => {
                       <MapaComponent
                         style={{ width: "100%", height: '500px' }}
                         latLngLiteral={{
-                          lat: model.latitude,
-                          lng: model.longitude
+                          lat: Number(model.latitude),
+                          lng: Number(model.longitude)
                         }}
                         onChangeAddress={(value) => atualizarModel("enderecoAproximado", value)}
                         onChangeLatLng={({ lat, lng }) => {
                           setModel((value: any) => ({
                             ...value,
-                            latitude: Number(lat.toFixed(7)),
-                            longitude: Number(lng.toFixed(7))
+                            latitude: String(lat.toFixed(7)),
+                            longitude: String(lng.toFixed(7))
                           }))
                         }} />
                     ) : null}
@@ -1104,22 +1120,6 @@ export const ImovelPage = () => {
                   value={model?.reserved}
                   onChange={(value) => atualizarModel("reserved", value)}
                 />
-              </div>
-
-              <div className="col-md-4">
-                <div className="form-floating mb-3">
-                  <input
-                    className="form-control"
-                    id="input-reserveDate"
-                    type="date"
-                    placeholder="Data da Reserva"
-                    value={model.reserveDate || ""}
-                    onChange={(event) =>
-                      atualizarModel("reserveDate", event.target.value)
-                    }
-                  />
-                  <label htmlFor="input-reserveDate">Data da Reserva</label>
-                </div>
               </div>
             </div>
           </div>

@@ -47,7 +47,6 @@ export class PropertyMapper {
             .description(response.description)
             .privateInfo(response.privateInfo)
             .reserved(response.reserved)
-            .reserveDate(response.reserveDate)
             .hectare(response.hectare)
             .constuctionYear(response.constuctionYear)
             .featured(response.featured)

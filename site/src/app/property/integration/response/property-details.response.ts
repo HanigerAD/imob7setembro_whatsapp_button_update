@@ -17,7 +17,6 @@ export class PropertyDetailsResponse {
     public description?: string;
     public privateInfo?: string;
     public reserved?: string;
-    public reserveDate?: string;
     public hectare?: string;
     public constuctionYear?: string;
     public featured?: string;
