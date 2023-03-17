@@ -28,7 +28,7 @@ export const ImovelPage = () => {
   const [neighborhoods, setNeighborhoods] = useState([]);
   const [carregando, setCarregando] = useState(false);
 
-  const modelId = params.internalCode || null;
+  const modelId = params.code || null;
 
   function atualizarModel(chave: string, valor: any) {
     setModel((modelAnt: any) => {

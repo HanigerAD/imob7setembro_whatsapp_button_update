@@ -17,7 +17,7 @@ const ErrorContent = ({ properties }: { properties: any[] }) => (
       (property: any) =>
       (
         <div key={`properties-${property.code}`}>
-          <Link target="_blank" to={`/admin/imoveis/${property.code}`}>Código {property.internalCode} - {property.title}</Link>
+          <Link target="_blank" to={`/admin/imoveis/${property.code}`}>Código {property.code} - Código Interno {property.internalCode} - {property.title}</Link>
           <br />
         </div>
       )
