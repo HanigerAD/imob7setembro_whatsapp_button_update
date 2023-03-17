@@ -1,42 +1,50 @@
-import { toast, Id } from 'react-toastify'
+import { toast, Id, UpdateOptions } from 'react-toastify'
+
+const TOAST_OPTIONS_DEFAULT = {
+  style: { whiteSpace: 'pre-line' }, isLoading: false, closeButton: true,
+} as UpdateOptions;
 
 export class ToastHelper {
-  toastId: Id | undefined
+  toastLoadingId: Id | undefined
 
   constructor() {
   }
 
   loading(conteudo: string) {
-    this.toastId = toast.loading(conteudo);
+    this.toastLoadingId = toast.loading(conteudo);
   }
 
   success(conteudo: string) {
-    if (this.toastId) {
-      toast.update(this.toastId, { render: conteudo, type: 'success', isLoading: false, closeButton: true, autoClose: 5000 });
+    if (this.toastLoadingId) {
+      toast.update(this.toastLoadingId, { ...TOAST_OPTIONS_DEFAULT, render: conteudo, type: 'success', autoClose: 5000 });
+      this.toastLoadingId = undefined;
     } else {
       toast.success(conteudo);
     }
   }
 
   error(conteudo: string) {
-    if (this.toastId) {
-      toast.update(this.toastId, { render: conteudo, type: 'error', isLoading: false, closeButton: true });
+    if (this.toastLoadingId) {
+      toast.update(this.toastLoadingId, { ...TOAST_OPTIONS_DEFAULT, render: conteudo, type: 'error' });
+      this.toastLoadingId = undefined;
     } else {
       toast.error(conteudo);
     }
   }
 
   warning(conteudo: string) {
-    if (this.toastId) {
-      toast.update(this.toastId, { render: conteudo, type: 'warning', isLoading: false, closeButton: true });
+    if (this.toastLoadingId) {
+      toast.update(this.toastLoadingId, { ...TOAST_OPTIONS_DEFAULT, render: conteudo, type: 'warning' });
+      this.toastLoadingId = undefined;
     } else {
       toast.warning(conteudo);
     }
   }
 
   info(conteudo: string) {
-    if (this.toastId) {
-      toast.update(this.toastId, { render: conteudo, type: 'info', isLoading: false, closeButton: true });
+    if (this.toastLoadingId) {
+      toast.update(this.toastLoadingId, { ...TOAST_OPTIONS_DEFAULT, render: conteudo, type: 'info' });
+      this.toastLoadingId = undefined;
     } else {
       toast.info(conteudo);
     }
