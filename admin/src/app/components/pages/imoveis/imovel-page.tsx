@@ -28,7 +28,7 @@ export const ImovelPage = () => {
   const [neighborhoods, setNeighborhoods] = useState([]);
   const [carregando, setCarregando] = useState(false);
 
-  const modelId = params.code || null;
+  const modelId = params.internalCode || null;
 
   function atualizarModel(chave: string, valor: any) {
     setModel((modelAnt: any) => {
@@ -276,11 +276,16 @@ export const ImovelPage = () => {
       setCarregando(false);
 
       navigate(`/admin/imoveis`);
-    } catch (error) {
-      console.log({ error });
-      toastHelper.error(
-        "Houve um erro ao salvar o Imovel. Verifique se os campos foram preenchidos corretamente"
-      );
+    } catch (error: any) {
+      let errorMessage = error?.response?.data?.message || "Houve um erro ao salvar o Imovel. Verifique se os campos foram preenchidos corretamente";
+      toastHelper.error(errorMessage);
+
+      if (error?.response?.data?.errors) {
+        for (let errorItem of error?.response?.data?.errors) {
+          toastHelper.error(errorItem.message);
+        }
+      }
+
       setCarregando(false);
     }
   }

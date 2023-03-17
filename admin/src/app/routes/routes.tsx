@@ -35,7 +35,7 @@ export const Routes = () => (
     <Route path="admin" element={<AdminLayout />}>
       <Route index element={<DashboardPage />} />
       <Route path="imoveis/cadastrar" element={<ImovelPage />} />
-      <Route path="imoveis/:code" element={<ImovelPage />} />
+      <Route path="imoveis/:internalCode" element={<ImovelPage />} />
       <Route path="imoveis" element={<ImoveisPage />} />
       <Route path="postagens/cadastrar" element={<PostagemPage />} />
       <Route path="postagens/:code" element={<PostagemPage />} />
