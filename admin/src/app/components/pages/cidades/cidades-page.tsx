@@ -6,32 +6,7 @@ import { Pagination } from "../../layouts/admin/components/pagination";
 import { toast } from "react-toastify";
 import { usePagination } from "../../../hooks/usePagination";
 import { ErrorModalContext } from "../../shared/ErrorModal";
-
-const ErrorContent = ({ neighborhoods, properties }: { neighborhoods: any[], properties: any[] }) => (
-  <>
-    {neighborhoods && neighborhoods.length ? <h3>Bairros ({neighborhoods.length} Registros)</h3> : ''}
-    {neighborhoods && neighborhoods.length ? neighborhoods.map(
-      (neighborhood: any) =>
-      (
-        <div key={`neighborhoods-${neighborhood.code}`}>
-          <Link target="_blank" to={`/admin/bairros/${neighborhood.code}`}>{neighborhood.description}</Link>
-          <br />
-        </div>
-      )
-    ) : ''}
-
-    {properties && properties.length ? <h3>Imoveis ({properties.length} Registros)</h3> : ''}
-    {properties && properties.length ? properties.map(
-      (property: any) =>
-      (
-        <div key={`properties-${property.code}`}>
-          <Link target="_blank" to={`/admin/imoveis/${property.code}`}>Código {property.code} - Código Interno {property.internalCode} - {property.title}</Link>
-          <br />
-        </div>
-      )
-    ) : ''}
-  </>
-);
+import { ErrorContent } from "./cidade-page";
 
 export const CidadesPage = () => {
   const [models, setModels] = useState([]);
@@ -42,7 +17,7 @@ export const CidadesPage = () => {
   async function deletar(model: any) {
     confirmAlert({
       title: "Atenção",
-      message: `Você deseja realmente deletar o registro ${model.title} ?`,
+      message: `Você deseja realmente deletar o registro ${model.description} ?`,
       buttons: [
         {
           label: "Sim",

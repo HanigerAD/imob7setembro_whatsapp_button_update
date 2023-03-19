@@ -1,9 +1,38 @@
 import _ from "lodash";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import { apiService } from "../../../services/api.service";
 import { ObjectHelper } from "../../../helpers/object.helper";
+import { confirmAlert } from "react-confirm-alert";
+import { Link } from "react-router-dom";
+import { ErrorModalContext } from "../../shared/ErrorModal";
+
+export const ErrorContent = ({ neighborhoods, properties }: { neighborhoods: any[], properties: any[] }) => (
+  <>
+    {neighborhoods && neighborhoods.length ? <h3>Bairros ({neighborhoods.length} Registros)</h3> : ''}
+    {neighborhoods && neighborhoods.length ? neighborhoods.map(
+      (neighborhood: any) =>
+      (
+        <div key={`neighborhoods-${neighborhood.code}`}>
+          <Link target="_blank" to={`/admin/bairros/${neighborhood.code}`}>{neighborhood.description}</Link>
+          <br />
+        </div>
+      )
+    ) : ''}
+
+    {properties && properties.length ? <h3>Imoveis ({properties.length} Registros)</h3> : ''}
+    {properties && properties.length ? properties.map(
+      (property: any) =>
+      (
+        <div key={`properties-${property.code}`}>
+          <Link target="_blank" to={`/admin/imoveis/${property.code}`}>Código {property.code} - Código Interno {property.internalCode} - {property.title}</Link>
+          <br />
+        </div>
+      )
+    ) : ''}
+  </>
+);
 
 export const CidadePage = () => {
   const navigate = useNavigate();
@@ -12,6 +41,7 @@ export const CidadePage = () => {
   const [modelAnt, setModelAnt] = useState({} as any);
   const [ufs, setUfs] = useState([]);
   const [carregando, setCarregando] = useState(false);
+  const { showError } = useContext<any>(ErrorModalContext);
 
   const modelId = params.code || null;
 
@@ -90,6 +120,49 @@ export const CidadePage = () => {
     }
   }
 
+  async function deletar(model: any) {
+    confirmAlert({
+      title: "Atenção",
+      message: `Você deseja realmente deletar o registro ${model.description} ?`,
+      buttons: [
+        {
+          label: "Sim",
+          onClick: async () => {
+            try {
+              setCarregando(true);
+              await apiService.delete(
+                `/locality/city/${model.code}`
+              );
+              toast.success("Registro removido com sucesso");
+              navigate(`/admin/cidades`);
+            } catch (error: any) {
+              console.log({ error });
+              if (error && error?.response && error?.response?.data) {
+                let message = "Algo inesperado ocorreu! Verifique se o registro selecionado não está sendo utilizado";
+
+                if (error?.response?.data?.message) {
+                  message = error?.response?.data?.message;
+                }
+
+                if (error?.response?.data?.neighborhoods || error?.response?.data?.properties) {
+                  let content = <ErrorContent neighborhoods={error?.response?.data?.neighborhoods} properties={error?.response?.data?.properties} />;
+                  showError(message, content);
+                } else {
+                  toast.error(`${message}`);
+                }
+              }
+              setCarregando(false);
+            }
+          },
+        },
+        {
+          label: "Não",
+          onClick: () => { },
+        },
+      ],
+    });
+  }
+
   async function buscarUfs() {
     setCarregando(true);
     setUfs([]);
@@ -165,7 +238,7 @@ export const CidadePage = () => {
                       atualizarModel(
                         "uf",
                         ufs.find(({ code }) => code == event.target.value) ||
-                          null
+                        null
                       )
                     }
                   >
@@ -218,6 +291,15 @@ export const CidadePage = () => {
               disabled={carregando}
             >
               Salvar
+            </button>
+            &nbsp;
+            <button
+              className="btn btn-danger mb-4"
+              type="button"
+              disabled={carregando}
+              onClick={() => deletar(model)}
+            >
+              Deletar
             </button>
           </div>
         </div>
