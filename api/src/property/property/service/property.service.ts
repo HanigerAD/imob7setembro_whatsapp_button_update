@@ -143,17 +143,35 @@ export class PropertyService {
   public async buildDetailedResponse(property: PropertyDTO): Promise<PropertyDetailResponse> {
     const builder = new PropertyDetailBuilder();
     builder.setProperty(property);
-    builder.setAgent(await this.getAgent(property.code));
-    builder.setCategory(await this.getCategoryByProperty(property.code));
-    builder.setConservationState(await this.getConservationState(property.code));
-    builder.setProfile(await this.getprofile(property.code));
-    builder.setType(await this.getType(property.code));
-    builder.setZone(await this.getZone(property.code));
-    builder.setTransaction(await this.getTransaction(property.code))
-    builder.setFederativeUnit(await this.federativeUnitService.getByCity(property.city))
-    builder.setCity(await this.cityService.getSingle(property.city))
-    builder.setNeighborhood(await this.neighborhoodService.getSingle(property.neighborhood))
-    builder.setSituation(await this.getSituation(property.code))
+
+    if (property.code) {
+      builder.setAgent(await this.getAgent(property.code));
+      builder.setCategory(await this.getCategoryByProperty(property.code));
+      builder.setConservationState(await this.getConservationState(property.code));
+      builder.setProfile(await this.getprofile(property.code));
+      builder.setType(await this.getType(property.code));
+      builder.setZone(await this.getZone(property.code));
+      builder.setTransaction(await this.getTransaction(property.code))
+    }
+
+    if (property.neighborhood) {
+      const neighborhood = await this.neighborhoodService.getSingle(property.neighborhood);
+      builder.setNeighborhood(neighborhood)
+
+      if (neighborhood && neighborhood.city) {
+        const city = await this.cityService.getSingle(Number(neighborhood.city));
+        builder.setCity(city)
+
+        if (city && city.code) {
+          builder.setFederativeUnit(await this.federativeUnitService.getByCity(city.code))
+        }
+      }
+    }
+
+    if (property.code) {
+      builder.setSituation(await this.getSituation(property.code))
+    }
+
     return builder.build();
   }
 

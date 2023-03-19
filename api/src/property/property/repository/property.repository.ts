@@ -26,6 +26,9 @@ export class PropertyRepository {
     }
 
     public insertProperty(entity: PropertyDetailEntity): Promise<number> {
+      if (entity && entity.municipio) {
+        entity.municipio = undefined
+      }
         return this.knex
             .insert(entity)
             .into('imovel');
@@ -57,22 +60,22 @@ export class PropertyRepository {
             .select(
                 'imovel.*',
                 'area_total as areaTotal',
-                'bairro.descricao as bairro',
-                'municipio.descricao as municipio',
                 'transacao_imovel.descricao as transacao',
                 'transacao_imovel.codigo as transacao_codigo',
                 'foto_imovel.foto as foto',
-                'unidade_federativa.descricao as unidadeFederativa',
+                'bairro.descricao as bairro',
+                'municipio.descricao as municipio',
+                'unidade_federativa.descricao as uf',
                 'zona_imovel.descricao as zona',
                 'categoria_imovel.descricao as categoria'
             )
             .from('imovel')
             .joinRaw('LEFT JOIN categoria_imovel ON imovel.categoria = categoria_imovel.codigo')
             .joinRaw('LEFT JOIN zona_imovel ON imovel.zona = zona_imovel.codigo')
-            .joinRaw('LEFT JOIN bairro ON imovel.bairro = bairro.codigo')
-            .joinRaw('LEFT JOIN municipio on imovel.municipio = municipio.codigo')
-            .joinRaw('LEFT JOIN agenciador on imovel.agenciador = agenciador.codigo')
-            .joinRaw('LEFT JOIN unidade_federativa ON municipio.unidade_federativa = unidade_federativa.codigo')
+            .joinRaw('INNER JOIN bairro as join_bairro ON join_bairro.codigo = imovel.bairro')
+            .joinRaw('LEFT JOIN municipio as join_municipio ON join_municipio.codigo = join_bairro.municipio')
+            .joinRaw('LEFT JOIN unidade_federativa as join_unidade_federativa ON join_unidade_federativa.codigo = join_municipio.unidade_federativa')
+            .joinRaw('LEFT JOIN agenciador ON imovel.agenciador = agenciador.codigo')
             .joinRaw('LEFT JOIN transacao_imovel ON imovel.transacao = transacao_imovel.codigo')
             .joinRaw('LEFT JOIN foto_imovel ON imovel.codigo = foto_imovel.imovel')
             .where('codigo_interno', code)
@@ -154,22 +157,22 @@ export class PropertyRepository {
             .select(
                 'imovel.*',
                 'area_total as areaTotal',
-                'bairro.descricao as bairro',
-                'municipio.descricao as municipio',
                 'transacao_imovel.descricao as transacao',
                 'transacao_imovel.codigo as transacao_codigo',
                 'foto_imovel.foto as foto',
-                'unidade_federativa.descricao as unidadeFederativa',
+                'bairro.descricao as bairro',
+                'municipio.descricao as municipio',
+                'unidade_federativa.descricao as uf',
                 'zona_imovel.descricao as zona',
                 'categoria_imovel.descricao as categoria',
             )
             .from('imovel')
             .joinRaw('LEFT JOIN categoria_imovel ON imovel.categoria = categoria_imovel.codigo')
             .joinRaw('LEFT JOIN zona_imovel ON imovel.zona = zona_imovel.codigo')
-            .joinRaw('LEFT JOIN bairro ON imovel.bairro = bairro.codigo')
-            .joinRaw('LEFT JOIN municipio on imovel.municipio = municipio.codigo')
-            .joinRaw('LEFT JOIN agenciador on imovel.agenciador = agenciador.codigo')
-            .joinRaw('LEFT JOIN unidade_federativa ON municipio.unidade_federativa = unidade_federativa.codigo')
+            .joinRaw('INNER JOIN bairro ON bairro.codigo = imovel.bairro')
+            .joinRaw('INNER JOIN municipio ON municipio.codigo = bairro.municipio')
+            .joinRaw('INNER JOIN unidade_federativa ON unidade_federativa.codigo = municipio.unidade_federativa')
+            .joinRaw('LEFT JOIN agenciador ON imovel.agenciador = agenciador.codigo')
             .joinRaw('LEFT JOIN transacao_imovel ON imovel.transacao = transacao_imovel.codigo')
             .joinRaw('LEFT JOIN foto_imovel ON imovel.codigo = foto_imovel.imovel AND foto_imovel.ordem = 1')
             .modify(queryBuilder => this.getAllQueryBuilder(queryBuilder, filters))
@@ -184,9 +187,9 @@ export class PropertyRepository {
             .from('imovel')
             .joinRaw('LEFT JOIN categoria_imovel ON imovel.categoria = categoria_imovel.codigo')
             .joinRaw('LEFT JOIN zona_imovel ON imovel.zona = zona_imovel.codigo')
-            .joinRaw('LEFT JOIN bairro ON imovel.bairro = bairro.codigo')
-            .joinRaw('LEFT JOIN municipio on imovel.municipio = municipio.codigo')
-            .joinRaw('LEFT JOIN unidade_federativa ON municipio.unidade_federativa = unidade_federativa.codigo')
+            .joinRaw('INNER JOIN bairro ON bairro.codigo = imovel.bairro')
+            .joinRaw('INNER JOIN municipio ON municipio.codigo = bairro.municipio')
+            .joinRaw('INNER JOIN unidade_federativa ON unidade_federativa.codigo = municipio.unidade_federativa')
             .joinRaw('LEFT JOIN transacao_imovel ON imovel.transacao = transacao_imovel.codigo')
             .joinRaw('LEFT JOIN foto_imovel ON imovel.codigo = foto_imovel.imovel AND foto_imovel.ordem = 1')
             .modify(queryBuilder => this.getAllQueryBuilder(queryBuilder, filters))
@@ -211,6 +214,9 @@ export class PropertyRepository {
     }
 
     public update(code: number, entity: PropertyDetailEntity): Promise<number> {
+      if (entity && entity.municipio) {
+        entity.municipio = undefined
+      }
         return this.knex
             .update(entity)
             .from('imovel')
