@@ -11,6 +11,7 @@ export const environment = {
     blog: "http://localhost:3000/blog",
     configuration: "http://localhost:3000/configuration",
     banner: "http://localhost:3000/banner",
+    sobreNosBannerEndpoint: "http://localhost:3000/sobre-nos-banner",
     locality: "http://localhost:3000/locality",
     property: "http://localhost:3000/property",
     contact: "http://localhost:3000/contact",

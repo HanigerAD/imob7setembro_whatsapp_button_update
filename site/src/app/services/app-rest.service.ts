@@ -14,6 +14,7 @@ export class AppRestService {
   private authEndpoint: string = environment.endpoint.auth;
   private configurationEndpoint: string = environment.endpoint.configuration;
   private bannerEndpoint: string = environment.endpoint.banner;
+  private sobreNosBannerEndpoint: string = environment.endpoint.sobreNosBannerEndpoint;
 
   constructor(
       private http: HttpClient
@@ -29,6 +30,10 @@ export class AppRestService {
 
   get siteBanner(): Observable<any> {
     return this.http.get<string>(`${this.bannerEndpoint}`);
+  }
+  
+  get sobreNosBanner(): Observable<any> {
+    return this.http.get<string>(`${this.sobreNosBannerEndpoint}`);
   }
 
 }

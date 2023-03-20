@@ -44,6 +44,13 @@ export class AboutUsComponent implements OnInit {
     return `background-image:url(${banner});`;
   }
 
+  get sobreNosBanners(): any[] {
+    const res = JSON.parse(localStorage.getItem(StorageEnum.SOBRE_NOS_BANNERS));
+    console.log({ res });
+    const sobreNosBanners = res ? res as unknown as string[] : [];
+    return sobreNosBanners;
+  }
+
   public converterParaWhatsapp(phone: string): string {
     return converterParaWhatsapp(phone);
   }

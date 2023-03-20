@@ -48,20 +48,16 @@ export class ImageService {
         return previousValue.concat(currentValue)
       }, []));
 
-      return this.cdnService.sendMultipleFilesToFTP(cdnDtos);
+      await this.cdnService.sendMultipleFilesToFTP(cdnDtos);
     }
-
-    return null;
   }
 
   public async saveImage(image: ImageRequest, addWatermask = false, logoUrl = '', kbytes?: number): Promise<void> {
     const cdnDtos = await this.prepararImagensParaCdn(image, addWatermask, logoUrl, kbytes);
 
     if (cdnDtos.length) {
-      return this.cdnService.sendMultipleFilesToFTP(cdnDtos);
+      await this.cdnService.sendMultipleFilesToFTP(cdnDtos);
     }
-
-    return null;
   }
 
   public async applyWatermarkAndSubmitToCdn(images: ImageWatermark[], logoUrl: string, res: Response): Promise<void> {
@@ -74,10 +70,8 @@ export class ImageService {
     }
 
     if (cdnDtos.length) {
-      return this.cdnService.sendMultipleFilesToFTP(cdnDtos);
+      await this.cdnService.sendMultipleFilesToFTP(cdnDtos);
     }
-
-    return null;
   }
 
   private async prepararImagensParaCdn(image: ImageRequest, addWatermask = false, logoUrl = '', kbytes?: number): Promise<CdnDto[]> {

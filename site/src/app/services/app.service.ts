@@ -36,6 +36,12 @@ export class AppService {
       map(banners => banners.map(banner => `${environment.cdn}/${banner.image}`))
     );
   }
+  
+  get sobreNosBanners(): Observable<string[]> {
+    return this.restService.sobreNosBanner.pipe(
+      map(banners => banners.map(banner => `${environment.cdn}/${banner.image}`))
+    );
+  }
 
   public saveSiteInfoStorage(siteInfo: ConfigurationModel): void {
     localStorage.setItem(StorageEnum.SITE_INFO, JSON.stringify(siteInfo));
