@@ -79,6 +79,7 @@ const MODEL_INITIAL = {
   superFeatured: 0,
   suite: 0,
   rented: 0,
+  number: 0,
   condominiumPrice: '0.00',
   showValue: 1,
   latitude: "-30.1093317",
@@ -182,6 +183,7 @@ export const ImovelPage = () => {
       'bathroom',
       'parkingVacancy',
       'pavement',
+      'number',
       'financeable',
       'constuctionYear',
       'suite',
@@ -526,10 +528,11 @@ export const ImovelPage = () => {
   useEffect(() => {
     if (ehEmpreendimento) {
       const novoValor = {
-        privativeArea: 0,
-        totalArea: 0,
-        price: 0,
-        condominiumPrice: 0
+        privativeArea: MODEL_INITIAL.privativeArea,
+        totalArea: MODEL_INITIAL.totalArea,
+        price: MODEL_INITIAL.price,
+        condominiumPrice: MODEL_INITIAL.condominiumPrice,
+        number: MODEL_INITIAL.number,
       };
 
       setModel((modelAnt: any) => {
@@ -865,7 +868,7 @@ export const ImovelPage = () => {
                   <input
                     className="form-control"
                     id="input-number"
-                    type="text"
+                    type="number"
                     placeholder="Número"
                     value={model.number || ""}
                     onChange={(event) =>
