@@ -1026,7 +1026,6 @@ export const ImovelPage = () => {
                     id="input-privativeArea"
                     type="text"
                     placeholder="Área Privada"
-                    disabled={ehEmpreendimento}
                     value={model.privativeArea || ""}
                     onChange={(event) =>
                       atualizarModel("privativeArea", event.target.value)
@@ -1042,7 +1041,6 @@ export const ImovelPage = () => {
                     id="input-totalArea"
                     type="text"
                     placeholder="Área Total"
-                    disabled={ehEmpreendimento}
                     value={model.totalArea || ""}
                     onChange={(event) =>
                       atualizarModel("totalArea", event.target.value)
@@ -1108,7 +1106,6 @@ export const ImovelPage = () => {
                   mask="currency"
                   prefix="R$"
                   value={model.price || ""}
-                  disabled={ehEmpreendimento}
                   onChange={(e) =>
                     atualizarModel("price", e.currentTarget.value)
                   }
@@ -1123,7 +1120,6 @@ export const ImovelPage = () => {
                   mask="currency"
                   prefix="R$"
                   value={model.condominiumPrice || ""}
-                  disabled={ehEmpreendimento}
                   onChange={(e) =>
                     atualizarModel("condominiumPrice", e.currentTarget.value)
                   }
