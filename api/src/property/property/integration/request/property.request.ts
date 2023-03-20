@@ -64,7 +64,7 @@ export class PropertyRequest {
   public privativeArea?: string;
 
   @IsOptional()
-  @Length(1, 255, { message: 'Area Privativa deve conter de 1 a 255 caracteres' })
+  @Length(1, 255, { message: 'Area Total deve conter de 1 a 255 caracteres' })
   public totalArea?: string;
 
   @IsNotEmpty({ message: 'Pavimentacao deve ser preenchido.' })
@@ -88,7 +88,7 @@ export class PropertyRequest {
   public reserved: number;
 
   @IsOptional()
-  @Length(1, 255, { message: 'Area Privativa deve conter de 1 a 255 caracteres' })
+  @Length(1, 255, { message: 'Hectare deve conter de 1 a 255 caracteres' })
   public hectare?: number;
 
   @IsOptional()
@@ -120,7 +120,7 @@ export class PropertyRequest {
   public showValue?: number;
 
   @IsOptional()
-  @Length(1, 13, { message: 'Codigo Postal deve Preenchido corretamente de acordo com 88888-888' })
+  @Length(1, 13, { message: 'CEP deve ser preenchido corretamente de acordo com 88888-888' })
   public zipCode?: string;
 
   @IsNotEmpty({ message: 'Cidade deve ser preenchido.' })
@@ -156,6 +156,6 @@ export class PropertyRequest {
   public situation: number;
 
   @IsOptional()
-  @Length(1, 255, { message: 'link do Youtube deve conter de 1 a 255 caracteres.' })
+  @Length(0, 255, { message: 'link do Youtube deve conter de 0 a 255 caracteres.' })
   public linkYoutube?: string;
 }
