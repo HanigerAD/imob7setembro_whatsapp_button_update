@@ -11,6 +11,7 @@ export const environment = {
     blog: "https://api.imobiliaria7setembro.com.br/blog",
     configuration: "https://api.imobiliaria7setembro.com.br/configuration",
     banner: "https://api.imobiliaria7setembro.com.br/banner",
+    sobreNosBannerEndpoint: "https://api.imobiliaria7setembro.com.br/sobre-nos-banner",
     locality: "https://api.imobiliaria7setembro.com.br/locality",
     property: "https://api.imobiliaria7setembro.com.br/property",
     contact: "https://api.imobiliaria7setembro.com.br/contact",
