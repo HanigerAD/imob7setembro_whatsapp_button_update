@@ -19,10 +19,77 @@ import { MapaComponent } from "../../shared/mapa/mapa-component";
 import { PropertyTypeEnum } from "./property-type.enum";
 import { ToastHelper } from "../../../helpers/toast.helper";
 
+type ImovelProps = {
+  internalCode?: number;
+  title?: string;
+  type?: number;
+  category?: number;
+  profile?: number;
+  conservationState?: number;
+  zone?: number;
+  agent?: number;
+  show?: number;
+  price?: string;
+  dormitory?: number;
+  unitAvailable?: number;
+  bathroom?: number;
+  parkingVacancy?: number;
+  privativeArea?: string | number;
+  totalArea?: string | number;
+  pavement?: number;
+  financeable?: number;
+  description?: string;
+  privateInfo?: string;
+  reserved?: number;
+  hectare?: string | number;
+  constuctionYear?: number;
+  featured?: number;
+  superFeatured?: number;
+  suite?: number;
+  rented?: number;
+  condominiumPrice?: string;
+  showValue?: number;
+  zipCode?: string;
+  city?: number;
+  neighborhood?: number;
+  street?: string;
+  number?: number;
+  complement?: string;
+  latitude?: string;
+  longitude?: string;
+  transaction?: number;
+  situation?: number;
+  linkYoutube?: string;
+}
+
+const MODEL_INITIAL = {
+  show: 1,
+  price: '0.00',
+  dormitory: 0,
+  unitAvailable: 1,
+  bathroom: 0,
+  parkingVacancy: 0,
+  privativeArea: '0',
+  totalArea: '0',
+  pavement: 0,
+  financeable: 0,
+  reserved: 0,
+  hectare: '0',
+  featured: 0,
+  superFeatured: 0,
+  suite: 0,
+  rented: 0,
+  number: 0,
+  condominiumPrice: '0.00',
+  showValue: 1,
+  latitude: "-30.1093317",
+  longitude: "-51.3204208"
+} as ImovelProps;
+
 export const ImovelPage = () => {
   const navigate = useNavigate();
   const params = useParams();
-  const [model, setModel] = useState({} as any);
+  const [model, setModel] = useState(MODEL_INITIAL as any);
   const [cities, setCities] = useState([]);
   const [federativeUnits, setFederativeUnits] = useState([]);
   const [neighborhoods, setNeighborhoods] = useState([]);
@@ -116,8 +183,8 @@ export const ImovelPage = () => {
       'bathroom',
       'parkingVacancy',
       'pavement',
+      'number',
       'financeable',
-      'hectare',
       'constuctionYear',
       'suite',
     ].forEach(key => {
@@ -384,7 +451,7 @@ export const ImovelPage = () => {
 
   async function buscar(modelId: string) {
     setCarregando(true);
-    setModel({});
+    setModel(MODEL_INITIAL);
 
     try {
       const resposta = await apiService.get(`/property/properties/${modelId}`);
@@ -417,6 +484,27 @@ export const ImovelPage = () => {
         newModel.longitude = String(Number(newModel.longitude).toFixed(7));
       }
 
+      newModel.show = newModel.show || MODEL_INITIAL.show;
+      newModel.price = newModel.price || MODEL_INITIAL.price;
+      newModel.dormitory = newModel.dormitory || MODEL_INITIAL.dormitory;
+      newModel.unitAvailable = newModel.unitAvailable || MODEL_INITIAL.unitAvailable;
+      newModel.bathroom = newModel.bathroom || MODEL_INITIAL.bathroom;
+      newModel.parkingVacancy = newModel.parkingVacancy || MODEL_INITIAL.parkingVacancy;
+      newModel.privativeArea = newModel.privativeArea || MODEL_INITIAL.privativeArea;
+      newModel.totalArea = newModel.totalArea || MODEL_INITIAL.totalArea;
+      newModel.pavement = newModel.pavement || MODEL_INITIAL.pavement;
+      newModel.financeable = newModel.financeable || MODEL_INITIAL.financeable;
+      newModel.reserved = newModel.reserved || MODEL_INITIAL.reserved;
+      newModel.hectare = newModel.hectare || MODEL_INITIAL.hectare;
+      newModel.featured = newModel.featured || MODEL_INITIAL.featured;
+      newModel.superFeatured = newModel.superFeatured || MODEL_INITIAL.superFeatured;
+      newModel.suite = newModel.suite || MODEL_INITIAL.suite;
+      newModel.rented = newModel.rented || MODEL_INITIAL.rented;
+      newModel.condominiumPrice = newModel.condominiumPrice || MODEL_INITIAL.condominiumPrice;
+      newModel.showValue = newModel.showValue || MODEL_INITIAL.showValue;
+      newModel.latitude = newModel.latitude || MODEL_INITIAL.latitude;
+      newModel.longitude = newModel.longitude || MODEL_INITIAL.longitude;
+
       setModel(newModel);
 
       setCarregando(false);
@@ -425,13 +513,6 @@ export const ImovelPage = () => {
       toast.error("Houve um erro ao buscar o Imovel.");
       setCarregando(false);
     }
-  }
-
-  const inicializarModel = () => {
-    const newModel = Object.assign({}, model);
-    newModel.latitude = "-30.1093317";
-    newModel.longitude = "-51.3204208";
-    setModel(newModel);
   }
 
   const ehEmpreendimento = useMemo(() => {
@@ -447,10 +528,11 @@ export const ImovelPage = () => {
   useEffect(() => {
     if (ehEmpreendimento) {
       const novoValor = {
-        privativeArea: 0,
-        totalArea: 0,
-        price: 0,
-        condominiumPrice: 0
+        privativeArea: MODEL_INITIAL.privativeArea,
+        totalArea: MODEL_INITIAL.totalArea,
+        price: MODEL_INITIAL.price,
+        condominiumPrice: MODEL_INITIAL.condominiumPrice,
+        number: MODEL_INITIAL.number,
       };
 
       setModel((modelAnt: any) => {
@@ -467,8 +549,6 @@ export const ImovelPage = () => {
   useEffect(() => {
     if (modelId) {
       buscar(modelId);
-    } else {
-      inicializarModel();
     }
   }, [modelId]);
 
@@ -788,7 +868,7 @@ export const ImovelPage = () => {
                   <input
                     className="form-control"
                     id="input-number"
-                    type="text"
+                    type="number"
                     placeholder="Número"
                     value={model.number || ""}
                     onChange={(event) =>
@@ -947,9 +1027,8 @@ export const ImovelPage = () => {
                   <input
                     className="form-control"
                     id="input-privativeArea"
-                    type="number"
+                    type="text"
                     placeholder="Área Privada"
-                    disabled={ehEmpreendimento}
                     value={model.privativeArea || ""}
                     onChange={(event) =>
                       atualizarModel("privativeArea", event.target.value)
@@ -963,9 +1042,8 @@ export const ImovelPage = () => {
                   <input
                     className="form-control"
                     id="input-totalArea"
-                    type="number"
+                    type="text"
                     placeholder="Área Total"
-                    disabled={ehEmpreendimento}
                     value={model.totalArea || ""}
                     onChange={(event) =>
                       atualizarModel("totalArea", event.target.value)
@@ -979,7 +1057,7 @@ export const ImovelPage = () => {
                   <input
                     className="form-control"
                     id="input-hectare"
-                    type="number"
+                    type="text"
                     placeholder="Hectares"
                     value={model.hectare || ""}
                     onChange={(event) =>
@@ -1031,7 +1109,6 @@ export const ImovelPage = () => {
                   mask="currency"
                   prefix="R$"
                   value={model.price || ""}
-                  disabled={ehEmpreendimento}
                   onChange={(e) =>
                     atualizarModel("price", e.currentTarget.value)
                   }
@@ -1046,7 +1123,6 @@ export const ImovelPage = () => {
                   mask="currency"
                   prefix="R$"
                   value={model.condominiumPrice || ""}
-                  disabled={ehEmpreendimento}
                   onChange={(e) =>
                     atualizarModel("condominiumPrice", e.currentTarget.value)
                   }
