@@ -1,8 +1,26 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import { apiService } from "../../../services/api.service";
 import { ObjectHelper } from "../../../helpers/object.helper";
+import { Link } from "react-router-dom";
+import { confirmAlert } from "react-confirm-alert";
+import { ErrorModalContext } from "../../shared/ErrorModal";
+
+export const ErrorContent = ({ properties }: { properties: any[] }) => (
+  <>
+    {properties && properties.length ? <h3>Imoveis ({properties.length} Registros)</h3> : ''}
+    {properties && properties.length ? properties.map(
+      (property: any) =>
+      (
+        <div key={`properties-${property.code}`}>
+          <Link target="_blank" to={`/admin/imoveis/${property.code}`}>Código {property.code} - Código Interno {property.internalCode} - {property.title}</Link>
+          <br />
+        </div>
+      )
+    ) : ''}
+  </>
+);
 
 export const BairroPage = () => {
   const navigate = useNavigate();
@@ -12,11 +30,55 @@ export const BairroPage = () => {
   const [ufs, setUfs] = useState([]);
   const [cidades, setCidades] = useState([]);
   const [carregando, setCarregando] = useState(true);
+  const { showError } = useContext<any>(ErrorModalContext);
 
   const modelId = params.code || null;
 
   function atualizarModel(chave: string, valor: any) {
     setModel((modelAnt: any) => ({ ...modelAnt, [chave]: valor }));
+  }
+
+  async function deletar(model: any) {
+    confirmAlert({
+      title: "Atenção",
+      message: `Você deseja realmente deletar o registro ${model.description} ?`,
+      buttons: [
+        {
+          label: "Sim",
+          onClick: async () => {
+            try {
+              setCarregando(true);
+              await apiService.delete(
+                `/neighborhood/neighborhoods/${model.code}`
+              );
+              toast.success("Registro removido com sucesso");
+              navigate(`/admin/bairros`);
+            } catch (error: any) {
+              console.log({ error });
+              if (error && error?.response && error?.response?.data) {
+                let message = "Algo inesperado ocorreu! Verifique se o registro selecionado não está sendo utilizado";
+
+                if (error?.response?.data?.message) {
+                  message = error?.response?.data?.message;
+                }
+
+                if (error?.response?.data?.properties) {
+                  let content = <ErrorContent properties={error?.response?.data?.properties} />;
+                  showError(message, content);
+                } else {
+                  toast.error(`${message}`);
+                }
+              }
+              setCarregando(false);
+            }
+          },
+        },
+        {
+          label: "Não",
+          onClick: () => { },
+        },
+      ],
+    });
   }
 
   async function cancelar(event: any) {
@@ -199,7 +261,7 @@ export const BairroPage = () => {
                       atualizarModel(
                         "uf",
                         ufs.find(({ code }) => code == event.target.value) ||
-                          null
+                        null
                       )
                     }
                   >
@@ -281,6 +343,15 @@ export const BairroPage = () => {
               disabled={carregando}
             >
               Salvar
+            </button>
+            &nbsp;
+            <button
+              className="btn btn-danger mb-4"
+              type="button"
+              disabled={carregando}
+              onClick={() => deletar(model)}
+            >
+              Deletar
             </button>
           </div>
         </div>

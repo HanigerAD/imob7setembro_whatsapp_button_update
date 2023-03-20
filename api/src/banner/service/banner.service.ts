@@ -16,7 +16,7 @@ export class BannerService {
     }
 
     public async insert(file: Express.Multer.File, res): Promise<number> {
-        return this.imageService.saveImages(Array.of(this.buildBannerImage(file)), res)
+        return this.imageService.saveImages(Array.of(this.buildBannerImage(file)))
             .then(() => this.repository.insert(file.filename));
     }
 

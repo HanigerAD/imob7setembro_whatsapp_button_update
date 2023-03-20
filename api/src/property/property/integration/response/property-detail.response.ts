@@ -23,25 +23,24 @@ export class PropertyDetailResponse {
     public privativeArea?: string;//ok
     public totalArea?: string;//ok
     public pavement?: number;//ok
-    public financeable?: boolean;//ok
+    public financeable?: number;//ok
     public description?: string;//ok
     public privateInfo?: string;//ok
-    public show?: boolean;//ok
-    public reserved?: boolean;//ok
-    public reserveDate?: string;//ok
+    public show?: number;//ok
+    public reserved?: number;//ok
     public hectare?: number;//ok
     public constuctionYear?: number;//ok
-    public featured?: boolean;//ok
-    public superFeatured?: boolean;//ok
+    public featured?: number;//ok
+    public superFeatured?: number;//ok
     public suite?: number;//ok
-    public rented?: boolean;//ok
+    public rented?: number;//ok
     public condominiumPrice?: string;//ok
-    public showValue?: boolean;//ok
+    public showValue?: number;//ok
     public city?: CityResponse;//ok
     public neighborhood?: NeighborhoodResponse;//ok
     public zipCode?: string;//OK
     public street?: string;//ok
-    public number?: string;//ok
+    public number?: number;//ok
     public complement?: string;//ok
     public latitude?: string;//ok
     public longitude?: string;//ok

@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { apiService } from "../../../services/api.service";
-import { login } from "../../../services/auth.service";
+import { getToken, login } from "../../../services/auth.service";
 
 export const LoginPage = () => {
   const navigate = useNavigate();
@@ -40,6 +40,24 @@ export const LoginPage = () => {
       toast.error("Houve um problema com o login, verifique suas credenciais.");
     }
   }
+
+  async function verificarToken(token: string) {
+    try {
+      await apiService.get("/auth/token-verify");
+      navigate("/admin", { replace: true });
+    } catch (error) {
+      setMessage("Sessão expirada");
+      toast.error("Sessão expirada");
+    }
+  }
+
+  useEffect(() => {
+    const token = getToken();
+
+    if (token) {
+      verificarToken(token);
+    }
+  }, []);
 
   return (
     <div className="container">

@@ -82,37 +82,37 @@
                     </select>
                   </div>
                   <div class="form-group">
-                    <select class="wide select_option form-control">
-                      <option data-display="Bedrooms">Dormitórios</option>
-                      <option>1</option>
-                      <option>2</option>
-                      <option>3</option>
-                      <option>4</option>
-                      <option>5</option>
-                      <option>6</option>
-                      <option>7</option>
-                      <option>8</option>
-                      <option>9</option>
+                    <select class="wide select_option form-control" formControlName="bedroom">
+                      <option data-display="Bedrooms" value="null">Dormitórios</option>
+                      <option [value]="1">1</option>
+                      <option [value]="2">2</option>
+                      <option [value]="3">3</option>
+                      <option [value]="4">4</option>
+                      <option [value]="5">5</option>
+                      <option [value]="6">6</option>
+                      <option [value]="7">7</option>
+                      <option [value]="8">8</option>
+                      <option [value]="9">9</option>
                     </select>
                   </div>
                   <div class="form-group">
-                    <select class="wide select_option form-control">
-                      <option data-display="Bathrooms">Banheiros</option>
-                      <option>1</option>
-                      <option>2</option>
-                      <option>3</option>
-                      <option>4</option>
-                      <option>5</option>
+                    <select class="wide select_option form-control" formControlName="bathroom">
+                      <option data-display="Bathrooms" value="null">Banheiros</option>
+                      <option [value]="1">1</option>
+                      <option [value]="2">2</option>
+                      <option [value]="3">3</option>
+                      <option [value]="4">4</option>
+                      <option [value]="5">5</option>
                     </select>
                   </div>
                   <div class="form-group">
-                    <select class="wide select_option form-control">
-                      <option data-display="Bathrooms">Vagas</option>
-                      <option>1</option>
-                      <option>2</option>
-                      <option>3</option>
-                      <option>4</option>
-                      <option>5</option>
+                    <select class="wide select_option form-control" formControlName="parkingVacancy">
+                      <option data-display="Bathrooms" value="null">Vagas</option>
+                      <option [value]="1">1</option>
+                      <option [value]="2">2</option>
+                      <option [value]="3">3</option>
+                      <option [value]="4">4</option>
+                      <option [value]="5">5</option>
                     </select>
                   </div>
                   <div class="form-group">
@@ -181,14 +181,15 @@
                                   class="img-fluid w100 img-transition">
                               </div>
                               <div class="custom-card-info">
-                                <div class="custom-card-info-item custom-card-info-item-bankable" *ngIf="property.financeable"> Financiável </div>
+                                <div class="custom-card-info-item custom-card-info-item-bankable"
+                                  *ngIf="property.financeable"> Financiável </div>
                                 <div class="custom-card-info-item"> {{ property.transaction }} </div>
                               </div>
                             </div>
                             <div class="card__image-body">
                               <span class="badge badge-primary text-capitalize mb-2"> {{ property.category }} </span>
                               <h6 class="text-capitalize">
-                                <a href="#"> Cód. {{ property.internalCode }} - {{ property.title }}</a>
+                                <a href="#"> Código {{ property.internalCode }} - {{ property.title }}</a>
                               </h6>
 
                               <p class="text-capitalize">
@@ -214,7 +215,8 @@
                               <ul class="list-inline my-auto ml-auto">
                                 <li class="list-inline-item">
                                   <h6 class="text-primary">
-                                    {{ property.price && property.price !== "0.00" ? 'R$' + converterParaMoeda(property.price, false) : 'A CONSULTAR' }}
+                                    {{ property.price && property.price !== "0.00" ? 'R$' +
+                                    converterParaMoeda(property.price, false) : 'A CONSULTAR' }}
                                   </h6>
                                 </li>
                               </ul>

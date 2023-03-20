@@ -39,6 +39,12 @@ export class PropertyService {
       );
   }
 
+  public getPropertiesCounter(filters: SearchModel): Observable<number> {
+    filters.showSite = 1;
+
+    return this.rest.getPropertiesCounter(filters);
+  }
+
   public getPropertyImages(code: number): Observable<string[]> {
     return this.rest.getPropertyImages(code);
   }

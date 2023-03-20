@@ -9,6 +9,19 @@ export const GlobalStyles = createGlobalStyle`
     height: 100%;
   }
 
+  .transform-translate-40 {
+    -ms-transform: translate(-40%, -40%),
+    transform: translate(-40%, -40%),
+  }
+
+  .show-hide-on-hover > .hide {
+    display: none;
+  }
+
+  .show-hide-on-hover:hover > .hide {
+    display: block;
+  }
+
   .root-layout {
     min-height: 100%;
   }

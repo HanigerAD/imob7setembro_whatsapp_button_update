@@ -31,7 +31,7 @@ export class AboutUsComponent implements OnInit {
 
   public getAgents(): void {
     this.service.getAgents().subscribe(response => {
-      this.agents = response;
+      this.agents = response ? response.filter(({ flagVisivelSite }) => flagVisivelSite) : [];
     });
   }
 
@@ -42,6 +42,13 @@ export class AboutUsComponent implements OnInit {
   get banner(): string {
     const banner = JSON.stringify(localStorage.getItem(StorageEnum.BANNER));
     return `background-image:url(${banner});`;
+  }
+
+  get sobreNosBanners(): any[] {
+    const res = JSON.parse(localStorage.getItem(StorageEnum.SOBRE_NOS_BANNERS));
+    console.log({ res });
+    const sobreNosBanners = res ? res as unknown as string[] : [];
+    return sobreNosBanners;
   }
 
   public converterParaWhatsapp(phone: string): string {

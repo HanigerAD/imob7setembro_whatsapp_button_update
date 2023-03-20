@@ -15,4 +15,7 @@ export class SearchModel {
     public type: PropertyTypeEnum;
     public page: number;
     public perPage: number;
+    public bedroom?: number;
+    public parkingVacancy?: number;
+    public bathroom?: number;
 }

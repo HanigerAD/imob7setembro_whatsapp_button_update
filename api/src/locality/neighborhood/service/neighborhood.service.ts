@@ -1,5 +1,8 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, ConflictException, Injectable } from '@nestjs/common';
 import { Response } from 'express';
+import { PropertyResponse } from 'src/property/property/integration/response/property.response';
+import { PropertyMapper } from 'src/property/property/mapper/property.mapper';
+import { PropertyRepository } from 'src/property/property/repository/property.repository';
 
 import { CityService } from '../../city/service/city.service';
 import { NeighborhoodBuilder } from '../builder/neighborhood.builder';
@@ -14,7 +17,8 @@ import { CityResponse } from './../../city/integration/response/city.response';
 export class NeighborhoodService {
     constructor(
         private repository: NeighborhoodRepository,
-        private cityService: CityService
+        private cityService: CityService,
+        private propertyRepository: PropertyRepository
     ) { }
 
     public insert(request: NeighborhoodRequest): Promise<number> {
@@ -46,13 +50,33 @@ export class NeighborhoodService {
             .then(result => this.buildResponse(NeighborhoodMapper.entityToResponse(result)))
     }
 
+    public getProperties(code: number): Promise<PropertyResponse[]> {
+        return this.propertyRepository.getAll({ paginacao: { pagina: 1, porPagina: 1000 }, bairro: [String(code)] })
+            .then(result => PropertyMapper.entityListToResponse(result));
+    }
+
     public async buildResponse(neighborhood: NeighborhoodResponse): Promise<NeighborhoodResponse> {
         const builder = new NeighborhoodBuilder();
         builder.neighborhoodData(neighborhood);
         return builder.build();
     }
 
-    public delete(code: number): Promise<number> {
-        return this.repository.delete(code);
+    public async delete(code: number): Promise<number> {
+        const properties = await this.getProperties(code);
+        console.log({ properties })
+
+        if ((properties && properties.length)) {
+            const message = 'Não foi possivel deletar o registro pois o mesmo contem outros registros vinculados.';
+            throw new BadRequestException({
+                message,
+                properties,
+            }, message);
+        } else {
+            try {
+                return this.repository.delete(code);
+            } catch (error) {
+                throw new ConflictException(error, 'Erro ao executar comando no banco de dados')
+            }
+        }
     }
 }

@@ -8,6 +8,7 @@ import { NeighborhoodRepository } from "./neighborhood/repository/neighborhood.r
 import { FederativeUnitController } from "./federative-unit/controller/federative-unit.controller";
 import { FederativeUnitService } from "./federative-unit/service/federative-unit.service";
 import { FederativeUnitRepository } from "./federative-unit/repository/federative-unit.repository";
+import { PropertyRepository } from 'src/property/property/repository/property.repository';
 
 @Module({
     controllers: [
@@ -21,7 +22,8 @@ import { FederativeUnitRepository } from "./federative-unit/repository/federativ
         NeighborhoodService,
         NeighborhoodRepository,
         FederativeUnitService,
-        FederativeUnitRepository
+        FederativeUnitRepository,
+        PropertyRepository
     ],
     exports: [
         CityService,

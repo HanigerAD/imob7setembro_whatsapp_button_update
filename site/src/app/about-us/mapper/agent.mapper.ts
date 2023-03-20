@@ -17,6 +17,7 @@ export class AgentMapper {
             .image(`${this.cdnEndpoint}${response.image}`)
             .name(response.name)
             .phone(response.phone)
+            .flagVisivelSite(response.flagVisivelSite)
             .build();
     }
 }

@@ -11,6 +11,7 @@ import TextEditor from "react-quill";
 import Input from "../../shared/input-generico";
 import { converterParaTelefone } from "../../../utils/parser.utils";
 import { GaleriaDeBanners } from "./galeria-de-banners";
+import { SobreNosGaleriaDeBanners } from "./sobre-nos-galeria-de-banners";
 
 export const ConfiguracoesPage = () => {
   const navigate = useNavigate();
@@ -103,6 +104,34 @@ export const ConfiguracoesPage = () => {
     }
   }
 
+  async function salvarSobreNosBanners(images: any[]) {
+    if (images && images.length > 0) {
+      const deletedImages = images
+        .filter((image) => !!image.remove)
+        .map((image) => image.image);
+
+      if (deletedImages.length) {
+        for (let imageToDelete of deletedImages) {
+          await apiService.delete(`/sobre-nos-banner/${imageToDelete}`);
+        }
+      }
+
+      const newImages = images.filter((image) => !!image.upload);
+
+      if (newImages.length) {
+        for (const image of newImages) {
+          const data = new FormData();
+
+          data.append("file", image.image);
+
+          await apiService.post(`/sobre-nos-banner`, data, {
+            params: { order: image.order },
+          });
+        }
+      }
+    }
+  }
+
   async function salvar(data: any) {
     setCarregando(true);
 
@@ -110,6 +139,7 @@ export const ConfiguracoesPage = () => {
       await salvarConfiguracoesSite(data);
       await salvarLogo(data.logo);
       await salvarBanners(data.banners);
+      await salvarSobreNosBanners(data.sobreNosBanners);
 
       toast.success("Registro salvo com sucesso");
       setCarregando(false);
@@ -134,6 +164,9 @@ export const ConfiguracoesPage = () => {
 
       const respostaBanners = await apiService.get(`/banner`);
       newModel.banners = respostaBanners.data;
+
+      const respostaSobreNosBanners = await apiService.get(`/sobre-nos-banner`);
+      newModel.sobreNosBanners = respostaSobreNosBanners.data;
 
       setModelAnt(newModel);
       setModel(newModel);
@@ -298,6 +331,17 @@ export const ConfiguracoesPage = () => {
             <GaleriaDeBanners
               imagens={model.banners || []}
               onChange={(banners) => atualizarModel("banners", banners || [])}
+            />
+          </div>
+        </div>
+
+        <div className="card mb-4">
+          <div className="card-header">Banners - Pagina Sobre Nós</div>
+
+          <div className="card-body">
+            <SobreNosGaleriaDeBanners
+              imagens={model.sobreNosBanners || []}
+              onChange={(sobreNosBanners) => atualizarModel("sobreNosBanners", sobreNosBanners || [])}
             />
           </div>
         </div>

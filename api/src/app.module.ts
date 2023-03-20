@@ -1,6 +1,4 @@
 import { Module } from "@nestjs/common";
-import { ServeStaticModule } from "@nestjs/serve-static";
-import { join } from "path";
 import { AppController } from "./app.controller";
 import { AppService } from "./app.service";
 import { AuthenticationModule } from "./authentication/authentication.module";
@@ -9,6 +7,7 @@ import { KnexModule } from "nestjs-knex";
 import { UserModule } from "./user/user.module";
 import { PostModule } from "./post/post.module";
 import { BannerModule } from "./banner/banner.module";
+import { SobreNosBannerModule } from "./sobre_nos_banner/sobre_nos_banner.module";
 import { AgentModule } from "./agent/agent.module";
 import { ConfigurationModule } from "./configuration/configuration.module";
 import { LocalityModule } from "./locality/locality.module";
@@ -27,6 +26,8 @@ import { PartnerModule } from "./partners/partners.module";
         config: {
           client: "mysql",
           useNullAsDefault: true,
+          debug: true,
+          asyncStackTraces: true,
           connection: {
             host: configService.get<string>("DB_HOST"),
             port: configService.get<string>("DB_PORT"),
@@ -46,6 +47,7 @@ import { PartnerModule } from "./partners/partners.module";
     UserModule,
     PostModule,
     BannerModule,
+    SobreNosBannerModule,
     AgentModule,
     PartnerModule,
     ConfigurationModule,
@@ -67,4 +69,4 @@ import { PartnerModule } from "./partners/partners.module";
     },
   ],
 })
-export class AppModule {}
+export class AppModule { }

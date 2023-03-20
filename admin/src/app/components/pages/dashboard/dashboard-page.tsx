@@ -1,5 +1,22 @@
 import { Link } from "react-router-dom";
 
+export const Item = ({ label, to, color = "primary" }: { label: string, to: string, color?: string }) => (
+  <div className={`card mb-4 border-${color}`}>
+    <div className="card-body fw-bold fst-italic">{label}</div>
+    <div className="card-footer d-flex align-items-center justify-content-between">
+      <Link
+        className="small stretched-link"
+        to={to}
+      >
+        Ir para á página
+      </Link>
+      <div className="small">
+        <i className="fas fa-angle-right"></i>
+      </div>
+    </div>
+  </div>
+)
+
 export const DashboardPage = () => {
   return (
     <div className="container-fluid px-4">
@@ -7,72 +24,38 @@ export const DashboardPage = () => {
       <ol className="breadcrumb mb-4">
         <li className="breadcrumb-item active">Painel</li>
       </ol>
+
+      <h3 className="mt-4">Geral</h3>
+
       <div className="row">
-        <div className="col-xl-3 col-md-6">
-          <div className="card bg-primary text-white mb-4">
-            <div className="card-body">Imóveis</div>
-            <div className="card-footer d-flex align-items-center justify-content-between">
-              <Link
-                className="small text-white stretched-link"
-                to="/admin/imoveis"
-              >
-                Ver Detalhes
-              </Link>
-              <div className="small text-white">
-                <i className="fas fa-angle-right"></i>
-              </div>
-            </div>
-          </div>
-        </div>
-        {/* <div className="col-xl-3 col-md-6">
-          <div className="card bg-warning text-white mb-4">
-            <div className="card-body">Mensagens</div>
-            <div className="card-footer d-flex align-items-center justify-content-between">
-              <Link
-                className="small text-white stretched-link"
-                to="/admin/mensagens"
-              >
-                Ver Detalhes
-              </Link>
-              <div className="small text-white">
-                <i className="fas fa-angle-right"></i>
-              </div>
-            </div>
-          </div>
-        </div> */}
-        <div className="col-xl-3 col-md-6">
-          <div className="card bg-success text-white mb-4">
-            <div className="card-body">Postagens</div>
-            <div className="card-footer d-flex align-items-center justify-content-between">
-              <Link
-                className="small text-white stretched-link"
-                to="/admin/postagens"
-              >
-                Ver Detalhes
-              </Link>
-              <div className="small text-white">
-                <i className="fas fa-angle-right"></i>
-              </div>
-            </div>
-          </div>
-        </div>
-        {/* <div className="col-xl-3 col-md-6">
-          <div className="card bg-danger text-white mb-4">
-            <div className="card-body">Usuários</div>
-            <div className="card-footer d-flex align-items-center justify-content-between">
-              <Link
-                className="small text-white stretched-link"
-                to="/admin/usuarios"
-              >
-                Ver Detalhes
-              </Link>
-              <div className="small text-white">
-                <i className="fas fa-angle-right"></i>
-              </div>
-            </div>
-          </div>
-        </div> */}
+        <div className="col-xl-3 col-md-4"><Item to="/admin/corretores" label="Corretores" /></div>
+        <div className="col-xl-3 col-md-4"><Item to="/admin/parceiros" label="Parceiros" /></div>
+        <div className="col-xl-3 col-md-4"><Item to="/admin/imoveis" label="Imóveis" /></div>
+        <div className="col-xl-3 col-md-4"><Item to="/admin/categorias" label="Categorias" /></div>
+        <div className="col-xl-3 col-md-4"><Item to="/admin/postagens" label="Postagens" /></div>
       </div>
+
+      <h3 className="mt-4">Localizacões</h3>
+
+      <div className="row">
+        <div className="col-xl-3 col-md-4"><Item to="/admin/cidades" label="Cidades" /></div>
+        <div className="col-xl-3 col-md-4"><Item to="/admin/bairros" label="Bairros" /></div>
+      </div>
+
+      <h3 className="mt-4">Formulários do Site</h3>
+
+      <div className="row">
+        <div className="col-xl-3 col-md-4"><Item to="/admin/novos-imoveis" label="Novos Imoveis" /></div>
+        <div className="col-xl-3 col-md-4"><Item to="/admin/mensagens" label="Mensagens" /></div>
+      </div>
+
+      <h3 className="mt-4">Configurações</h3>
+
+      <div className="row">
+        <div className="col-xl-3 col-md-4"><Item to="/admin/configuracoes" label="Site" /></div>
+        <div className="col-xl-3 col-md-4"><Item to="/admin/usuarios" label="Usuários" /></div>
+      </div>
+
     </div>
   );
 };

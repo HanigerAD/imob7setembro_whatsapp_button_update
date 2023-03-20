@@ -54,7 +54,7 @@ export class PostService {
     }
 
     public setImage(code: number, image: Express.Multer.File, res: Response): Promise<number> {
-        return this.imageService.saveImages(Array.of(this.buildPostImage(image)), res)
+        return this.imageService.saveImages(Array.of(this.buildPostImage(image)))
             .then(() => this.repository.setImage(code, image.filename))
     }
 

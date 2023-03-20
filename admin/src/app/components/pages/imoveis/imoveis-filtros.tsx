@@ -20,6 +20,12 @@ export const ImoveisFiltros = ({ buscar }: ImoveisFiltrosProps) => {
     event.preventDefault();
     let filters = Object.assign({}, filtro);
 
+    for (var propName in filters) {
+      if (filters[propName] === '' || filters[propName] === null || filters[propName] === undefined) {
+        delete filters[propName];
+      }
+    }
+
     if (filters.type) {
       filters.type = filters.type.code;
     }

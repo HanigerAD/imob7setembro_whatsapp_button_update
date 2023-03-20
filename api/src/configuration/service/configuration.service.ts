@@ -49,7 +49,7 @@ export class ConfigurationService {
     }
 
     public async updateLogo(file: Express.Multer.File, res: Response): Promise<number> {
-        await this.imageService.saveImages(this.buildPropertyImage(file), res);
+        await this.imageService.saveImages(this.buildPropertyImage(file));
         return this.repository.updateLogo(file.filename);
     }
 

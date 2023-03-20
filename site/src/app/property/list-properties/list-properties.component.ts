@@ -1,20 +1,20 @@
-import {Component, OnChanges, OnInit} from '@angular/core';
-import {FormBuilder, FormGroup} from '@angular/forms';
-import {Options} from '@angular-slider/ngx-slider';
-import {CityModel} from '../../navbar/search/model/city.model';
-import {NeighborhoodModel} from '../../navbar/search/model/neighborhood.model';
-import {SearchModel} from '../../navbar/search/model/search.model';
-import {StorageEnum} from '../../shared/storage.enum';
-import {FinalityModel} from '../../navbar/search/model/finality.model';
-import {TypeModel} from '../../navbar/search/model/type.model';
-import {SearchService} from '../../navbar/search/services/search.service';
-import {Subscription} from 'rxjs';
-import {PropertyService} from '../services/property.service';
-import {PropertyModel} from '../models/property.model';
-import {Router} from '@angular/router';
-import {TransactionEnum} from '../../shared/enum/transaction.enum';
-import {ZoneModel} from '../../navbar/search/model/zone.model';
-import {PropertyZoneEnum} from '../../navbar/search/enum/property-zone.enum';
+import { Component, OnChanges, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup } from '@angular/forms';
+import { Options } from '@angular-slider/ngx-slider';
+import { CityModel } from '../../navbar/search/model/city.model';
+import { NeighborhoodModel } from '../../navbar/search/model/neighborhood.model';
+import { SearchModel } from '../../navbar/search/model/search.model';
+import { StorageEnum } from '../../shared/storage.enum';
+import { FinalityModel } from '../../navbar/search/model/finality.model';
+import { TypeModel } from '../../navbar/search/model/type.model';
+import { SearchService } from '../../navbar/search/services/search.service';
+import { Subscription } from 'rxjs';
+import { PropertyService } from '../services/property.service';
+import { PropertyModel } from '../models/property.model';
+import { Router } from '@angular/router';
+import { TransactionEnum } from '../../shared/enum/transaction.enum';
+import { ZoneModel } from '../../navbar/search/model/zone.model';
+import { PropertyZoneEnum } from '../../navbar/search/enum/property-zone.enum';
 import { converterParaMoeda } from '../../shared/utils/parser.utils';
 import { Builder } from 'builder-pattern';
 
@@ -27,9 +27,9 @@ export class ListPropertiesComponent implements OnInit, OnChanges {
 
   private subscriptions: Subscription = new Subscription();
   public searchForm: FormGroup;
-  public minPrice: number = 10000;
+  public minPrice: number = 0;
   public maxPrice: number = 2000000;
-  public minPriceConfig: number = 10000;
+  public minPriceConfig: number = 0;
   public maxPriceConfig: number = 2000000;
   public optionsSlider: Options;
   public filters: SearchModel;
@@ -42,17 +42,17 @@ export class ListPropertiesComponent implements OnInit, OnChanges {
   public loading: boolean = true;
   public ruralZoneSelected = false;
 
-  public propertiesCounter: number;
+  public propertiesCounter = 0;
   public actualPage = 1;
   public perPage = 12;
 
   public converterParaMoeda = converterParaMoeda;
 
   constructor(
-      private formBuilder: FormBuilder,
-      private service: PropertyService,
-      private searchService: SearchService,
-      private router: Router
+    private formBuilder: FormBuilder,
+    private service: PropertyService,
+    private searchService: SearchService,
+    private router: Router
   ) { }
 
   public ngOnInit(): void {
@@ -76,15 +76,15 @@ export class ListPropertiesComponent implements OnInit, OnChanges {
 
   public verifyMinAndMaxFilterValues(): void {
     const transactionCode = this.service.filteredTransaction ?
-        this.service.filteredTransaction :
-        Number(this.searchForm.get('finality').value);
+      this.service.filteredTransaction :
+      Number(this.searchForm.get('finality').value);
 
     switch (transactionCode) {
 
       case (0 || TransactionEnum.SALE): {
-        this.minPrice = 10000;
+        this.minPrice = 0;
         this.maxPrice = 10000000;
-        this.minPriceConfig = 10000;
+        this.minPriceConfig = 0;
         this.maxPriceConfig = 10000000;
         break;
       }
@@ -105,14 +105,14 @@ export class ListPropertiesComponent implements OnInit, OnChanges {
     this.filters = JSON.parse(localStorage.getItem(StorageEnum.FILTERS));
     if (!this.filters) {
       const newFilters = Builder<SearchModel>()
-      .finality(0)
-      .type(0)
-      .city(0)
-      .neighborhood(0)
-      .zone(0)
-      .minPrice(10000)
-      .maxPrice(2000000)
-      .build();
+        .finality(0)
+        .type(0)
+        .city(0)
+        .neighborhood(0)
+        .zone(0)
+        .minPrice(0)
+        .maxPrice(2000000)
+        .build();
 
       this.searchService.saveFiltersStorage(newFilters);
       this.filters = newFilters;
@@ -131,7 +131,10 @@ export class ListPropertiesComponent implements OnInit, OnChanges {
         hectare: this.filters.neighborhood,
         code: this.filters.code,
         minPrice: this.filters.minPrice,
-        maxPrice: this.filters.maxPrice
+        maxPrice: this.filters.maxPrice,
+        bedroom: this.filters.bedroom,
+        parkingVacancy: this.filters.parkingVacancy,
+        bathroom: this.filters.bathroom,
       });
     }
 
@@ -154,33 +157,33 @@ export class ListPropertiesComponent implements OnInit, OnChanges {
 
   private getFinalities(): void {
     this.subscriptions.add(
-        this.searchService.getFinalities().subscribe(
-            finalities => this.finalities = finalities
-        )
+      this.searchService.getFinalities().subscribe(
+        finalities => this.finalities = finalities
+      )
     );
   }
 
   private getZones(): void {
     this.subscriptions.add(
-        this.searchService.getZones().subscribe(
-            zones => this.zones = zones
-        )
+      this.searchService.getZones().subscribe(
+        zones => this.zones = zones
+      )
     );
   }
 
   private getTypes(): void {
     this.subscriptions.add(
-        this.searchService.getTypes().subscribe(
-            types => this.types = types
-        )
+      this.searchService.getTypes().subscribe(
+        types => this.types = types
+      )
     );
   }
 
   private getCities(): void {
     this.subscriptions.add(
-        this.searchService.getCities().subscribe(
-            cities => this.manageGettingCities(cities)
-        )
+      this.searchService.getCities().subscribe(
+        cities => this.manageGettingCities(cities)
+      )
     );
   }
 
@@ -191,9 +194,9 @@ export class ListPropertiesComponent implements OnInit, OnChanges {
 
   public getNeighborhoods(): void {
     this.subscriptions.add(
-        this.searchService.getNeighborhoods(this.searchForm.get('city').value).subscribe(
-            neighborhoods => this.neighborhoods = neighborhoods
-        )
+      this.searchService.getNeighborhoods(this.searchForm.get('city').value).subscribe(
+        neighborhoods => this.neighborhoods = neighborhoods
+      )
     );
   }
 
@@ -204,19 +207,30 @@ export class ListPropertiesComponent implements OnInit, OnChanges {
 
   private roundValue(value: number): number {
     return this.minPriceConfig > 100 ?
-        Math.trunc(Math.round(value  * 100) / 1000000 ) * 10000 :
-        Math.trunc(Math.round(value  * 100) / 10000 ) * 100;
+      Math.trunc(Math.round(value * 100) / 1000000) * 10000 :
+      Math.trunc(Math.round(value * 100) / 10000) * 100;
   }
 
   private getProperties(): void {
+    this.getPropertiesCounter();
+
     this.filters.page = this.actualPage;
     this.filters.perPage = this.perPage;
 
     this.subscriptions.add(
-        this.service.getProperties(this.filters).subscribe(
-            properties => this.manageSuccessGetProperties(properties),
-            () => this.loading = false
-        )
+      this.service.getProperties(this.filters).subscribe(
+        properties => this.manageSuccessGetProperties(properties),
+        () => this.loading = false
+      )
+    );
+  }
+
+  private getPropertiesCounter(): void {
+    this.subscriptions.add(
+      this.service.getPropertiesCounter(this.filters).subscribe(
+        propertiesCounter => this.manageSuccessGetPropertiesCounter(propertiesCounter),
+        () => this.loading = false
+      )
     );
   }
 
@@ -225,10 +239,17 @@ export class ListPropertiesComponent implements OnInit, OnChanges {
     this.loading = false;
   }
 
+  private manageSuccessGetPropertiesCounter(propertiesCounter: number): void {
+    this.propertiesCounter = propertiesCounter;
+  }
+
   public searchProperties(): void {
     this.filters = this.searchForm.getRawValue();
     this.filters.minPrice = this.minPrice;
     this.filters.maxPrice = this.maxPrice;
+    this.filters.bathroom = this.filters.bathroom ? Number(this.filters.bathroom) : undefined;
+    this.filters.bedroom = this.filters.bedroom ? Number(this.filters.bedroom) : undefined;
+    this.filters.parkingVacancy = this.filters.parkingVacancy ? Number(this.filters.parkingVacancy) : undefined;
 
     this.getProperties();
   }

@@ -95,64 +95,95 @@ export const GaleriaDeImagens = ({
 
   return (
     <div className="row">
-      {imagensSemRemover.map(({ photo, title }, index) => (
-        <div className="col-md-3 mb-3 mt-3" key={index}>
-          <div className="card">
-            <img
-              className="card-img-top"
-              src={
-                typeof photo == "string"
-                  ? `${CDN_URL}/original-${photo}`
-                  : criarImagemTemp(photo)
-              }
-              alt={title}
-              onError={imageFallback}
-            />
-            <div className="card-body">
-              <button
-                className="btn btn-primary btn-sm btn-block"
-                disabled={index == 0}
-                type="button"
-                onClick={() => tormarPrincipal(photo)}
-              >
-                Tormar Principal
-              </button>
+      {imagensSemRemover.map(({ photo, title }, index) => {
+        const imageLink = typeof photo == "string"
+          ? `${CDN_URL}/original-${photo}`
+          : criarImagemTemp(photo);
 
-              <button
-                className="btn btn-danger btn-sm btn-block"
-                type="button"
-                onClick={() => remover(photo)}
-              >
-                Remover
-              </button>
+        return (
+          <div className="col-md-3 mb-3 mt-3" key={index}>
+            <div className="card">
+              <a href={imageLink} className="show-hide-on-hover" target="_blank" style={{ position: 'relative' }}>
+                <img
+                  className="card-img-top"
+                  style={{
+                    width: '100%',
+                    height: '180px',
+                    objectFit: 'cover',
+                  }}
+                  src={imageLink}
+                  alt={title}
+                  onError={imageFallback}
+                />
+                <div className="hide" style={{
+                  top: 0,
+                  left: 0,
+                  right: 0,
+                  bottom: 0,
+                  position: 'absolute'
+                }}>
+                  <div style={{
+                    position: 'relative',
+                    width: '100%',
+                    height: '100%',
+                    backgroundColor: "rgba(0,0,0,0.5)",
+                  }}>
+                    <span className="transform-translate-40" style={{
+                      margin: 0,
+                      position: 'absolute',
+                      top: '40%',
+                      left: '40%',
+                      color: '#fff'
+                    }}>Visualizar</span>
+                  </div>
+                </div>
+              </a>
+              <div className="card-body">
+                <button
+                  className="btn btn-primary btn-sm btn-block"
+                  disabled={index == 0}
+                  type="button"
+                  onClick={() => tormarPrincipal(photo)}
+                >
+                  Tormar Principal
+                </button>
 
-              <div className="text-center">
-                <span className="">Mover</span>
+                <button
+                  className="btn btn-danger btn-sm btn-block"
+                  type="button"
+                  onClick={() => remover(photo)}
+                >
+                  Remover
+                </button>
 
-                <div>
-                  <button
-                    className="btn btn-secondary btn-sm"
-                    disabled={index == 0}
-                    type="button"
-                    onClick={() => moverParaEsquerda(photo)}
-                  >
-                    {"<"}
-                  </button>
-                  &nbsp;
-                  <button
-                    className="btn btn-secondary btn-sm"
-                    type="button"
-                    disabled={index == imagensSemRemover.length - 1}
-                    onClick={() => moverParaDireita(photo)}
-                  >
-                    {">"}
-                  </button>
+                <div className="text-center">
+                  <span className="">Mover</span>
+
+                  <div>
+                    <button
+                      className="btn btn-secondary btn-sm"
+                      disabled={index == 0}
+                      type="button"
+                      onClick={() => moverParaEsquerda(photo)}
+                    >
+                      {"<"}
+                    </button>
+                    &nbsp;
+                    <button
+                      className="btn btn-secondary btn-sm"
+                      type="button"
+                      disabled={index == imagensSemRemover.length - 1}
+                      onClick={() => moverParaDireita(photo)}
+                    >
+                      {">"}
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
-      ))}
+        )
+      })}
 
       <div className="col-md-3 mb-3 mt-3">
         <input

@@ -172,7 +172,7 @@ export const ImoveisPage = () => {
                         </div>
 
                         <p className="text-justify text-truncate para mb-0">
-                          <b>Tipo:</b>
+                          <b>Transação:</b>
                           &nbsp;
                           <span>{model.transaction}</span>
                         </p>

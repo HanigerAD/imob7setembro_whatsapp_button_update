@@ -1,5 +1,5 @@
 import { ImageResponse } from './../integration/response/photo.response';
-import { HttpService, Injectable } from '@nestjs/common';
+import { BadRequestException, ConflictException, Injectable } from '@nestjs/common';
 import { Builder } from 'builder-pattern';
 import { Response } from 'express';
 
@@ -51,6 +51,7 @@ import { SituationMapper } from "../../../user/mapper/situation.mapper";
 import { ConfigurationService } from 'src/configuration/service/configuration.service';
 import { ImageWatermark } from 'src/common/integration/request/image-watermark';
 import { CategoryRequest } from '../../../property/category/integration/response/category.request';
+import { PropertyResponse } from '../integration/response/property.response';
 
 
 
@@ -68,7 +69,8 @@ export class PropertyService {
   }
 
   public async insertProperty(request: PropertyRequest): Promise<number> {
-    return this.repository.insertProperty(PropertyMapper.requestToEntity(request));
+    const propertyDetailEntity = PropertyMapper.requestToEntity(request);
+    return this.repository.insertProperty(propertyDetailEntity);
   }
 
   public async insertCategory(request: CategoryRequest): Promise<number> {
@@ -79,12 +81,27 @@ export class PropertyService {
     return this.repository.updateCategory(code, CategoryMapper.requestToEntity(request));
   }
 
-  public deleteCategory(code: number): Promise<number> {
-    return this.repository.deleteCategory(code);
+  public async deleteCategory(code: number): Promise<number> {
+    const properties = await this.getPropertiesByCategory(code);
+
+    if ((properties && properties.length)) {
+      const message = 'Não foi possivel deletar o registro pois o mesmo contem outros registros vinculados.';
+      throw new BadRequestException({
+        message,
+        properties,
+      }, message);
+    } else {
+      try {
+        return this.repository.deleteCategory(code);
+      } catch (error) {
+        throw new ConflictException(error, 'Erro ao executar comando no banco de dados')
+      }
+    }
   }
 
-  public update(code: number, request: PropertyRequest): Promise<number> {
-    return this.repository.update(code, PropertyMapper.requestToEntity(request));
+  public async update(code: number, request: PropertyRequest): Promise<number> {
+    const propertyDetailEntity = PropertyMapper.requestToEntity(request);
+    return this.repository.update(code, propertyDetailEntity);
   }
 
   public getAllProperties(filter: PropertyFilterRequest): Promise<any> {
@@ -92,6 +109,12 @@ export class PropertyService {
 
     return this.repository.getAll(UtilsService.clearObject(filters))
       .then(properties => PropertyMapper.entityListToResponse(properties));
+  }
+
+  public getAllPropertiesCounter(filter: PropertyFilterRequest): Promise<any> {
+    const filters = PropertyFilterMapper.requestToEntity(filter);
+
+    return this.repository.getAllCounter(UtilsService.clearObject(filters));
   }
 
   public async generateImagesWithWatermark(res: Response): Promise<void> {
@@ -108,8 +131,6 @@ export class PropertyService {
     const { logo: logoImageName } = await this.configurationService.get();
     const logoUrl = `${process.env.CDN_URL}/${logoImageName}`;
 
-    console.log('1', allImagesOfProperties);
-
     return this.imageService.applyWatermarkAndSubmitToCdn(allImagesOfProperties, logoUrl, res);
   }
 
@@ -122,17 +143,35 @@ export class PropertyService {
   public async buildDetailedResponse(property: PropertyDTO): Promise<PropertyDetailResponse> {
     const builder = new PropertyDetailBuilder();
     builder.setProperty(property);
-    builder.setAgent(await this.getAgent(property.code));
-    builder.setCategory(await this.getCategoryByProperty(property.code));
-    builder.setConservationState(await this.getConservationState(property.code));
-    builder.setProfile(await this.getprofile(property.code));
-    builder.setType(await this.getType(property.code));
-    builder.setZone(await this.getZone(property.code));
-    builder.setTransaction(await this.getTransaction(property.code))
-    builder.setFederativeUnit(await this.federativeUnitService.getByCity(property.city))
-    builder.setCity(await this.cityService.getSingle(property.city))
-    builder.setNeighborhood(await this.neighborhoodService.getSingle(property.neighborhood))
-    builder.setSituation(await this.getSituation(property.code))
+
+    if (property.code) {
+      builder.setAgent(await this.getAgent(property.code));
+      builder.setCategory(await this.getCategoryByProperty(property.code));
+      builder.setConservationState(await this.getConservationState(property.code));
+      builder.setProfile(await this.getprofile(property.code));
+      builder.setType(await this.getType(property.code));
+      builder.setZone(await this.getZone(property.code));
+      builder.setTransaction(await this.getTransaction(property.code))
+    }
+
+    if (property.neighborhood) {
+      const neighborhood = await this.neighborhoodService.getSingle(property.neighborhood);
+      builder.setNeighborhood(neighborhood)
+
+      if (neighborhood && neighborhood.city) {
+        const city = await this.cityService.getSingle(Number(neighborhood.city));
+        builder.setCity(city)
+
+        if (city && city.code) {
+          builder.setFederativeUnit(await this.federativeUnitService.getByCity(city.code))
+        }
+      }
+    }
+
+    if (property.code) {
+      builder.setSituation(await this.getSituation(property.code))
+    }
+
     return builder.build();
   }
 
@@ -142,6 +181,11 @@ export class PropertyService {
 
   public getNeighborhood(code: number): Promise<NeighborhoodResponse> {
     return this.neighborhoodService.getSingle(code);
+  }
+
+  public getPropertiesByCategory(code: number): Promise<PropertyResponse[]> {
+    return this.repository.getAll({ paginacao: { pagina: 1, porPagina: 1000 }, categoria: String(code) })
+      .then(result => PropertyMapper.entityListToResponse(result));
   }
 
   public getCategory(code: number): Promise<CategoryResponse> {
@@ -214,24 +258,29 @@ export class PropertyService {
       .then(documents => documents.map(document => PropertyDocumentMapper.mapPropertyDocumentEntityToResponse(document)));
   }
 
-  public async insertPropertyImages(files: Express.Multer.File[], propertyCode: number, res: Response): Promise<void> {
+  public async insertPropertyImages(files: Express.Multer.File[], propertyCode: number): Promise<boolean> {
     const { logo: logoImageName } = await this.configurationService.get();
     const logoUrl = `${process.env.CDN_URL}/${logoImageName}`;
 
-    return this.imageService.saveImages(this.buildPropertyImage(files), res, true, logoUrl)
-      .then(() => Promise.all(files.map((file, i) => this.repository.insertPropertyImages(file.filename, i, propertyCode))))
-      .then(() => {
-      })
+    await this.imageService.saveImages(this.buildPropertyImage(files), true, logoUrl, ImageSizeEnum.PROPERTY_KBYTES)
+    await Promise.all(files.map((file, i) => this.repository.insertPropertyImages(file.filename, i, propertyCode)))
 
+    return true;
   }
 
-  public async insertPropertyImage(file: Express.Multer.File, propertyCode: number, res: Response, order: number): Promise<void> {
+  public async insertPropertyImage(file: Express.Multer.File, propertyCode: number, order: number): Promise<boolean> {
     const { logo: logoImageName } = await this.configurationService.get();
     const logoUrl = `${process.env.CDN_URL}/${logoImageName}`;
 
-    return this.imageService.saveImage(this.buildPropertyImageRequest(file), res, true, logoUrl)
-      .then(() => this.repository.insertPropertyImage(file[0].filename, order, propertyCode))
-      .then(() => { });
+    try {
+      await this.imageService.saveImage(this.buildPropertyImageRequest(file), true, logoUrl, ImageSizeEnum.PROPERTY_KBYTES)
+      await this.repository.insertPropertyImage(file.filename, order, propertyCode)
+    } catch (error) {
+      console.log('insertPropertyImage', { error })
+      throw error;
+    }
+
+    return true;
   }
 
   public async updateImagesSort(imagesSort: ImageSortRequest[]): Promise<void> {
@@ -250,7 +299,7 @@ export class PropertyService {
   }
 
   public buildPropertyDocument(file: Express.Multer.File): Express.Multer.File {
-    return file[0];
+    return file;
   }
 
   public buildPropertyImage(files: Express.Multer.File[]): ImageRequest[] {
@@ -265,7 +314,7 @@ export class PropertyService {
 
   public buildPropertyImageRequest(file: Express.Multer.File): ImageRequest {
     return Builder<ImageRequest>()
-      .file(file[0])
+      .file(file)
       .width(ImageSizeEnum.PROPERTY_WIDTH)
       .height(ImageSizeEnum.PROPERTY_HEIGHT)
       .build();

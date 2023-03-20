@@ -1,20 +1,23 @@
-import { useEffect, useMemo, useState } from "react";
+import { useContext, useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import { confirmAlert } from "react-confirm-alert";
 import { apiService } from "../../../services/api.service";
 import { Pagination } from "../../layouts/admin/components/pagination";
 import { toast } from "react-toastify";
 import { usePagination } from "../../../hooks/usePagination";
+import { ErrorModalContext } from "../../shared/ErrorModal";
+import { ErrorContent } from "./bairro-page";
 
 export const BairrosPage = () => {
   const [models, setModels] = useState([]);
   const [carregando, setCarregando] = useState(false);
   const paginationProps = usePagination({ currentPage: 1, itemsPerPage: 5 });
+  const { showError } = useContext<any>(ErrorModalContext);
 
   async function deletar(model: any) {
     confirmAlert({
       title: "Atenção",
-      message: `Você deseja realmente deletar o registro ${model.title} ?`,
+      message: `Você deseja realmente deletar o registro ${model.description} ?`,
       buttons: [
         {
           label: "Sim",
@@ -26,16 +29,29 @@ export const BairrosPage = () => {
               );
               toast.success("Registro removido com sucesso");
               buscar();
-            } catch (error) {
+            } catch (error: any) {
               console.log({ error });
-              toast.error("Algo inesperado ocorreu! Verifique se o registro selecionado não está sendo utilizado");
+              if (error && error?.response && error?.response?.data) {
+                let message = "Algo inesperado ocorreu! Verifique se o registro selecionado não está sendo utilizado";
+
+                if (error?.response?.data?.message) {
+                  message = error?.response?.data?.message;
+                }
+
+                if (error?.response?.data?.properties) {
+                  let content = <ErrorContent properties={error?.response?.data?.properties} />;
+                  showError(message, content);
+                } else {
+                  toast.error(`${message}`);
+                }
+              }
               setCarregando(false);
             }
           },
         },
         {
           label: "Não",
-          onClick: () => {},
+          onClick: () => { },
         },
       ],
     });

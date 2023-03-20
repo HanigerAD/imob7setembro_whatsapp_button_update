@@ -52,33 +52,25 @@ async function copiarArquivosParaServerAdmin() {
 }
 
 async function main() {
-  console.log("Realizando build do Site");
-  await buildSite();
-  console.log("Build do Site realizado");
-
-  console.log("Realizando build do Admin");
-  await buildAdmin();
-  console.log("Build do Admin realizado");
-
   console.log("Realizando build da Api");
   await buildApi();
   console.log("Build da Api realizado");
 
-  console.log("Limpando Server Site");
-  await limparServerSite();
-  console.log("Server Site Limpo");
-
+  console.log("Realizando build do Admin");
+  await buildAdmin();
   console.log("Limpando Server Admin");
   await limparServerAdmin();
-  console.log("Server Admin Limpo");
-
-  console.log("Copiando Arquivos para Server Site");
-  await copiarArquivosParaServerSite();
-  console.log("Arquivos Copiados para Server Site");
-
   console.log("Copiando Arquivos para Server Admin");
   await copiarArquivosParaServerAdmin();
-  console.log("Arquivos Copiados para Server Admin");
+  console.log("Build do Admin realizado");
+  
+  console.log("Realizando build do Site");
+  await buildSite();
+  console.log("Limpando Server Site");
+  await limparServerSite();
+  console.log("Copiando Arquivos para Server Site");
+  await copiarArquivosParaServerSite();
+  console.log("Build do Site realizado");
 }
 
 exports.default = main;

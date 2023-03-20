@@ -8,6 +8,7 @@ export class AgentMapper {
     return Builder<AgentEntity>()
       .nome(request.name)
       .telefone(request.phone)
+      .flag_visivel_site(request.flagVisivelSite)
       .build();
   }
 
@@ -17,6 +18,7 @@ export class AgentMapper {
       .name(entity.nome)
       .phone(entity.telefone)
       .image(entity.imagem)
+      .flagVisivelSite(entity.flag_visivel_site)
       .build();
   }
 
