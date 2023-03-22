@@ -106,7 +106,7 @@ export const UsuariosPage = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {currentItems.length ? (
+                    {currentItems.length > 0 ? (
                       currentItems.map((model: any) => (
                         <tr key={model.code}>
                           <th scope="row">{model.code}</th>

@@ -97,7 +97,7 @@ export const ImoveisPage = () => {
             <div className="text-center">Carregando...</div>
           ) : (
             <>
-              {currentItems.length ? (
+              {currentItems.length > 0 ? (
                 <>
                   {currentItems.map((model: any) => (
                     <div

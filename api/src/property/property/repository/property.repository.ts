@@ -174,7 +174,7 @@ export class PropertyRepository {
             .joinRaw('INNER JOIN unidade_federativa ON unidade_federativa.codigo = municipio.unidade_federativa')
             .joinRaw('LEFT JOIN agenciador ON imovel.agenciador = agenciador.codigo')
             .joinRaw('LEFT JOIN transacao_imovel ON imovel.transacao = transacao_imovel.codigo')
-            .joinRaw('LEFT JOIN foto_imovel ON imovel.codigo = foto_imovel.imovel AND foto_imovel.ordem = 1')
+            .joinRaw('LEFT JOIN foto_imovel ON foto_imovel.codigo = (SELECT codigo FROM foto_imovel AS sub_foto_imovel WHERE sub_foto_imovel.imovel = imovel.codigo ORDER BY ordem LIMIT 1)')
             .modify(queryBuilder => this.getAllQueryBuilder(queryBuilder, filters))
             .offset(since)
             .limit(perPage)
@@ -191,7 +191,7 @@ export class PropertyRepository {
             .joinRaw('INNER JOIN municipio ON municipio.codigo = bairro.municipio')
             .joinRaw('INNER JOIN unidade_federativa ON unidade_federativa.codigo = municipio.unidade_federativa')
             .joinRaw('LEFT JOIN transacao_imovel ON imovel.transacao = transacao_imovel.codigo')
-            .joinRaw('LEFT JOIN foto_imovel ON imovel.codigo = foto_imovel.imovel AND foto_imovel.ordem = 1')
+            .joinRaw('LEFT JOIN foto_imovel ON foto_imovel.codigo = (SELECT codigo FROM foto_imovel AS sub_foto_imovel WHERE sub_foto_imovel.imovel = imovel.codigo ORDER BY ordem LIMIT 1)')
             .modify(queryBuilder => this.getAllQueryBuilder(queryBuilder, filters))
             .first();
 
