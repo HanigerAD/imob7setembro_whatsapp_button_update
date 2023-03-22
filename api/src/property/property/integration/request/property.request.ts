@@ -123,9 +123,6 @@ export class PropertyRequest {
   @Length(1, 13, { message: 'CEP deve ser preenchido corretamente de acordo com 88888-888' })
   public zipCode?: string;
 
-  @IsNotEmpty({ message: 'Cidade deve ser preenchido.' })
-  public city?: number;
-
   @IsNotEmpty({ message: 'Bairro deve ser preenchido.' })
   public neighborhood?: number;
 

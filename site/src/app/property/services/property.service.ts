@@ -49,8 +49,12 @@ export class PropertyService {
     return this.rest.getPropertyImages(code);
   }
 
-  public getPropertyImage(path: string): string {
-    return `${environment.cdn}/${path}`;
+  public getPropertyImage(path: string | null): string {
+    if (path) {
+      return `${environment.cdn}/${path}`;
+    } else {
+      return `./assets/images/imovel-sem-imagem.png`;
+    }
   }
 
   get filteredTransaction(): number {

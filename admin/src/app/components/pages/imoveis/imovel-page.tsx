@@ -164,7 +164,6 @@ export const ImovelPage = () => {
       "condominiumPrice",
       "showValue",
       "zipCode",
-      "city",
       "neighborhood",
       "street",
       "number",
@@ -192,11 +191,6 @@ export const ImovelPage = () => {
         newModel[key] = Number(newModel[key]);
       }
     });
-
-    newModel.city = newModel.city
-      ? ObjectHelper.mantemSomenteCampos(newModel.city, ["code"])
-      : null;
-    newModel.city = newModel.city ? newModel.city.code : null;
 
     newModel.neighborhood = newModel.neighborhood
       ? ObjectHelper.mantemSomenteCampos(newModel.neighborhood, ["code"])
