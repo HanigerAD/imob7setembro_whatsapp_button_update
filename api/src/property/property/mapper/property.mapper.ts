@@ -40,7 +40,6 @@ export class PropertyMapper {
       .valor_condominio(request.condominiumPrice)
       .exibir_valor(request.showValue)
       .transacao(request.transaction)
-      .municipio(request.city)
       .bairro(request.neighborhood)
       .cep(request.zipCode)
       .logradouro(request.street)

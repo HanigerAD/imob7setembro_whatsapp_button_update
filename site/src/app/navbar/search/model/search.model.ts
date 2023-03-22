@@ -4,7 +4,6 @@ export class SearchModel {
     public city: number;
     public code: number;
     public finality: number;
-    public hectare: number;
     public maxPrice: number;
     public minPrice: number;
     public neighborhood: number;

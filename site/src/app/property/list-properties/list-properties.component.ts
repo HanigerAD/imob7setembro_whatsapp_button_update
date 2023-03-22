@@ -128,7 +128,6 @@ export class ListPropertiesComponent implements OnInit, OnChanges {
         city: this.filters.city,
         zone: this.filters.zone,
         neighborhood: this.filters.neighborhood,
-        hectare: this.filters.neighborhood,
         code: this.filters.code,
         minPrice: this.filters.minPrice,
         maxPrice: this.filters.maxPrice,

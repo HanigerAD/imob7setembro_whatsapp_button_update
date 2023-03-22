@@ -214,9 +214,6 @@ export class PropertyRepository {
     }
 
     public update(code: number, entity: PropertyDetailEntity): Promise<number> {
-      if (entity && entity.municipio) {
-        entity.municipio = undefined
-      }
         return this.knex
             .update(entity)
             .from('imovel')
