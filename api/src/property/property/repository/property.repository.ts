@@ -26,9 +26,6 @@ export class PropertyRepository {
     }
 
     public insertProperty(entity: PropertyDetailEntity): Promise<number> {
-      if (entity && entity.municipio) {
-        entity.municipio = undefined
-      }
         return this.knex
             .insert(entity)
             .into('imovel');

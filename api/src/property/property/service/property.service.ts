@@ -69,10 +69,7 @@ export class PropertyService {
   }
 
   public async insertProperty(request: PropertyRequest): Promise<number> {
-    const propertyDetailEntity = PropertyMapper.requestToEntity(request);
-
-    propertyDetailEntity.municipio = undefined;
-
+    const { municipio, ...propertyDetailEntity } = PropertyMapper.requestToEntity(request);
     return this.repository.insertProperty(propertyDetailEntity);
   }
 
@@ -103,9 +100,7 @@ export class PropertyService {
   }
 
   public async update(code: number, request: PropertyRequest): Promise<number> {
-    const propertyDetailEntity = PropertyMapper.requestToEntity(request);
-
-    propertyDetailEntity.municipio = undefined;
+    const { municipio, ...propertyDetailEntity } = PropertyMapper.requestToEntity(request);
 
     return this.repository.update(code, propertyDetailEntity);
   }
