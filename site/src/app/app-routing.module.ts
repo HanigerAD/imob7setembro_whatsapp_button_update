@@ -21,11 +21,11 @@ const routes: Routes = [
   { path: 'artigo/:code', component: ViewPostComponent },
   { path: 'parceiros', component: PartnersComponent },
   { path: 'comercialize-seu-imovel', component: SellYourPropertyComponent },
-  { path: 'contatos', component: ContactsComponent }
+  { path: 'contatos', component: ContactsComponent },
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes, { useHash: true})],
+  imports: [RouterModule.forRoot(routes, { useHash: true })],
   exports: [RouterModule]
 })
 export class AppRoutingModule { }

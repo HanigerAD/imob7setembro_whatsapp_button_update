@@ -53,8 +53,7 @@
                     </select>
                   </div>
                   <div class="form-group">
-                    <select class="wide select_option form-control" formControlName="finality"
-                      (change)="verifyMinAndMaxFilterValues()">
+                    <select class="wide select_option form-control" formControlName="finality">
                       <option data-display="Property Type" value="0">Finalidade</option>
                       <option *ngFor="let finality of finalities" [value]="finality.code"> {{ finality.description }}
                       </option>
@@ -109,8 +108,11 @@
                     </select>
                   </div>
                   <div class="form-group">
-                    <label class="mb-3">Preferências de valor</label>
-                    <ngx-slider [(value)]="minPrice" [(highValue)]="maxPrice" [options]="optionsSlider"></ngx-slider>
+                    <input type="text" class="wide form-control mb-3" appAllowDecimalNumber formControlName="minPrice"
+                      (keyup)="transformCurrency('minPrice')" placeholder="Valor Min." />
+
+                    <input type="text" class="wide form-control" appAllowDecimalNumber formControlName="maxPrice"
+                      (keyup)="transformCurrency('maxPrice')" placeholder="Valor Máx." />
                   </div>
 
                 </div>
@@ -164,8 +166,8 @@
                     <ng-template #propertiesDone>
 
                       <div class="row" *ngIf="properties.length; else noPropertiesMessage">
-                        <div class="col-md-6 col-lg-6" *ngFor="let property of properties"
-                          (click)="seePropertyDetails(property.code)">
+                        <a class="col-md-6 col-lg-6" *ngFor="let property of properties"
+                          [routerLink]="['/detalhes-imovel/' + property.code]">
                           <div class="card__image card__box-v1">
                             <div class="card__image-header h-250 img-space">
                               <!--                                                    <div class="ribbon text-capitalize">sold out</div>-->
@@ -182,7 +184,7 @@
                             <div class="card__image-body">
                               <span class="badge badge-primary text-capitalize mb-2"> {{ property.category }} </span>
                               <h6 class="text-capitalize">
-                                <a href="#"> Código {{ property.internalCode }} - {{ property.title }}</a>
+                                Código {{ property.internalCode }} - {{ property.title }}
                               </h6>
 
                               <p class="text-capitalize">
@@ -215,7 +217,7 @@
                               </ul>
                             </div>
                           </div>
-                        </div>
+                        </a>
                       </div>
 
                       <ng-template class="row" #noPropertiesMessage>
@@ -225,17 +227,14 @@
                         </div>
                       </ng-template>
 
+                      <app-pagination *ngIf="properties.length" class="pager" [registerPerPage]="perPage"
+                        [actualPage]="actualPage" [totalRegisters]="propertiesCounter"
+                        (pageChanged)="changePage($event)">
+                      </app-pagination>
                     </ng-template>
-
-                    <app-pagination *ngIf="properties.length" class="pager" [registerPerPage]="perPage"
-                      [actualPage]="actualPage" [totalRegisters]="propertiesCounter" (pageChanged)="changePage($event)">
-                    </app-pagination>
 
                     <div class="cleafix"></div>
                   </div>
-
-
-
                 </div>
                 <!-- END FILTER VERTICAL -->
               </div>
@@ -259,7 +258,7 @@
 
         </div>
         <div class="col-lg-3">
-          <a (click)="redirectToContacts()" class="btn btn-light text-uppercase "> Contatos
+          <a [routerLink]="['/contatos']" class="btn btn-light text-uppercase "> Contatos
             <i class="fa fa-angle-right ml-3 arrow-btn "></i></a>
         </div>
       </div>

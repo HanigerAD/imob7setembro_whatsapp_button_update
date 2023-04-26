@@ -39,10 +39,6 @@ export class ViewPropertyComponent implements OnInit, OnDestroy, OnChanges, Afte
   public types: TypeModel[] = [];
   public cities: CityModel[] = [];
   public neighborhoods: NeighborhoodModel[] = [];
-  public minPrice: number = 0;
-  public maxPrice: number = 10000000;
-  public minPriceConfig: number = 0;
-  public maxPriceConfig: number = 10000000;
   public optionsSlider: Options;
   public similarProperties: PropertyModel[] = [];
   public ruralZoneSelected = false;
@@ -67,16 +63,12 @@ export class ViewPropertyComponent implements OnInit, OnDestroy, OnChanges, Afte
     this.getTypes();
     this.getCities();
     this.getFilters();
-    this.getValueRange();
-    this.configureSlider();
     this.getPropertyCode();
-    this.verifyMinAndMaxFilterValues();
     this.getPartners();
     window.scroll(0, 0);
   }
 
   public ngOnChanges(): void {
-    this.verifyMinAndMaxFilterValues();
     this.ruralZoneSelected = this.searchForm?.get('zone')?.value === PropertyZoneEnum.RURAL;
   }
 
@@ -85,6 +77,31 @@ export class ViewPropertyComponent implements OnInit, OnDestroy, OnChanges, Afte
   }
 
   public ngAfterViewInit(): void { }
+
+  transformCurrency(keyFormattedCurrency) {
+    const value = this.searchForm.get(keyFormattedCurrency).value;
+
+    this.searchForm.get(keyFormattedCurrency).setValue(
+      this.formatMoney(value),
+      { emitEvent: false }
+    );
+  }
+
+  formatMoney(value) {
+    let temp = String(value).trim();
+
+    temp = temp.replace(/\D/g, "");
+    temp = temp.replace(/(\d)$/, "$1");
+    temp = temp.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+
+    return temp;
+  }
+
+  converterParaNumero(value) {
+    let temp = String(value).trim().replace(/\D/g, "");
+
+    return Number(temp);
+  }
 
   get urlToShareFacebook(): string {
     return `${window.location.href}`;
@@ -172,8 +189,8 @@ export class ViewPropertyComponent implements OnInit, OnDestroy, OnChanges, Afte
         zone: this.filters.zone,
         neighborhood: this.filters.neighborhood,
         code: this.filters.code,
-        minPrice: this.filters.minPrice,
-        maxPrice: this.filters.maxPrice,
+        minPrice: [this.filters.minPrice ? this.formatMoney(this.filters.minPrice) : ''],
+        maxPrice: [this.filters.maxPrice ? this.formatMoney(this.filters.maxPrice) : ''],
         bedroom: this.filters.bedroom,
         parkingVacancy: this.filters.parkingVacancy,
         bathroom: this.filters.bathroom,
@@ -187,8 +204,8 @@ export class ViewPropertyComponent implements OnInit, OnDestroy, OnChanges, Afte
         neighborhood: 0,
         zone: 0,
         code: null,
-        minPrice: 0,
-        maxPrice: 2000000,
+        minPrice: '',
+        maxPrice: '',
         bedroom: null,
         parkingVacancy: null,
         bathroom: null,
@@ -243,33 +260,10 @@ export class ViewPropertyComponent implements OnInit, OnDestroy, OnChanges, Afte
     );
   }
 
-  private getValueRange(): void {
-    this.minPrice = this.filters?.minPrice ? this.filters.minPrice : 0;
-    this.maxPrice = this.filters?.maxPrice ? this.filters.maxPrice : 2000000;
-  }
-
-  private configureSlider(): void {
-    this.optionsSlider = {
-      floor: this.minPriceConfig,
-      ceil: this.maxPriceConfig,
-      animate: true,
-      translate: (value: number): string => {
-        return 'R$' + (this.roundValue(value)).toLocaleString();
-      },
-      combineLabels: (minValue: string, maxValue: string): string => {
-        return `${minValue} - ${maxValue}`;
-      }
-    };
-  }
-
-  private roundValue(value: number): number {
-    return Math.trunc(Math.round(value * 100) / 1000000) * 10000;
-  }
-
   public search(): void {
     this.filters = this.searchForm.getRawValue();
-    this.filters.minPrice = this.minPrice;
-    this.filters.maxPrice = this.maxPrice;
+    this.filters.minPrice = this.filters.minPrice ? this.converterParaNumero(this.filters.minPrice) : undefined;
+    this.filters.maxPrice = this.filters.maxPrice ? this.converterParaNumero(this.filters.maxPrice) : undefined;
     this.filters.bathroom = this.filters.bathroom ? Number(this.filters.bathroom) : undefined;
     this.filters.bedroom = this.filters.bedroom ? Number(this.filters.bedroom) : undefined;
     this.filters.parkingVacancy = this.filters.parkingVacancy ? Number(this.filters.parkingVacancy) : undefined;
@@ -297,33 +291,6 @@ export class ViewPropertyComponent implements OnInit, OnDestroy, OnChanges, Afte
 
   public redirectToProperties(): void {
     this.router.navigateByUrl('/listando-imoveis');
-  }
-
-  public verifyMinAndMaxFilterValues(): void {
-    const transactionCode = this.service.filteredTransaction ?
-      this.service.filteredTransaction :
-      Number(this.searchForm.get('finality').value);
-
-    switch (transactionCode) {
-
-      case (0 || TransactionEnum.SALE): {
-        this.minPrice = 0;
-        this.maxPrice = 10000000;
-        this.minPriceConfig = 0;
-        this.maxPriceConfig = 10000000;
-        break;
-      }
-
-      case (TransactionEnum.RENT || TransactionEnum.SEASON): {
-        this.minPrice = 0;
-        this.maxPrice = 50000;
-        this.minPriceConfig = 0;
-        this.maxPriceConfig = 50000;
-        break;
-      }
-    }
-
-    this.configureSlider();
   }
 
   public prevSlides() {
