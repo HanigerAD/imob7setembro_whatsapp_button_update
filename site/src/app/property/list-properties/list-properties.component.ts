@@ -27,10 +27,6 @@ export class ListPropertiesComponent implements OnInit, OnChanges {
 
   private subscriptions: Subscription = new Subscription();
   public searchForm: FormGroup;
-  public minPrice: number = 0;
-  public maxPrice: number = 2000000;
-  public minPriceConfig: number = 0;
-  public maxPriceConfig: number = 2000000;
   public optionsSlider: Options;
   public filters: SearchModel;
   public finalities: FinalityModel[] = [];
@@ -62,43 +58,38 @@ export class ListPropertiesComponent implements OnInit, OnChanges {
     this.getCities();
     this.getFilters();
     this.generateForm();
-    this.verifyMinAndMaxFilterValues();
-    this.getValueRange();
 
     this.getProperties();
     window.scroll(0, 0);
   }
 
   public ngOnChanges(): void {
-    this.verifyMinAndMaxFilterValues();
     this.ruralZoneSelected = this.searchForm?.get('zone')?.value === PropertyZoneEnum.RURAL;
   }
 
-  public verifyMinAndMaxFilterValues(): void {
-    const transactionCode = this.service.filteredTransaction ?
-      this.service.filteredTransaction :
-      Number(this.searchForm.get('finality').value);
+  transformCurrency(keyFormattedCurrency) {
+    const value = this.searchForm.get(keyFormattedCurrency).value;
 
-    switch (transactionCode) {
+    this.searchForm.get(keyFormattedCurrency).setValue(
+      this.formatMoney(value),
+      { emitEvent: false }
+    );
+  }
 
-      case (0 || TransactionEnum.SALE): {
-        this.minPrice = 0;
-        this.maxPrice = 10000000;
-        this.minPriceConfig = 0;
-        this.maxPriceConfig = 10000000;
-        break;
-      }
+  formatMoney(value) {
+    let temp = String(value).trim();
 
-      case (TransactionEnum.RENT || TransactionEnum.SEASON): {
-        this.minPrice = 0;
-        this.maxPrice = 50000;
-        this.minPriceConfig = 0;
-        this.maxPriceConfig = 50000;
-        break;
-      }
-    }
+    temp = temp.replace(/\D/g, "");
+    temp = temp.replace(/(\d)$/, "$1");
+    temp = temp.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
 
-    this.configureSlider();
+    return temp;
+  }
+
+  converterParaNumero(value) {
+    let temp = String(value).trim().replace(/\D/g, "");
+
+    return Number(temp);
   }
 
   private getFilters(): void {
@@ -110,8 +101,6 @@ export class ListPropertiesComponent implements OnInit, OnChanges {
         .city(0)
         .neighborhood(0)
         .zone(0)
-        .minPrice(0)
-        .maxPrice(2000000)
         .build();
 
       this.searchService.saveFiltersStorage(newFilters);
@@ -129,8 +118,8 @@ export class ListPropertiesComponent implements OnInit, OnChanges {
         zone: this.filters.zone,
         neighborhood: this.filters.neighborhood,
         code: this.filters.code,
-        minPrice: this.filters.minPrice,
-        maxPrice: this.filters.maxPrice,
+        minPrice: [this.filters.minPrice ? this.formatMoney(this.filters.minPrice) : ''],
+        maxPrice: [this.filters.maxPrice ? this.formatMoney(this.filters.maxPrice) : ''],
         bedroom: this.filters.bedroom,
         parkingVacancy: this.filters.parkingVacancy,
         bathroom: this.filters.bathroom,
@@ -138,20 +127,6 @@ export class ListPropertiesComponent implements OnInit, OnChanges {
     }
 
     this.ruralZoneSelected = this.searchForm.get('zone').value === PropertyZoneEnum.RURAL;
-  }
-
-  private configureSlider(): void {
-    this.optionsSlider = {
-      floor: this.minPriceConfig,
-      ceil: this.maxPriceConfig,
-      animate: true,
-      translate: (value: number): string => {
-        return 'R$' + (this.roundValue(value)).toLocaleString();
-      },
-      combineLabels: (minValue: string, maxValue: string): string => {
-        return `${minValue} - ${maxValue}`;
-      }
-    };
   }
 
   private getFinalities(): void {
@@ -199,22 +174,14 @@ export class ListPropertiesComponent implements OnInit, OnChanges {
     );
   }
 
-  private getValueRange(): void {
-    this.minPrice = this.filters.minPrice;
-    this.maxPrice = this.filters.maxPrice;
-  }
-
-  private roundValue(value: number): number {
-    return this.minPriceConfig > 100 ?
-      Math.trunc(Math.round(value * 100) / 1000000) * 10000 :
-      Math.trunc(Math.round(value * 100) / 10000) * 100;
-  }
-
   private getProperties(): void {
     this.getPropertiesCounter();
 
     this.filters.page = this.actualPage;
     this.filters.perPage = this.perPage;
+    this.filters.minPrice = this.filters.minPrice ? this.converterParaNumero(this.filters.minPrice) : undefined;
+    this.filters.maxPrice = this.filters.maxPrice ? this.converterParaNumero(this.filters.maxPrice) : undefined;
+    this.loading = true;
 
     this.subscriptions.add(
       this.service.getProperties(this.filters).subscribe(
@@ -244,8 +211,8 @@ export class ListPropertiesComponent implements OnInit, OnChanges {
 
   public searchProperties(): void {
     this.filters = this.searchForm.getRawValue();
-    this.filters.minPrice = this.minPrice;
-    this.filters.maxPrice = this.maxPrice;
+    this.filters.minPrice = this.filters.minPrice ? this.converterParaNumero(this.filters.minPrice) : undefined;
+    this.filters.maxPrice = this.filters.maxPrice ? this.converterParaNumero(this.filters.maxPrice) : undefined;
     this.filters.bathroom = this.filters.bathroom ? Number(this.filters.bathroom) : undefined;
     this.filters.bedroom = this.filters.bedroom ? Number(this.filters.bedroom) : undefined;
     this.filters.parkingVacancy = this.filters.parkingVacancy ? Number(this.filters.parkingVacancy) : undefined;

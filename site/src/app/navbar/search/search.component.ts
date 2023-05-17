@@ -10,6 +10,7 @@ import { SearchTabsEnum } from './enum/search-tabs.enum';
 import { FinalityModel } from './model/finality.model';
 import { TypeModel } from './model/type.model';
 import { PropertyZoneEnum } from './enum/property-zone.enum';
+import { CurrencyPipe } from '@angular/common';
 
 @Component({
   selector: 'app-search',
@@ -22,8 +23,6 @@ export class SearchComponent implements OnInit, OnDestroy {
   public siteInfo: LoginModel;
 
   public searchForm: FormGroup;
-  public minPrice: number = 100;
-  public maxPrice: number = 2000000;
   public optionsSlider: Options;
   public finalities: FinalityModel[] = [];
   public types: TypeModel[] = [];
@@ -57,11 +56,30 @@ export class SearchComponent implements OnInit, OnDestroy {
       city: 0,
       neighborhood: 0,
       internalCode: null,
-      minPrice: 0,
-      maxPrice: 0,
+      minPrice: '',
+      maxPrice: '',
       category: 0,
       zone: 0
     });
+  }
+
+  transformCurrency(keyFormattedCurrency) {
+    const value = this.searchForm.get(keyFormattedCurrency).value;
+
+    this.searchForm.get(keyFormattedCurrency).setValue(
+      this.formatMoney(value),
+      { emitEvent: false }
+    );
+  }
+
+  formatMoney(value) {
+    let temp = String(value).trim();
+
+    temp = temp.replace(/\D/g, "");
+    temp = temp.replace(/(\d)$/, "$1");
+    temp = temp.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+
+    return temp;
   }
 
   public changeTab(activatedTab: string): void {
@@ -114,15 +132,11 @@ export class SearchComponent implements OnInit, OnDestroy {
   private manageSelectedValues(): void {
     switch (this.activatedTab) {
       case SearchTabsEnum.URBAN: {
-        this.searchForm.get('minPrice').setValue(this.minPrice);
-        this.searchForm.get('maxPrice').setValue(this.maxPrice);
         this.searchForm.get('zone').setValue(PropertyZoneEnum.URBAN);
         break;
       }
 
       case SearchTabsEnum.RURAL: {
-        this.searchForm.get('minPrice').setValue(this.minPrice);
-        this.searchForm.get('maxPrice').setValue(this.maxPrice);
         this.searchForm.get('zone').setValue(PropertyZoneEnum.RURAL);
         break;
       }
@@ -135,7 +149,7 @@ export class SearchComponent implements OnInit, OnDestroy {
   private configureSlider(): void {
     this.optionsSlider = {
       floor: 0,
-      ceil: 2000000,
+      ceil: 10000000,
       animate: true,
       translate: (value: number): string => {
         return 'R$' + (this.roundValue(value)).toLocaleString();

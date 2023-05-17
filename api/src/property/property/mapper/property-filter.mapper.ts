@@ -38,8 +38,8 @@ export class PropertyFilterMapper {
 
   public static generatePriceFilter(filter: PropertyFilterRequest): PriceFilterEntity {
     return Builder<PriceFilterEntity>()
-      .minPrice(filter.minPrice ? Number(filter.minPrice) : 0)
-      .maxPrice(filter.maxPrice ? Number(filter.maxPrice) : 100000000000)
+      .minPrice(filter.minPrice ? Number(filter.minPrice) : undefined)
+      .maxPrice(filter.maxPrice ? Number(filter.maxPrice) : undefined)
       .build();
   }
 

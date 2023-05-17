@@ -28,7 +28,8 @@
       <div class="col-md-12">
         <div class="single__detail-area-price">
           <h4 class="text-capitalize text-gray">
-            {{ property?.price && property?.price !== "0.00" ? 'R$' + converterParaMoeda(property?.price, false) : 'A CONSULTAR' }}
+            {{ property?.price && property?.price !== "0.00" ? 'R$' + converterParaMoeda(property?.price, false) : 'A
+            CONSULTAR' }}
           </h4>
           <h6 class="text-capitalize text-white" *ngIf="property?.financeable"> <span class="financeable-label">
               Financiável </span> </h6>
@@ -96,7 +97,8 @@
                   <div class="col-md-6 col-lg-6">
                     <ul class="property__detail-info-list list-unstyled">
                       <li *ngIf="property?.internalCode"><b>Código do Imóvel:</b> {{ property?.internalCode }} </li>
-                      <li><b>Preço:</b>{{ property?.price && property?.price !== "0.00" ? 'R$' + converterParaMoeda(property?.price, false) : 'A CONSULTAR' }}</li>
+                      <li><b>Preço:</b>{{ property?.price && property?.price !== "0.00" ? 'R$' +
+                        converterParaMoeda(property?.price, false) : 'A CONSULTAR' }}</li>
                       <li *ngIf="property?.totalArea"><b>Área:</b> {{ property?.totalArea }}m² </li>
                       <li *ngIf="property?.dormitory"><b>Quartos:</b> {{ property?.dormitory }} </li>
                       <li *ngIf="property?.bathroom"><b>Banheiros:</b> {{ property?.bathroom }} </li>
@@ -106,8 +108,10 @@
                     <ul class="property__detail-info-list list-unstyled">
                       <li *ngIf="property?.parkingVacancy"><b>Garagens:</b> {{ property?.parkingVacancy }}</li>
                       <li *ngIf="property?.parkingVacancy"><b>Vagas garagem:</b> {{ property?.parkingVacancy }}</li>
-                      <li *ngIf="property?.constuctionYear"><b>Ano de construção:</b> {{ property?.constuctionYear }}</li>
-                      <li *ngIf="property?.type?.description"><b>Tipo de imóvel:</b> {{ property?.type?.description }}</li>
+                      <li *ngIf="property?.constuctionYear"><b>Ano de construção:</b> {{ property?.constuctionYear }}
+                      </li>
+                      <li *ngIf="property?.type?.description"><b>Tipo de imóvel:</b> {{ property?.type?.description }}
+                      </li>
                     </ul>
                   </div>
                 </div>
@@ -172,8 +176,7 @@
                     </select>
                   </div>
                   <div class="form-group">
-                    <select class="wide select_option form-control" formControlName="finality"
-                      (change)="verifyMinAndMaxFilterValues()">
+                    <select class="wide select_option form-control" formControlName="finality">
                       <option data-display="Property Type" value="0">Finalidade</option>
                       <option *ngFor="let finality of finalities" [value]="finality.code"> {{
                         finality.description }} </option>
@@ -229,8 +232,11 @@
                     </select>
                   </div>
                   <div class="form-group">
-                    <label class="mb-3">Preferências de valor</label>
-                    <ngx-slider [(value)]="minPrice" [(highValue)]="maxPrice" [options]="optionsSlider"></ngx-slider>
+                    <input type="text" class="wide form-control mb-3" appAllowDecimalNumber formControlName="minPrice"
+                      (keyup)="transformCurrency('minPrice')" placeholder="Valor Min." />
+
+                    <input type="text" class="wide form-control" appAllowDecimalNumber formControlName="maxPrice"
+                      (keyup)="transformCurrency('maxPrice')" placeholder="Valor Máx." />
                   </div>
 
                 </div>
@@ -284,8 +290,8 @@
             </div>
             <div class="tab-pane fade show active" id="pills-tab-two" role="tabpanel" aria-labelledby="pills-tab-two">
               <div class="row">
-                <div class="col-md-4 col-lg-4" *ngFor="let property of similarProperties.slice(0,2)"
-                  (click)="seePropertyDetails(property?.code)">
+                <a class="col-md-4 col-lg-4" *ngFor="let property of similarProperties.slice(0,2)"
+                  [routerLink]="['/detalhes-imovel/' + property.code]">
                   <div class="card__image card__box-v1">
                     <div class="card__image-header h-250 img-space">
                       <!--                                                    <div class="ribbon text-capitalize">sold out</div>-->
@@ -293,7 +299,8 @@
                         <img [src]="getPropertyImage(property?.photo)" alt="" class="img-fluid w100 img-transition">
                       </div>
                       <div class="custom-card-info">
-                        <div class="custom-card-info-item custom-card-info-item-bankable" *ngIf="property?.financeable"> Financiável </div>
+                        <div class="custom-card-info-item custom-card-info-item-bankable" *ngIf="property?.financeable">
+                          Financiável </div>
                         <div class="custom-card-info-item"> {{ property?.transaction }} </div>
                       </div>
                     </div>
@@ -301,7 +308,7 @@
                       <span class="badge badge-primary text-capitalize mb-2"> {{ property?.category
                         }} </span>
                       <h6 class="text-capitalize">
-                        <a href="#"> {{ property?.title }}</a>
+                        {{ property?.title }}
                       </h6>
 
                       <p class="text-capitalize">
@@ -330,14 +337,15 @@
                       <ul class="list-inline my-auto ml-auto">
                         <li class="list-inline-item">
                           <h6 class="text-primary">
-                            {{ property?.price && property?.price !== "0.00" ? 'R$' + converterParaMoeda(property?.price, false) : 'A CONSULTAR' }}
+                            {{ property?.price && property?.price !== "0.00" ? 'R$' +
+                            converterParaMoeda(property?.price, false) : 'A CONSULTAR' }}
                           </h6>
                         </li>
 
                       </ul>
                     </div>
                   </div>
-                </div>
+                </a>
               </div>
 
               <div class="cleafix"></div>
@@ -355,23 +363,23 @@
 <!-- PARCEIROS -->
 <section>
   <div class="container">
-      <div class="row">
-          <div class="col-md-8 col-lg-6 mx-auto">
-              <div class="title__head">
-                  <h2 class="text-center text-capitalize">
-                      Parceiros
-                  </h2>
-              </div>
-          </div>
-          <div class="clearfix"></div>
+    <div class="row">
+      <div class="col-md-8 col-lg-6 mx-auto">
+        <div class="title__head">
+          <h2 class="text-center text-capitalize">
+            Parceiros
+          </h2>
+        </div>
       </div>
+      <div class="clearfix"></div>
+    </div>
 
-      <div class="d-flex justify-content-around align-content-around flex-wrap">
-          <div *ngFor="let partner of partners" style="width: 150px" class="d-flex align-items-center">
-              <img src="{{ partner.image }}" alt="{{ partner.name }}" class="img-fluid"
-                  onerror="this.src='../../assets/images/sem-imagem-300x300.png'" />
-          </div>
+    <div class="d-flex justify-content-around align-content-around flex-wrap">
+      <div *ngFor="let partner of partners" style="width: 150px" class="d-flex align-items-center">
+        <img src="{{ partner.image }}" alt="{{ partner.name }}" class="img-fluid"
+          onerror="this.src='../../assets/images/sem-imagem-300x300.png'" />
       </div>
+    </div>
   </div>
 </section>
 <!-- END PARCEIROS -->

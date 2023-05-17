@@ -3,7 +3,6 @@ import { BrowserModule } from '@angular/platform-browser';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { HomepageModule } from './homepage/homepage.module';
 import { HttpClientModule } from '@angular/common/http';
 import { NavbarComponent } from './navbar/navbar.component';
 import { AppService } from './services/app.service';
@@ -42,6 +41,11 @@ import { SharedModule } from './shared/shared.module';
 import { AgentRestService } from './about-us/service/agent-rest.service';
 import { PartnerRestService } from './shared/services/partner-rest.service';
 import { NavbarSliderComponent } from './navbar/slider/slider.component';
+import { RouterModule } from '@angular/router';
+import { HomepageComponent } from './homepage/homepage/homepage.component';
+import { CommonModule } from '@angular/common';
+import { HomepageService } from './shared/services/homepage.service';
+import { HomepageRestService } from './shared/services/homepage-rest.service';
 
 @NgModule({
   declarations: [
@@ -58,12 +62,12 @@ import { NavbarSliderComponent } from './navbar/slider/slider.component';
     ViewPostComponent,
     PartnersComponent,
     SellYourPropertyComponent,
-    LoadingComponent
+    LoadingComponent,
+    HomepageComponent,
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
-    HomepageModule,
     HttpClientModule,
     NgxSliderModule,
     ReactiveFormsModule,
@@ -71,7 +75,10 @@ import { NavbarSliderComponent } from './navbar/slider/slider.component';
     NgxMaskModule.forRoot(),
     ShareButtonsModule,
     ShareIconsModule,
-    SharedModule
+    CommonModule,
+    RouterModule,
+    NgxSliderModule,
+    SharedModule,
   ],
   providers: [
     AppService,
@@ -90,7 +97,9 @@ import { NavbarSliderComponent } from './navbar/slider/slider.component';
     SellYourPropertyRestService,
     AlertService,
     ContactsService,
-    ContactsRestService
+    ContactsRestService,
+    HomepageService,
+    HomepageRestService,
   ],
   bootstrap: [AppComponent]
 })

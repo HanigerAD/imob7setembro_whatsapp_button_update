@@ -1,11 +1,11 @@
 <!-- MOST POPULAR PLACES -->
 <section class="wrap__heading" *ngIf="featuredPropertiesToRent.length || featuredPropertiesToSell.length">
-  <div class="container" *ngIf="featuredPropertiesToRent.length">
+  <div class="container" *ngIf="featuredPropertiesToRent.length > 0">
     <div class="row">
       <div class="col-md-8 col-lg-6 mx-auto">
         <div class="title__head">
           <h2 class="text-center text-capitalize">
-            Imóveis destaque para Alguel
+            Imóveis destaque para Locação
           </h2>
         </div>
       </div>
@@ -13,23 +13,24 @@
     </div>
 
     <div class="row">
-      <div class="col-md-4 col-lg-4" *ngFor="let property of featuredPropertiesToRent"
-        (click)="seePropertyDetails(property.code)">
-        <div class="card__image card__box-v1">
+      <div class="col-md-4 col-lg-4" *ngFor="let property of featuredPropertiesToRent">
+        <a class="card__image card__box-v1" [routerLink]="['/detalhes-imovel/' + property.code]">
           <div class="card__image-header h-250 img-space">
             <div class="image-watermark">
-              <img [src]="getPropertyImage(property.photo)" alt="" class="img-fluid w100 img-transition">
+              <img [src]="getPropertyImage(property.photo)" alt="" class="img-fluid w100 img-transition" />
             </div>
             <div class="custom-card-info">
               <div class="custom-card-info-item custom-card-info-item-bankable" *ngIf="property.financeable">
-                Financiável </div>
+                Financiável
+              </div>
               <div class="custom-card-info-item"> {{ property.transaction }} </div>
             </div>
           </div>
+
           <div class="card__image-body">
             <span class="badge badge-primary text-capitalize mb-2"> {{ property.category }} </span>
             <h6 class="text-capitalize">
-              <a href="#"> Código {{ property.internalCode }} - {{ property.title }}</a>
+              Código {{ property.internalCode }} - {{ property.title }}
             </h6>
 
             <p class="text-capitalize">
@@ -40,18 +41,19 @@
               <li class="list-inline-item"></li>
               <li class="list-inline-item" *ngIf="property.bedroom">
                 <span>
-                  Dormitórios <br>
+                  Dormitórios <br />
                   <i class="fa fa-bed"></i> {{ property.bedroom }}
                 </span>
               </li>
               <li class="list-inline-item" *ngIf="property.totalArea">
                 <span>
-                  Área <br>
+                  Área <br />
                   <i class="fa fa-map"></i> {{ property.totalArea }}m²
                 </span>
               </li>
             </ul>
           </div>
+
           <div class="card__image-footer">
             <ul class="list-inline my-auto ml-auto">
               <li class="list-inline-item">
@@ -62,12 +64,12 @@
               </li>
             </ul>
           </div>
-        </div>
+        </a>
       </div>
     </div>
   </div>
-  <div class="container" *ngIf="featuredPropertiesToSell.length">
 
+  <div class="container" *ngIf="featuredPropertiesToSell.length > 0">
     <div class="row mt-5">
       <div class="col-md-8 col-lg-6 mx-auto">
         <div class="title__head">
@@ -80,45 +82,51 @@
     </div>
 
     <div class="row">
-      <div class="col-md-4 col-lg-4" *ngFor="let property of featuredPropertiesToSell"
-        (click)="seePropertyDetails(property.code)">
-        <div class="card__image card__box-v1">
+      <div class="col-md-4 col-lg-4" *ngFor="let property of featuredPropertiesToSell">
+        <a class="card__image card__box-v1" [routerLink]="['/detalhes-imovel/' + property.code]">
           <div class="card__image-header h-250 img-space">
             <div class="image-watermark">
-              <img [src]="getPropertyImage(property.photo)" alt="" class="img-fluid w100 img-transition">
+              <img [src]="getPropertyImage(property.photo)" alt="" class="img-fluid w100 img-transition" />
             </div>
             <div class="custom-card-info">
               <div class="custom-card-info-item custom-card-info-item-bankable" *ngIf="property.financeable">
-                Financiável </div>
+                Financiável
+              </div>
               <div class="custom-card-info-item"> {{ property.transaction }} </div>
             </div>
           </div>
+
           <div class="card__image-body">
             <span class="badge badge-primary text-capitalize mb-2"> {{ property.category }} </span>
+
             <h6 class="text-capitalize">
-              <a href="#"> Código {{ property.internalCode }} - {{ property.title }}</a>
+              Código {{ property.internalCode }} - {{ property.title }}
             </h6>
 
             <p class="text-capitalize">
               <i class="fa fa-map-marker"></i>
               {{ property.neighborhood }}, {{ property.city }}
             </p>
+
             <ul class="list-inline card__content">
               <li class="list-inline-item"></li>
+
               <li class="list-inline-item" *ngIf="property.bedroom">
                 <span>
-                  Dormitórios <br>
+                  Dormitórios <br />
                   <i class="fa fa-bed"></i> {{ property.bedroom }}
                 </span>
               </li>
+
               <li class="list-inline-item" *ngIf="property.totalArea">
                 <span>
-                  Área <br>
+                  Área <br />
                   <i class="fa fa-map"></i> {{ property.totalArea }}m²
                 </span>
               </li>
             </ul>
           </div>
+
           <div class="card__image-footer">
             <ul class="list-inline my-auto ml-auto">
               <li class="list-inline-item">
@@ -129,7 +137,7 @@
               </li>
             </ul>
           </div>
-        </div>
+        </a>
       </div>
     </div>
   </div>
@@ -193,7 +201,7 @@
       <div class="clearfix"></div>
     </div>
     <div class="row">
-      <div class="col-md-4" *ngFor="let post of posts" (click)="seePost(post.code)">
+      <a class="col-md-4" *ngFor="let post of posts" [routerLink]="['/artigo/' + post.code]">
         <!-- BLOG  -->
         <div class="card__image">
           <div class="card__image-header h-250">
@@ -231,7 +239,7 @@
           </div>
         </div>
         <!-- END BLOG -->
-      </div>
+      </a>
     </div>
   </div>
 </section>
