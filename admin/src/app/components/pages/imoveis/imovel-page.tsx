@@ -1,4 +1,3 @@
-import _ from "lodash";
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import TextEditor from "react-quill";
@@ -1102,7 +1101,7 @@ export const ImovelPage = () => {
                   placeholder="0,00"
                   mask="currency"
                   prefix="R$"
-                  value={model.price || ""}
+                  value={model?.price}
                   onChange={(e) =>
                     atualizarModel("price", e.currentTarget.value)
                   }
@@ -1116,7 +1115,7 @@ export const ImovelPage = () => {
                   placeholder="0,00"
                   mask="currency"
                   prefix="R$"
-                  value={model.condominiumPrice || ""}
+                  value={model?.condominiumPrice}
                   onChange={(e) =>
                     atualizarModel("condominiumPrice", e.currentTarget.value)
                   }
