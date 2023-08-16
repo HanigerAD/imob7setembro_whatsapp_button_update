@@ -99,7 +99,7 @@
                       <li *ngIf="property?.internalCode"><b>Código do Imóvel:</b> {{ property?.internalCode }} </li>
                       <li><b>Preço:</b>{{ property?.price && property?.price !== "0.00" ? 'R$' +
                         converterParaMoeda(property?.price, false) : 'A CONSULTAR' }}</li>
-                      <li *ngIf="property?.condominiumPrice && property?.condominiumPrice !== '0.00'"><b>Valor do Condominio:</b> {{ 'R$' + converterParaMoeda(property?.condominiumPrice, false) }}</li>
+                      <li *ngIf="property?.condominiumPrice && property?.condominiumPrice !== '0.00' && property?.condominiumPrice !== '0'"><b>Valor do Condominio:</b> {{ 'R$' + converterParaMoeda(property?.condominiumPrice, false) }}</li>
                       <li *ngIf="property?.totalArea"><b>Área Total:</b> {{ property?.totalArea }}m² </li>
                       <li *ngIf="property?.privativeArea"><b>Área Privativa:</b> {{ property?.privativeArea }}m² </li>
                       <li *ngIf="property?.dormitory"><b>Quartos:</b> {{ property?.dormitory }} </li>
