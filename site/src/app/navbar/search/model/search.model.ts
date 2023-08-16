@@ -1,20 +1,20 @@
 import {PropertyTypeEnum} from '../enum/property-type.enum';
 
 export class SearchModel {
-    public city: number;
-    public code: number;
-    public finality: number;
-    public maxPrice: number;
-    public minPrice: number;
-    public neighborhood: number;
-    public financeable: boolean | number;
-    public featured: boolean;
-    public zone: number;
-    public showSite: number;
-    public type: PropertyTypeEnum;
-    public page: number;
-    public perPage: number;
-    public bedroom?: number;
-    public parkingVacancy?: number;
-    public bathroom?: number;
+    public city: number | string;
+    public code: number | string;
+    public finality: number | string;
+    public maxPrice: number | string;
+    public minPrice: number | string;
+    public neighborhood: number | string;
+    public financeable: boolean | number | string;
+    public featured: boolean | string;
+    public zone: number | string;
+    public showSite: number | string;
+    public type: PropertyTypeEnum | string;
+    public page: number | string;
+    public perPage: number | string;
+    public bedroom?: number | string;
+    public parkingVacancy?: number | string;
+    public bathroom?: number | string;
 }

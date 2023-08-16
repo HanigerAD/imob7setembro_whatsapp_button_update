@@ -263,6 +263,14 @@ export class ViewPropertyComponent implements OnInit, OnDestroy, OnChanges, Afte
   public search(): void {
     this.filters = this.searchForm.getRawValue();
     
+    this.filters.city = this.filters.city && this.filters.city !== '0' ? this.filters.city : undefined;
+    this.filters.code = this.filters.code && this.filters.code !== '0' ? this.filters.code : undefined;
+    this.filters.finality = this.filters.finality && this.filters.finality !== '0' ? this.filters.finality : undefined;
+    this.filters.neighborhood = this.filters.neighborhood && this.filters.neighborhood !== '0' ? this.filters.neighborhood : undefined;
+    this.filters.featured = this.filters.featured && this.filters.featured !== '0' ? this.filters.featured : undefined;
+    this.filters.zone = this.filters.zone && this.filters.zone !== '0' ? this.filters.zone : undefined;
+    this.filters.showSite = this.filters.showSite && this.filters.showSite !== '0' ? this.filters.showSite : undefined;
+    this.filters.type = this.filters.type && this.filters.type !== '0' ? this.filters.type : undefined;
     this.filters.minPrice = this.filters.minPrice ? this.converterParaNumero(this.filters.minPrice) : undefined;
     this.filters.maxPrice = this.filters.maxPrice ? this.converterParaNumero(this.filters.maxPrice) : undefined;
     this.filters.bathroom = this.filters.bathroom ? Number(this.filters.bathroom) : undefined;
