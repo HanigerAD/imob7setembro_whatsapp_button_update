@@ -16,6 +16,14 @@ services:
     volumes:
       - ./database/init:/docker-entrypoint-initdb.d
       - ./database/data:/var/lib/mysql
+    deploy:
+      resources:
+        limits:
+          cpus: '0.50'
+          memory: 512M
+        reservations:
+          cpus: '0.25'
+          memory: 128M
 
   # admin-database:
   #   container_name: imob7-admin-database
@@ -48,6 +56,14 @@ services:
       - database
     depends_on:
       - database
+    deploy:
+      resources:
+        limits:
+          cpus: '0.50'
+          memory: 512M
+        reservations:
+          cpus: '0.25'
+          memory: 128M
 
   admin:
     container_name: imob7-admin
@@ -56,6 +72,14 @@ services:
       service: frontend
     depends_on:
       - api
+    deploy:
+      resources:
+        limits:
+          cpus: '0.50'
+          memory: 512M
+        reservations:
+          cpus: '0.25'
+          memory: 128M
 
   site:
     container_name: imob7-site
@@ -64,6 +88,14 @@ services:
       service: frontend
     depends_on:
       - api
+    deploy:
+      resources:
+        limits:
+          cpus: '0.50'
+          memory: 1024M
+        reservations:
+          cpus: '0.25'
+          memory: 128M
 
 volumes:
   imob7-data:
