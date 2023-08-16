@@ -7,7 +7,7 @@ export class SearchModel {
     public maxPrice: number;
     public minPrice: number;
     public neighborhood: number;
-    public financeable: boolean;
+    public financeable: boolean | number;
     public featured: boolean;
     public zone: number;
     public showSite: number;

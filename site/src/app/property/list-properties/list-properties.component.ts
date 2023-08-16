@@ -211,12 +211,14 @@ export class ListPropertiesComponent implements OnInit, OnChanges {
 
   public searchProperties(): void {
     this.filters = this.searchForm.getRawValue();
+    
     this.filters.minPrice = this.filters.minPrice ? this.converterParaNumero(this.filters.minPrice) : undefined;
     this.filters.maxPrice = this.filters.maxPrice ? this.converterParaNumero(this.filters.maxPrice) : undefined;
     this.filters.bathroom = this.filters.bathroom ? Number(this.filters.bathroom) : undefined;
     this.filters.bedroom = this.filters.bedroom ? Number(this.filters.bedroom) : undefined;
     this.filters.parkingVacancy = this.filters.parkingVacancy ? Number(this.filters.parkingVacancy) : undefined;
-
+    this.filters.financeable = this.filters.financeable ? 1 : 0;
+    
     this.getProperties();
   }
 
