@@ -1,45 +1,12 @@
-# imob7setembro
+# Imobiliaria 7 de Setembro
+Repositorio com o codigo de [API](#api), [FRONTEND](#frontend) e [ADMIN](#admin)
 
-Status Imob7
-(30/09/22 - 18:00)
+## API
+_Informações..._
+## FRONTEND
+_Informações..._
+## ADMIN
+_Informações..._
+## Importante
+Para aplicar permissões no nestJs, usar o [Link](https://stackoverflow.com/questions/68701309/nestjs-permissions-guard-the-most-efficient-way)
 
-- [FEITO] Painel Administrativo
-- - [FEITO] Adicionar a imagem \/ de Select nos campos.
-- - - [FEITO] Cadastros
-- - - - [FEITO] Cidade
-- - - - [FEITO] Bairros
-- - - - [FEITO] Imóvel
-- - - - - [FEITO] Permitir Remover imovel
-- - - - - - [FEITO] Adicionar campo "Motivo Exclusão do Imóvel" só será permitido a exclusão após colocar esse motivo.
-- - - - - [FEITO] Cadastro de Documentos
-- - - - - [FEITO] Alterar Visualização da listagem de imoveis
-- - - - - [FEITO] Filtros de imoveis
-- - - - - [FEITO] Adicionar obrigatoriedade dos campos
-- - - - - [NAO SERA FEITO] CEP para a Longitude e Latitude
-- - - - - [FEITO] Alterar campo valor para INT
-- - - - - [FEITO] Remover obrigatoriedade dos campos Longitude e Latitude
-- - - - - [FEITO] Campo Link para vídeo do Youtube
-- - - - - [FEITO] Imagens
-- - - - - - [FEITO] Cadastrar várias imagens ao mesmo tempo.
-- - - - - - [FEITO] definir logo marca d'água nas fotos por padrão centralizado na "Direita" ou na "Esquerda"
-- - - - [FEITO] Corretores - (cadastro de corretores com foto)
-- - - - [FEITO] Contatos de Clientes
-- - - - - [FEITO] Novos Imoveis
-- - - - - [FEITO] Mensagens
-- - - - [FEITO] Usuarios
-- - - - [FEITO] Permissões de Usuarios
-- - - - [FEITO] Parceiros (Logo e Nome)
-- - - - [FEITO] Configurações
-- - - - - [FEITO] Banners
-- - - - - - [NAO SERA FEITO] Banner Topo - Posicionamento exato mesmo que a imagem seja maior que os 1920px de largura.
-
-- [FEITO] site
-- - [FEITO] Centralizar o Texto "Encontre o imóvel..."
-- - [FEITO] Colocar os cards do corretores na página "Sobre nós".
-- - [FEITO] logos de parceiros
-- - [FEITO] Adicionar a aba para o Filtro de Imóveis Financiáveis.
-- - [FEITO] Ajustar os links de compartilhamento do imóvel. Face e no Whats já com a mensagem incluíndo o ID e título do imóvel a ser compartilhado.
-- - [FEITO] Buscar por imovel
-- - - [FEITO] valor de Compra (10.000 até 10.000.000)
-- - - [FEITO] valor de Aluguel (300 até 50.000)
-- - - [FEITO] Colocar um botão switch para Compra e Aluguel (ESTA FUNCIONALIDADE EXISTE AO TROCAR O CAMPO FINALIDADE)
