@@ -8,10 +8,12 @@ import {
 import { Modal, ModalBody, ModalHeader } from "reactstrap";
 import { CDN_URL } from "../../../services/cdn.service";
 import { imageFallback } from "../../../helpers/image-fallback";
+import { VisualizarGaleriaDeImagens } from "./visualizar-galeria-de-imagens";
 
 export const VisualizarImovelModal = ({ code: modelId }: { code: string }) => {
   const [carregando, setCarregando] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
+  const [currentTab, setCurrentTab] = useState('IMAGENS');
   const [model, setModel] = useState({} as any);
 
   async function toggle() {
@@ -78,7 +80,7 @@ export const VisualizarImovelModal = ({ code: modelId }: { code: string }) => {
         <span>Visualizar</span>
       </button>
 
-      <Modal isOpen={isOpen} toggle={toggle} size="lg">
+      <Modal isOpen={isOpen} toggle={toggle} size="xl">
         <ModalHeader toggle={toggle}>Visualização de Imovel</ModalHeader>
         <ModalBody>
           {carregando ? 'Carregando...' : null}
@@ -169,57 +171,54 @@ export const VisualizarImovelModal = ({ code: modelId }: { code: string }) => {
                 </div>
               </div>
 
-              <h3>Imagens</h3>
-              <div className="row p-2">
-                {model.images.map(({ photo, title }: { [id: string]: any }, index: number) => (
-                  <div className="col-md-3 mb-3 mt-3" key={index}>
-                    <div className="card">
-                      <img
-                        className="card-img-top"
-                        src={`${CDN_URL}/original-${photo}`}
-                        alt={title}
-                        onError={imageFallback}
-                      />
-                      <div className="card-body">
-                        <a
-                          className="btn btn-primary btn-sm btn-block"
-                          href={`${CDN_URL}/${photo}`}
-                          rel="noreferrer"
-                          target="_blank"
-                          download={photo}
-                        >
-                          Baixar
-                        </a>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
+              <ul className="nav nav-pills nav-fill">
+                <li className="nav-item">
+                  <button className={`nav-link ${currentTab === 'IMAGENS' ? 'active' : ''}`} onClick={() => setCurrentTab('IMAGENS')}>Imagens</button>
+                </li>
+                <li className="nav-item">
+                  <button className={`nav-link ${currentTab === 'DOCUMENTOS' ? 'active' : ''}`} onClick={() => setCurrentTab('DOCUMENTOS')}>Documentos</button>
+                </li>
+              </ul>
 
-              <h3>Documentos</h3>
-              <div className="row p-2">
-                {model.documents.map(({ document, filename }: { [id: string]: any }, index: number) => (
-                  <div className="col-md-3 mb-3 mt-3" key={index}>
-                    <div className="card">
-                      <div className="card-body">
-                        <div className="text-center p-2">
-                          <i className="fa-regular fa-file-lines fa-10x mb-2"></i>
-                          <p>{filename}</p>
+              {currentTab === 'IMAGENS' ? (
+                <>
+                  <VisualizarGaleriaDeImagens
+                    imagens={model.images || []}
+                  />
+
+                  <div className="row p-2"></div>
+                </>
+              ) : null}
+
+              {currentTab === 'DOCUMENTOS' ? (
+                <div className="row p-2">
+                  {model.documents.length > 0 ? model.documents.map(({ document, filename }: { [id: string]: any }, index: number) => (
+                    <div className="col-md-3 mb-3 mt-3" key={index}>
+                      <div className="card">
+                        <div className="card-body">
+                          <div className="text-center p-2">
+                            <i className="fa-regular fa-file-lines fa-10x mb-2"></i>
+                            <p>{filename}</p>
+                          </div>
+                          <a
+                            className="btn btn-primary btn-sm btn-block"
+                            href={`${CDN_URL}/${document}`}
+                            rel="noreferrer"
+                            target="_blank"
+                            download={document}
+                          >
+                            Baixar
+                          </a>
                         </div>
-                        <a
-                          className="btn btn-primary btn-sm btn-block"
-                          href={`${CDN_URL}/${document}`}
-                          rel="noreferrer"
-                          target="_blank"
-                          download={document}
-                        >
-                          Baixar
-                        </a>
                       </div>
                     </div>
-                  </div>
-                ))}
-              </div>
+                  )) : (
+                    <div className="col-md-12 p-4 text-center">
+                      <p>Nenhum documento cadastrado</p>
+                    </div>
+                  ) }
+                </div>
+              ) : null}
             </>
           ) : null}
         </ModalBody>
