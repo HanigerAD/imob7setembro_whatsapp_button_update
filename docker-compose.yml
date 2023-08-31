@@ -20,7 +20,7 @@ services:
       resources:
         limits:
           cpus: '0.50'
-          memory: 512M
+          memory: 640M
         reservations:
           cpus: '0.25'
           memory: 128M
@@ -45,7 +45,7 @@ services:
   #     resources:
   #         limits:
   #           cpus: "0.50"
-  #           memory: 512M
+  #           memory: 640M
 
   api:
     container_name: imob7-api
@@ -60,7 +60,7 @@ services:
       resources:
         limits:
           cpus: '0.50'
-          memory: 512M
+          memory: 640M
         reservations:
           cpus: '0.25'
           memory: 128M
@@ -76,7 +76,7 @@ services:
       resources:
         limits:
           cpus: '0.50'
-          memory: 512M
+          memory: 640M
         reservations:
           cpus: '0.25'
           memory: 128M
