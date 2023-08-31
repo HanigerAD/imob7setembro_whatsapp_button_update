@@ -13,3 +13,12 @@ services:
     volumes:
       - ./:/home/app
       - ./command.sh:/home/utils/command.sh
+  build-frontend:
+    build:
+      context: .
+      dockerfile: build.Dockerfile
+    ports:
+      - "3002:3000"
+    volumes:
+      - ./:/home/app
+      - ./build.command.sh:/home/utils/build.command.sh

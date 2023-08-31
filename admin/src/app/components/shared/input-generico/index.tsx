@@ -1,4 +1,4 @@
-import React, { InputHTMLAttributes, useCallback } from "react";
+import React, { InputHTMLAttributes, useCallback, useMemo, useRef } from "react";
 import { cep, currency, cpf, phone } from "./masks";
 
 interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
@@ -19,6 +19,8 @@ const Input: React.FC<InputProps> = ({
   type,
   ...props
 }) => {
+  const inputReference = useRef<any>(null);
+
   const handleKeyUp = useCallback(
     (e: React.FormEvent<HTMLInputElement>) => {
       switch (mask) {
@@ -48,9 +50,15 @@ const Input: React.FC<InputProps> = ({
       if (onChange) {
         onChange(e as React.ChangeEvent<HTMLInputElement>);
       }
+
+      setTimeout(() => inputReference.current.focus(), 200);
     },
     [mask, onChange]
   );
+
+  const key = useMemo(() => {
+    return defaultValue && defaultValue !== '0.00' && defaultValue !== '0' ? 'defined' : 'notDefined';
+  }, [defaultValue]);
 
   return (
     <>
@@ -69,6 +77,8 @@ const Input: React.FC<InputProps> = ({
             <input
               className={`form-control ${className}`}
               defaultValue={defaultValue}
+              ref={inputReference}
+              key={key}
               onKeyUp={handleKeyUp}
               {...props} />
             : null}

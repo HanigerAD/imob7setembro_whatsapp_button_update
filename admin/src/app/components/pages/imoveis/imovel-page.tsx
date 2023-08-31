@@ -1,4 +1,3 @@
-import _ from "lodash";
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import TextEditor from "react-quill";
@@ -18,6 +17,7 @@ import {
 import { MapaComponent } from "../../shared/mapa/mapa-component";
 import { PropertyTypeEnum } from "./property-type.enum";
 import { ToastHelper } from "../../../helpers/toast.helper";
+import { PERMISSIONS, useVerifyPermission } from "../../../hooks/useVerifyPermission";
 
 type ImovelProps = {
   internalCode?: number;
@@ -94,6 +94,7 @@ export const ImovelPage = () => {
   const [federativeUnits, setFederativeUnits] = useState([]);
   const [neighborhoods, setNeighborhoods] = useState([]);
   const [carregando, setCarregando] = useState(false);
+  const { hasPermission, verifyPermission } = useVerifyPermission(PERMISSIONS.GESTAO_DE_IMOVEIS);
 
   const modelId = params.code || null;
 
@@ -536,8 +537,16 @@ export const ImovelPage = () => {
   }, [ehEmpreendimento]);
 
   useEffect(() => {
+    if (hasPermission === false) {
+      toast.error(`Usuario não possui a permissão ${PERMISSIONS.GESTAO_DE_IMOVEIS}`)
+      navigate("/admin");
+    }
+  }, [hasPermission])
+
+  useEffect(() => {
     buscarCidades();
     buscarUfs();
+    verifyPermission();
   }, []);
 
   useEffect(() => {
@@ -1102,7 +1111,7 @@ export const ImovelPage = () => {
                   placeholder="0,00"
                   mask="currency"
                   prefix="R$"
-                  value={model.price || ""}
+                  value={model?.price}
                   onChange={(e) =>
                     atualizarModel("price", e.currentTarget.value)
                   }
@@ -1116,7 +1125,7 @@ export const ImovelPage = () => {
                   placeholder="0,00"
                   mask="currency"
                   prefix="R$"
-                  value={model.condominiumPrice || ""}
+                  value={model?.condominiumPrice}
                   onChange={(e) =>
                     atualizarModel("condominiumPrice", e.currentTarget.value)
                   }

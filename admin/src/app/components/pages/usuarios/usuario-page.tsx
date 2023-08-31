@@ -269,11 +269,12 @@ export const UsuarioPage = () => {
                 <div className="col-md-6" key={`input-permissao-${permissao.code}`}>
                   <SeletorBooleanoGenerico
                     id={`input-permissao-${permissao.code}`}
+                    key={`input-permissao-${permissao.code}`}
                     required
                     label={permissao.description}
                     value={model && model.permission && !!model.permission.find((p: any) => p.code === permissao.code)}
                     onChange={(newValue) => {
-                      if (newValue === true) {
+                      if (Number(newValue) === 1) {
                         const permissaoExiste = model.permission.find((p: any) => p.code === permissao.code);
 
                         if (!permissaoExiste) {

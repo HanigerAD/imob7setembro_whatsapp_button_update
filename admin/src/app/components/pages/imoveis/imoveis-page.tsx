@@ -10,11 +10,13 @@ import { usePagination } from "../../../hooks/usePagination";
 import { ImoveisFiltros } from "./imoveis-filtros";
 import { converterParaMoeda } from "../../../utils/parser.utils";
 import { VisualizarImovelModal } from "./visualizar-imovel-modal";
+import { PERMISSIONS, useVerifyPermission } from "../../../hooks/useVerifyPermission";
 
 export const ImoveisPage = () => {
   const [models, setModels] = useState([]);
   const [carregando, setCarregando] = useState(false);
   const paginationProps = usePagination({ currentPage: 1, itemsPerPage: 5 });
+  const { hasPermission, verifyPermission } = useVerifyPermission(PERMISSIONS.GESTAO_DE_IMOVEIS);
 
   async function deletar(model: any) {
     confirmAlert({
@@ -70,6 +72,7 @@ export const ImoveisPage = () => {
   );
 
   useEffect(() => {
+    verifyPermission();
     buscar();
   }, []);
 
@@ -185,22 +188,28 @@ export const ImoveisPage = () => {
 
                         <div className="d-flex flex-column mt-4">
                           <VisualizarImovelModal code={model.code} />
-                          <Link
-                            className="btn btn-warning btn-sm mt-2"
-                            title="Editar"
-                            to={`/admin/imoveis/${model.code}`}
-                          >
-                            <i className="fas fa-pen-to-square fa-fw"></i>
-                            <span>Editar</span>
-                          </Link>
-                          <button
-                            className="btn btn-danger btn-sm mt-2"
-                            title="Deletar"
-                            onClick={() => deletar(model)}
-                          >
-                            <i className="fas fa-pen-to-square fa-fw"></i>
-                            <span>Deletar</span>
-                          </button>
+                          {
+                            hasPermission ? (
+                              <>
+                                <Link
+                                  className="btn btn-warning btn-sm mt-2"
+                                  title="Editar"
+                                  to={`/admin/imoveis/${model.code}`}
+                                >
+                                  <i className="fas fa-pen-to-square fa-fw"></i>
+                                  <span>Editar</span>
+                                </Link>
+                                <button
+                                  className="btn btn-danger btn-sm mt-2"
+                                  title="Deletar"
+                                  onClick={() => deletar(model)}
+                                >
+                                  <i className="fas fa-pen-to-square fa-fw"></i>
+                                  <span>Deletar</span>
+                                </button>
+                              </>
+                            ) : null
+                          }
                         </div>
                       </div>
                     </div>
