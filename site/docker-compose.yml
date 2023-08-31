@@ -14,3 +14,14 @@ services:
     volumes:
       - ./:/home/app
       - ./command.sh:/home/utils/command.sh
+  build-frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: always
+    ports:
+      - "4200:4200"
+      - "49153:49153"
+    volumes:
+      - ./:/home/app
+      - ./build.command.sh:/home/utils/build.command.sh

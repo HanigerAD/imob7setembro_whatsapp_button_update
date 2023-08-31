@@ -97,5 +97,29 @@ services:
           cpus: '0.25'
           memory: 128M
 
+  build-repo:
+    depends_on:
+      - build-api
+      - build-admin
+      - build-site
+
+  build-api:
+    container_name: build-imob7-api
+    extends:
+      file: ./api/docker-compose.yml
+      service: build-api
+
+  build-admin:
+    container_name: build-imob7-admin
+    extends:
+      file: ./admin/docker-compose.yml
+      service: build-frontend
+
+  build-site:
+    container_name: build-imob7-site
+    extends:
+      file: ./site/docker-compose.yml
+      service: build-frontend
+
 volumes:
   imob7-data:
