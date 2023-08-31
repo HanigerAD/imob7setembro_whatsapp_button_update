@@ -1,5 +1,7 @@
+import { useEffect, useState } from "react";
 import { Navigate, Outlet } from "react-router-dom";
 import { isAuthenticated } from "../../../services/auth.service";
+import { updateLocalUser } from "../../../services/user.service";
 import { Navbar } from "./components/navbar";
 import { Sidenav } from "./components/sidenav";
 import { SidebarProvider, useSidebar } from "./hooks/useSidebar";
@@ -23,7 +25,36 @@ const Layout = () => {
 };
 
 export const AdminLayout = () => {
-  return !isAuthenticated() ? (
+  const [isLoading, setIsLoading] = useState(true);
+  const [isAuth, setIsAuth] = useState(false);
+
+  useEffect(() => {
+    const init = async () => {
+      const authenticated = isAuthenticated();
+
+      if (authenticated) {
+        try {
+          await updateLocalUser()
+          setIsAuth(true);
+        } catch (error) {
+          setIsAuth(false);
+        }
+      } else {
+        setIsAuth(false);
+      }
+
+      setIsLoading(false);
+    }
+
+    init();
+  }, []);
+
+
+  if (isLoading) {
+    return <div>Carregando...</div>
+  }
+
+  return !isAuth ? (
     <Navigate to={{ pathname: "/" }} />
   ) : (
     <SidebarProvider>

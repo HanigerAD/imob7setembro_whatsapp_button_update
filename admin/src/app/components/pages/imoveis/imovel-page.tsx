@@ -17,6 +17,7 @@ import {
 import { MapaComponent } from "../../shared/mapa/mapa-component";
 import { PropertyTypeEnum } from "./property-type.enum";
 import { ToastHelper } from "../../../helpers/toast.helper";
+import { PERMISSIONS, useVerifyPermission } from "../../../hooks/useVerifyPermission";
 
 type ImovelProps = {
   internalCode?: number;
@@ -93,6 +94,7 @@ export const ImovelPage = () => {
   const [federativeUnits, setFederativeUnits] = useState([]);
   const [neighborhoods, setNeighborhoods] = useState([]);
   const [carregando, setCarregando] = useState(false);
+  const { hasPermission, verifyPermission } = useVerifyPermission(PERMISSIONS.GESTAO_DE_IMOVEIS);
 
   const modelId = params.code || null;
 
@@ -535,8 +537,16 @@ export const ImovelPage = () => {
   }, [ehEmpreendimento]);
 
   useEffect(() => {
+    if (hasPermission === false) {
+      toast.error(`Usuario não possui a permissão ${PERMISSIONS.GESTAO_DE_IMOVEIS}`)
+      navigate("/admin");
+    }
+  }, [hasPermission])
+
+  useEffect(() => {
     buscarCidades();
     buscarUfs();
+    verifyPermission();
   }, []);
 
   useEffect(() => {
