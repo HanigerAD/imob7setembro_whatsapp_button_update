@@ -16,8 +16,7 @@ services:
   build-frontend:
     build:
       context: .
-      dockerfile: Dockerfile
-    restart: always
+      dockerfile: build.Dockerfile
     ports:
       - "3002:3000"
     volumes:

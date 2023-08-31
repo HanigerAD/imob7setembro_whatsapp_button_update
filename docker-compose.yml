@@ -97,12 +97,6 @@ services:
           cpus: '0.25'
           memory: 128M
 
-  build-repo:
-    depends_on:
-      - build-api
-      - build-admin
-      - build-site
-
   build-api:
     container_name: build-imob7-api
     extends:
