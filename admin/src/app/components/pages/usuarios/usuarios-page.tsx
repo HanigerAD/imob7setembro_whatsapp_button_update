@@ -5,10 +5,17 @@ import { apiService } from "../../../services/api.service";
 import { Pagination } from "../../layouts/admin/components/pagination";
 import { toast } from "react-toastify";
 import { usePagination } from "../../../hooks/usePagination";
+import {
+  PERMISSIONS,
+  useVerifyPermission,
+} from "../../../hooks/useVerifyPermission";
 
 export const UsuariosPage = () => {
   const [models, setModels] = useState([]);
   const [carregando, setCarregando] = useState(false);
+  const { hasPermission, verifyPermission } = useVerifyPermission(
+    PERMISSIONS.GESTAO_DE_USUARIOS
+  );
   const paginationProps = usePagination({ currentPage: 1, itemsPerPage: 5 });
 
   async function deletar(model: any) {
@@ -32,7 +39,7 @@ export const UsuariosPage = () => {
         },
         {
           label: "Não",
-          onClick: () => { },
+          onClick: () => {},
         },
       ],
     });
@@ -66,6 +73,7 @@ export const UsuariosPage = () => {
 
   useEffect(() => {
     buscar();
+    verifyPermission();
   }, []);
 
   return (
@@ -73,10 +81,7 @@ export const UsuariosPage = () => {
       <div className="mt-4 d-flex justify-content-between align-items-center">
         <h1>Usuários</h1>
 
-        <Link
-          className="btn btn-primary btn-sm"
-          to="/admin/usuarios/cadastrar"
-        >
+        <Link className="btn btn-primary btn-sm" to="/admin/usuarios/cadastrar">
           Cadastrar
         </Link>
       </div>
@@ -112,23 +117,27 @@ export const UsuariosPage = () => {
                           <th scope="row">{model.code}</th>
                           <td>{model.name}</td>
                           <td>{model.email}</td>
-                          <td>
-                            <Link
-                              className="btn btn-link text-dark p-0"
-                              title="Editar"
-                              to={`/admin/usuarios/${model.code}`}
-                            >
-                              <i className="fas fa-pen-to-square fa-fw"></i>
-                            </Link>
-                            &nbsp;
-                            <button
-                              className="btn btn-link text-dark p-0"
-                              title="Deletar"
-                              onClick={() => deletar(model)}
-                            >
-                              <i className="fas fa-trash fa-fw"></i>
-                            </button>
-                          </td>
+                          {hasPermission ? (
+                            <td>
+                              <Link
+                                className="btn btn-link text-dark p-0"
+                                title="Editar"
+                                to={`/admin/usuarios/${model.code}`}
+                              >
+                                <i className="fas fa-pen-to-square fa-fw"></i>
+                              </Link>
+                              &nbsp;
+                              <button
+                                className="btn btn-link text-dark p-0"
+                                title="Deletar"
+                                onClick={() => deletar(model)}
+                              >
+                                <i className="fas fa-trash fa-fw"></i>
+                              </button>
+                            </td>
+                          ) : (
+                            <td></td>
+                          )}
                         </tr>
                       ))
                     ) : (
