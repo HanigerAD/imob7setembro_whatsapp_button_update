@@ -2,31 +2,49 @@ const { exec } = require("child_process");
 const path = require("path");
 const { src, dest } = require("gulp");
 
-async function buildSite() {
+async function startBuildContainer(container) {
   return new Promise((resolve, reject) => {
-    exec("docker exec imob7-site npm run build", (error, stdout) => {
+    exec(`docker compose up ${container} -d`, (error, stdout) => {
       if (error) reject(error);
       resolve(stdout);
     });
   });
+}
+
+async function stopBuildContainer(container) {
+  return new Promise((resolve, reject) => {
+    exec(`docker compose down ${container}`, (error, stdout) => {
+      if (error) reject(error);
+      resolve(stdout);
+    });
+  });
+}
+
+async function execBuildInContainer(container) {
+  return new Promise((resolve, reject) => {
+    exec(`docker exec ${container} npm run build`, (error, stdout) => {
+      if (error) reject(error);
+      resolve(stdout);
+    });
+  });
+}
+
+async function build(container) {
+  await startBuildContainer(container);
+  await execBuildInContainer(`imob7-${container}`);
+  await stopBuildContainer(container);
+}
+
+async function buildSite() {
+  await build("site");
 }
 
 async function buildAdmin() {
-  return new Promise((resolve, reject) => {
-    exec("docker exec imob7-admin npm run build", (error, stdout) => {
-      if (error) reject(error);
-      resolve(stdout);
-    });
-  });
+  await build("admin");
 }
 
 async function buildApi() {
-  return new Promise((resolve, reject) => {
-    exec("docker exec imob7-api npm run build", (error, stdout) => {
-      if (error) reject(error);
-      resolve(stdout);
-    });
-  });
+  await build("api");
 }
 
 async function limparServerSite() {
@@ -52,25 +70,23 @@ async function copiarArquivosParaServerAdmin() {
 }
 
 async function main() {
-  console.log("Realizando build da Api");
-  await buildApi();
-  console.log("Build da Api realizado");
-
-  console.log("Realizando build do Admin");
-  await buildAdmin();
+  // console.log("Realizando build da Api");
+  // await buildApi();
+  // console.log("Build da Api realizado");
+  // console.log("Realizando build do Admin");
+  // await buildAdmin();
   console.log("Limpando Server Admin");
   await limparServerAdmin();
   console.log("Copiando Arquivos para Server Admin");
   await copiarArquivosParaServerAdmin();
-  console.log("Build do Admin realizado");
-  
-  console.log("Realizando build do Site");
-  await buildSite();
+  // console.log("Build do Admin realizado");
+  // console.log("Realizando build do Site");
+  // await buildSite();
   console.log("Limpando Server Site");
   await limparServerSite();
   console.log("Copiando Arquivos para Server Site");
   await copiarArquivosParaServerSite();
-  console.log("Build do Site realizado");
+  // console.log("Finalizando maquinas de build");
 }
 
 exports.default = main;

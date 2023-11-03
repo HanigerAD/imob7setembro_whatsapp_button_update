@@ -1,3 +1,8 @@
+import { getUser } from "../../../services/auth.service";
+import { UsuarioPage } from "../usuarios/usuario-page";
+
 export const PerfilPage = () => {
-  return <h2>Perfil</h2>;
+  const usuarioLogado = getUser()
+
+  return UsuarioPage({ backPage: '/admin', userCode: usuarioLogado?.code })
 };

@@ -57,7 +57,7 @@ export class NavbarService {
         .city(0)
         .neighborhood(0)
         .maxPrice(10000000)
-        .financeable(true)
+        .financeable(1)
     .build();
   }
 }

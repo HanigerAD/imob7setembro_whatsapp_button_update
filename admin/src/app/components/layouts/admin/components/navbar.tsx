@@ -1,11 +1,12 @@
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
-import { logout } from "../../../../services/auth.service";
+import { getUser, logout } from "../../../../services/auth.service";
 import { useSidebar } from "../hooks/useSidebar";
 
 export const Navbar = () => {
   const navigate = useNavigate();
   const { toggle } = useSidebar();
+  const usuarioLogado = getUser()
 
   function manipularLogout() {
     logout();
@@ -36,20 +37,21 @@ export const Navbar = () => {
             data-bs-toggle="dropdown"
             aria-expanded="false"
           >
-            <i className="fas fa-user fa-fw"></i>
+            <i className="fas fa-user fa-fw" style={{ paddingRight: '4px' }}></i>
+            <span style={{ paddingRight: '4px' }}>{usuarioLogado?.name}</span>
           </button>
           <ul
             className="dropdown-menu dropdown-menu-end"
             aria-labelledby="navbarDropdown"
           >
-            {/* <li>
+            <li>
               <Link className="dropdown-item" to="/admin/perfil">
-                Perfil
+                Configurações
               </Link>
             </li>
             <li>
               <hr className="dropdown-divider" />
-            </li> */}
+            </li>
             <li>
               <button
                 className="dropdown-item"

@@ -1,5 +1,5 @@
 import _ from "lodash";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import { apiService } from "../../../services/api.service";
@@ -7,18 +7,39 @@ import { ObjectHelper } from "../../../helpers/object.helper";
 import Input from "../../shared/input-generico";
 import { AutocompleteGenerico } from "../../shared/autocomplete/autocomplete-generico";
 import { SeletorBooleanoGenerico } from "../../shared/seletor-booleano-generico";
+import {
+  PERMISSIONS,
+  useVerifyPermission,
+} from "../../../hooks/useVerifyPermission";
 
-export const UsuarioPage = () => {
+export const UsuarioPage: React.FC<{
+  backPage?: string;
+  userCode?: string;
+}> = ({ backPage = `/admin/usuarios`, userCode }) => {
   const navigate = useNavigate();
   const params = useParams();
-  const modelId = params.code || null;
+  const modelId = params.code || userCode || null;
   const [model, setModel] = useState({} as any);
-  const [senhaConfirmacao, setsenhaConfirmacao] = useState('');
+  const [senhaConfirmacao, setsenhaConfirmacao] = useState("");
   const [habilitarCamposSenha, setHabilitarCamposSenha] = useState(!modelId);
   const [permissoes, setPermissoes] = useState([] as any[]);
   const [modelAnt, setModelAnt] = useState({} as any);
   const [carregando, setCarregando] = useState(false);
+  const { hasPermission, verifyPermission } = useVerifyPermission(
+    PERMISSIONS.GESTAO_DE_USUARIOS
+  );
 
+  const novoCadastro = useMemo(() => {
+    return model.code ? false : true;
+  }, [model]);
+
+  const edicaoDeUsuarioLogado = useMemo(() => {
+    return model.code === modelId ? true : false;
+  }, [model.code, modelId]);
+
+  const usuarioPodeEditar = useMemo(() => {
+    return novoCadastro || edicaoDeUsuarioLogado || hasPermission;
+  }, [edicaoDeUsuarioLogado, hasPermission, novoCadastro]);
 
   function atualizarModel(chave: string, valor: any) {
     setModel((modelAnt: any) => ({ ...modelAnt, [chave]: valor }));
@@ -27,7 +48,7 @@ export const UsuarioPage = () => {
   async function cancelar(event: any) {
     event.preventDefault();
 
-    navigate(`/admin/usuarios`);
+    navigate(backPage);
   }
 
   async function manipularEnvio(event: any) {
@@ -57,12 +78,12 @@ export const UsuarioPage = () => {
     newModel.situation = newModel.situation ? newModel.situation.code : null;
 
     newModel.permission = newModel.permission
-      ? newModel.permission.map(
-        (permission: any) => {
-          const { code } = ObjectHelper.mantemSomenteCampos(permission, ["code"]);
+      ? newModel.permission.map((permission: any) => {
+          const { code } = ObjectHelper.mantemSomenteCampos(permission, [
+            "code",
+          ]);
           return code;
-        }
-      )
+        })
       : [];
 
     return newModel;
@@ -77,7 +98,9 @@ export const UsuarioPage = () => {
       await apiService.patch(`/user/users/${code}`, newModel);
 
       if (habilitarCamposSenha) {
-        await apiService.patch(`/user/users/${code}/update-password`, { password });
+        await apiService.patch(`/user/users/${code}/update-password`, {
+          password,
+        });
       }
     } else {
       const newModelComSenha = { ...newModel, password };
@@ -148,14 +171,13 @@ export const UsuarioPage = () => {
 
   useEffect(() => {
     setModelAnt({});
-
+    verifyPermission();
     buscarPermissoes();
 
     if (modelId) {
-      console.log({ modelId });
       buscar(modelId);
     } else {
-      atualizarModel('permission', []);
+      atualizarModel("permission", []);
     }
   }, [modelId]);
 
@@ -183,6 +205,7 @@ export const UsuarioPage = () => {
                   required
                   placeholder="Nome"
                   value={model.name || ""}
+                  disabled={carregando || !usuarioPodeEditar}
                   onChange={(e) =>
                     atualizarModel("name", e.currentTarget.value)
                   }
@@ -197,6 +220,7 @@ export const UsuarioPage = () => {
                   required
                   placeholder="E-mail"
                   value={model.email || ""}
+                  disabled={carregando || !usuarioPodeEditar}
                   onChange={(e) =>
                     atualizarModel("email", e.currentTarget.value)
                   }
@@ -212,7 +236,10 @@ export const UsuarioPage = () => {
                   label="Situação"
                   endpoint="/user/situations"
                   value={model?.situation || {}}
-                  onChange={(situation) => atualizarModel("situation", situation ?? {})}
+                  disabled={carregando || !usuarioPodeEditar}
+                  onChange={(situation) =>
+                    atualizarModel("situation", situation ?? {})
+                  }
                 />
               </div>
             </div>
@@ -230,9 +257,10 @@ export const UsuarioPage = () => {
                       id="input-password"
                       label="Senha"
                       required
-                      type='password'
+                      type="password"
                       placeholder="Senha"
                       value={model.password || ""}
+                      disabled={carregando || !usuarioPodeEditar}
                       onChange={(e) =>
                         atualizarModel("password", e.currentTarget.value)
                       }
@@ -244,9 +272,10 @@ export const UsuarioPage = () => {
                       id="input-senhaConfirmacao"
                       label="Confirmar Senha"
                       required
-                      type='password'
+                      type="password"
                       placeholder="Confirmar Senha"
                       value={senhaConfirmacao || ""}
+                      disabled={carregando || !usuarioPodeEditar}
                       onChange={(e) =>
                         setsenhaConfirmacao(e.currentTarget.value)
                       }
@@ -254,7 +283,13 @@ export const UsuarioPage = () => {
                   </div>
                 </>
               ) : (
-                <button className="btn btn-warning" onClick={() => setHabilitarCamposSenha(true)}>Alterar Senha</button>
+                <button
+                  className="btn btn-warning"
+                  disabled={carregando || !usuarioPodeEditar}
+                  onClick={() => setHabilitarCamposSenha(true)}
+                >
+                  Alterar Senha
+                </button>
               )}
             </div>
           </div>
@@ -265,30 +300,54 @@ export const UsuarioPage = () => {
 
           <div className="card-body">
             <div className="row">
-              {permissoes.map(permissao => (
-                <div className="col-md-6" key={`input-permissao-${permissao.code}`}>
-                  <SeletorBooleanoGenerico
-                    id={`input-permissao-${permissao.code}`}
+              {hasPermission ? (
+                permissoes.map((permissao) => (
+                  <div
+                    className="col-md-6"
                     key={`input-permissao-${permissao.code}`}
-                    required
-                    label={permissao.description}
-                    value={model && model.permission && !!model.permission.find((p: any) => p.code === permissao.code)}
-                    onChange={(newValue) => {
-                      if (Number(newValue) === 1) {
-                        const permissaoExiste = model.permission.find((p: any) => p.code === permissao.code);
-
-                        if (!permissaoExiste) {
-                          const userPermission = [...model.permission, permissao];
-                          atualizarModel("permission", userPermission)
-                        }
-                      } else {
-                        const userPermission = model.permission.filter((mPermissao: any) => mPermissao.code !== permissao.code);
-                        atualizarModel("permission", userPermission)
+                  >
+                    <SeletorBooleanoGenerico
+                      id={`input-permissao-${permissao.code}`}
+                      key={`input-permissao-${permissao.code}`}
+                      required
+                      disabled={carregando || !usuarioPodeEditar}
+                      label={permissao.description}
+                      value={
+                        model &&
+                        model.permission &&
+                        !!model.permission.find(
+                          (p: any) => p.code === permissao.code
+                        )
                       }
-                    }}
-                  />
-                </div>
-              ))}
+                      onChange={(newValue) => {
+                        if (Number(newValue) === 1) {
+                          const permissaoExiste = model.permission.find(
+                            (p: any) => p.code === permissao.code
+                          );
+
+                          if (!permissaoExiste) {
+                            const userPermission = [
+                              ...model.permission,
+                              permissao,
+                            ];
+                            atualizarModel("permission", userPermission);
+                          }
+                        } else {
+                          const userPermission = model.permission.filter(
+                            (mPermissao: any) =>
+                              mPermissao.code !== permissao.code
+                          );
+                          atualizarModel("permission", userPermission);
+                        }
+                      }}
+                    />
+                  </div>
+                ))
+              ) : (
+                <h2>
+                  Usuario nao possui autorizacao para alterar as permissoes
+                </h2>
+              )}
             </div>
           </div>
         </div>
@@ -307,7 +366,7 @@ export const UsuarioPage = () => {
             <button
               className="btn btn-success mb-4"
               type="submit"
-              disabled={carregando}
+              disabled={carregando || !usuarioPodeEditar}
             >
               Salvar
             </button>
