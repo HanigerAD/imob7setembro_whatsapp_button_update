@@ -194,6 +194,7 @@ export class ViewPropertyComponent implements OnInit, OnDestroy, OnChanges, Afte
         bedroom: this.filters.bedroom,
         parkingVacancy: this.filters.parkingVacancy,
         bathroom: this.filters.bathroom,
+        suite: this.filters.suite,
       });
     } else {
       this.searchForm = this.formBuilder.group({
@@ -209,6 +210,7 @@ export class ViewPropertyComponent implements OnInit, OnDestroy, OnChanges, Afte
         bedroom: null,
         parkingVacancy: null,
         bathroom: null,
+        suite: null,
       });
     }
 
@@ -274,6 +276,7 @@ export class ViewPropertyComponent implements OnInit, OnDestroy, OnChanges, Afte
     this.filters.minPrice = this.filters.minPrice ? this.converterParaNumero(this.filters.minPrice) : undefined;
     this.filters.maxPrice = this.filters.maxPrice ? this.converterParaNumero(this.filters.maxPrice) : undefined;
     this.filters.bathroom = this.filters.bathroom ? Number(this.filters.bathroom) : undefined;
+    this.filters.suite = this.filters.suite ? Number(this.filters.suite) : undefined;
     this.filters.bedroom = this.filters.bedroom ? Number(this.filters.bedroom) : undefined;
     this.filters.parkingVacancy = this.filters.parkingVacancy ? Number(this.filters.parkingVacancy) : undefined;
     this.filters.financeable = this.filters.financeable ? 1 : 0;

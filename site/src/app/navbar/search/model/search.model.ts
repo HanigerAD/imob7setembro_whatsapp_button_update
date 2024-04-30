@@ -17,4 +17,5 @@ export class SearchModel {
     public bedroom?: number | string;
     public parkingVacancy?: number | string;
     public bathroom?: number | string;
+    public suite?: number | string;
 }
