@@ -109,14 +109,14 @@ export class ViewPropertyComponent implements OnInit, OnDestroy, OnChanges, Afte
 
   get urlToShareWhatsApp(): string {
     const baseUrl = "https://wa.me";
-    const text = `Veja só easse imóvel que encontrei na Imobiliária 7 de Setembro: - ${window.location.href}`;
+    const text = `Veja só esse imóvel que encontrei na Imobiliária 7 de Setembro: - ${window.location.href}`;
     return `${baseUrl}/?text=${text}`;
   }
 
   get infoToShare() {
     return {
       url: window.location.href,
-      description: `Veja só easse imóvel que encontrei na Imobiliária 7 de Setembro: - ${window.location.href}`
+      description: `Veja só esse imóvel que encontrei na Imobiliária 7 de Setembro: - ${window.location.href}`
     }
   }
 
