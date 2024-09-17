@@ -15,23 +15,25 @@
     </li>
 
     <ng-container *ngFor="let page of pages">
-      <ng-container *ngIf="page >= 2 && page >= (actualPage - 1) && page <= (actualPage + 1)  && page < pages.length">
+      <ng-container *ngIf="page >= 2 && page >= (actualPage - 1) && page <=(actualPage + 1) && page < pages.length; else ''">
         <li class="page-item" [ngClass]="{'active': actualPage == page}">
           <a class="page-link pointer" (click)="changePage(page)">{{ page }}</a>
         </li>
       </ng-container>
     </ng-container>
 
-    <li class="page-item" *ngIf="pages.length > 3 && actualPage !== pages.length">
+    <li class="page-item" *ngIf="pages.length > 3 && (actualPage != pages.length && actualPage != pages.length - 1 && actualPage != pages.length - 2)">
       <span class="page-link">...</span>
     </li>
 
-    <li class="page-item" *ngIf="pages.length >= 3" [ngClass]="{'active': actualPage == pages.length}">
+    <li class="page-item" *ngIf="pages.length >= 2" [ngClass]="{'active': actualPage == pages.length}">
       <a class="page-link pointer" (click)="changePage(pages.length)">{{ pages.length }}</a>
     </li>
 
     <li class="page-item" [ngClass]="{'disabled': actualPage == numberOfPages}">
-      <a class="page-link pointer" (click)="changePage(actualPage + 1)">></a>
+      <a class="page-link pointer" (click)="changePage(actualPage + 1)">
+        >
+      </a>
     </li>
   </ul>
 
