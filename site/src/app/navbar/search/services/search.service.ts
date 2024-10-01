@@ -55,7 +55,7 @@ export class SearchService {
         );
   }
 
-  public saveFiltersStorage(filters: SearchModel): void {
+  public saveFiltersStorage(filters: SearchModel): void {   
     localStorage.setItem(StorageEnum.FILTERS, JSON.stringify(filters));
   }
 

@@ -5,7 +5,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { PropertyModel } from '../models/property.model';
 import { PropertyDetailsModel } from '../models/property-details.model';
 import * as L from 'leaflet';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormArray, FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { SearchModel } from '../../navbar/search/model/search.model';
 import { FinalityModel } from '../../navbar/search/model/finality.model';
 import { TypeModel } from '../../navbar/search/model/type.model';
@@ -48,6 +48,35 @@ export class ViewPropertyComponent implements OnInit, OnDestroy, OnChanges, Afte
 
   private subscriptions: Subscription = new Subscription();
 
+  neighborhoodsControl: any = []
+
+  createFormArray(): void {
+    
+    const values = this.neighborhoods.map(v => new FormControl(false));
+    this.neighborhoodsControl = this.formBuilder.array(values)
+    this.keepSearchFilters()
+    this.generateForm()
+  }
+
+  getNeighborhoodControls() {
+
+    return this.searchForm.get('neighborhood') ? (<FormArray>this.searchForm.get('neighborhood')).controls : null;
+  }
+
+  prepareNeighborhoodToSend() {
+    
+    const neighborhoodSubmit = this.filters.neighborhood
+      .map((value, index) => value ? this.neighborhoods[index].code : null)
+      .filter(value => value !== null)
+
+    return neighborhoodSubmit.length > 0 ? neighborhoodSubmit : [0]
+  }
+
+  private keepSearchFilters(): void {
+    this.filters = this.searchForm.getRawValue();
+  }
+
+  
   constructor(
     private service: PropertyService,
     private activatedRoute: ActivatedRoute,
@@ -187,7 +216,7 @@ export class ViewPropertyComponent implements OnInit, OnDestroy, OnChanges, Afte
         type: this.filters.type,
         city: this.filters.city,
         zone: this.filters.zone,
-        neighborhood: this.filters.neighborhood,
+        neighborhood: this.neighborhoodsControl,
         code: this.filters.code,
         minPrice: [this.filters.minPrice ? this.formatMoney(this.filters.minPrice) : ''],
         maxPrice: [this.filters.maxPrice ? this.formatMoney(this.filters.maxPrice) : ''],
@@ -202,7 +231,7 @@ export class ViewPropertyComponent implements OnInit, OnDestroy, OnChanges, Afte
         finality: 0,
         type: 0,
         city: 0,
-        neighborhood: 0,
+        neighborhood: this.neighborhoodsControl,
         zone: 0,
         code: null,
         minPrice: '',
@@ -257,8 +286,10 @@ export class ViewPropertyComponent implements OnInit, OnDestroy, OnChanges, Afte
   public getNeighborhoods(): void {
     this.subscriptions.add(
       this.searchService.getNeighborhoods(this.searchForm.get('city').value).subscribe(
-        neighborhoods => this.neighborhoods = neighborhoods
-      )
+        neighborhoods => {
+          this.neighborhoods = neighborhoods
+          this.createFormArray()
+        })
     );
   }
 
@@ -268,7 +299,7 @@ export class ViewPropertyComponent implements OnInit, OnDestroy, OnChanges, Afte
     this.filters.city = this.filters.city && this.filters.city !== '0' ? this.filters.city : undefined;
     this.filters.code = this.filters.code && this.filters.code !== '0' ? this.filters.code : undefined;
     this.filters.finality = this.filters.finality && this.filters.finality !== '0' ? this.filters.finality : undefined;
-    this.filters.neighborhood = this.filters.neighborhood && this.filters.neighborhood !== '0' ? this.filters.neighborhood : undefined;
+    this.filters.neighborhood = this.filters.neighborhood && this.filters.neighborhood.length === 0 ? [0] : this.prepareNeighborhoodToSend();
     this.filters.featured = this.filters.featured && this.filters.featured !== '0' ? this.filters.featured : undefined;
     this.filters.zone = this.filters.zone && this.filters.zone !== '0' ? this.filters.zone : undefined;
     this.filters.showSite = this.filters.showSite && this.filters.showSite !== '0' ? this.filters.showSite : undefined;

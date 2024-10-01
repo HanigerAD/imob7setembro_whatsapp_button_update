@@ -54,7 +54,8 @@ export class SearchComponent implements OnInit, OnDestroy {
       finality: 0,
       type: 0,
       city: 0,
-      neighborhood: 0,
+      neighborhood: 
+      [[0]],
       internalCode: null,
       minPrice: '',
       maxPrice: '',

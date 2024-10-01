@@ -21,7 +21,7 @@ export class NavbarService {
         .zone(0)
         .finality(1)
         .city(0)
-        .neighborhood(0)
+        .neighborhood([])
         .type(0)
         .maxPrice(10000000)
     .build();
@@ -32,7 +32,7 @@ export class NavbarService {
         .zone(0)
         .finality(2)
         .city(0)
-        .neighborhood(0)
+        .neighborhood([])
         .type(0)
         .maxPrice(10000000)
       .build();
@@ -44,7 +44,7 @@ export class NavbarService {
         .type(0)
         .zone(PropertyZoneEnum.RURAL)
         .city(0)
-        .neighborhood(0)
+        .neighborhood([])
         .maxPrice(10000000)
     .build();
   }
@@ -55,7 +55,7 @@ export class NavbarService {
         .type(PropertyTypeEnum.EMPREENDIMENTO)
         .zone(PropertyZoneEnum.URBAN)
         .city(0)
-        .neighborhood(0)
+        .neighborhood([])
         .maxPrice(10000000)
         .financeable(1)
     .build();

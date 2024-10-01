@@ -66,12 +66,14 @@
                       <option *ngFor="let city of cities" [value]="city.code"> {{ city.description }} </option>
                     </select>
                   </div>
-                  <div class="form-group">
-                    <select class="wide select_option form-control" formControlName="neighborhood">
-                      <option data-display="Locations" value="0">Bairros</option>
-                      <option *ngFor="let neighnorhood of neighborhoods" [value]="neighnorhood.code"> {{
-                        neighnorhood.description }}</option>
-                    </select>
+
+                  <div class="form-group" *ngIf="neighborhoods && neighborhoods.length > 0">
+                      <div class="checkbox" class="row-sm-6"  formArrayName="neighborhood">
+                        <div *ngFor="let item of getNeighborhoodControls(); let i = index">
+                          <input type="checkbox" [formControlName]="i">
+                          <span class="p-2">{{ neighborhoods[i].description }}</span>
+                        </div> 
+                      </div>
                   </div>
                   <div class="form-group">
                     <select class="wide select_option form-control" formControlName="bedroom">

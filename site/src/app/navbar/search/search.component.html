@@ -63,8 +63,9 @@
                           </div>
 
                           <div class="col-lg-3 mb-3" *ngIf="activatedTab == 'URBAN'">
-                            <select class="select_option form-control" name="select" [disabled]="!neighborhoods.length"
-                              formControlName="neighborhood">
+                            <!-- <select class="select_option form-control" name="select" [disabled]="!neighborhoods.length"
+                              formControlName="neighborhood"> -->
+                              <select class="select_option form-control" name="select" formControlName="neighborhood">
                               <option value="0"> Bairros </option>
                               <option *ngFor="let neighborhood of neighborhoods" [value]="neighborhood.code">
                                 {{ neighborhood.description }}
