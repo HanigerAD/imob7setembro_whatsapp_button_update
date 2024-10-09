@@ -62,16 +62,15 @@
                             </select>
                           </div>
 
-                          <div class="col-lg-3 mb-3" *ngIf="activatedTab == 'URBAN'">
-                            <!-- <select class="select_option form-control" name="select" [disabled]="!neighborhoods.length"
-                              formControlName="neighborhood"> -->
-                              <select class="select_option form-control" name="select" formControlName="neighborhood">
-                              <option value="0"> Bairros </option>
-                              <option *ngFor="let neighborhood of neighborhoods" [value]="neighborhood.code">
-                                {{ neighborhood.description }}
-                              </option>
-
-                            </select>
+                          <div class="col-lg-3 mb-3" *ngIf="activatedTab == 'URBAN'">                            
+                            <div class="checkbox" class="row-sm-6"  formArrayName="neighborhood" *ngIf="neighborhoods && neighborhoods.length > 0">
+                              <div id="scrollable-checkbox-list">
+                                <div *ngFor="let item of getNeighborhoodControls(); let i = index" class="neighborhood-item">
+                                  <input type="checkbox" [formControlName]="i">
+                                  <span class="p-1">{{ neighborhoods[i].description }}</span>
+                                </div> 
+                              </div>
+                            </div>
                           </div>
 
                           <div class="col-lg-3 mb-3" *ngIf="activatedTab == 'CODE'">
@@ -79,20 +78,20 @@
                               placeholder="Código">
                           </div>
 
-                          <div class="col-lg-3 mb-3 input-group-append"
+                          <div class="col-lg-3 mb-3"
                             *ngIf="activatedTab == 'URBAN' || activatedTab == 'RURAL'">
                             <input type="text" class="form-control" appAllowDecimalNumber formControlName="minPrice"
                               (keyup)="transformCurrency('minPrice')" placeholder="Valor Min." />
                           </div>
 
-                          <div class="col-lg-3 mb-3 input-group-append"
+                          <div class="col-lg-3 mb-3"
                             *ngIf="activatedTab == 'URBAN' || activatedTab == 'RURAL'">
                             <input type="text" class="form-control" appAllowDecimalNumber formControlName="maxPrice"
                               (keyup)="transformCurrency('maxPrice')" placeholder="Valor Máx." />
                           </div>
 
-                          <div class="col-lg-3 mb-3 input-group-append">
-                            <button class="btn btn-primary btn-block" type="submit" (click)="search()">
+                          <div class="col-lg-3 mb-3">
+                            <button class="btn btn-primary btn-block h-100" type="submit" (click)="search()">
                               <i class="fa fa-search"></i> <span class="ml-1 text-uppercase">Buscar</span>
                             </button>
                           </div>

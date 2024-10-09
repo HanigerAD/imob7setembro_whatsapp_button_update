@@ -42,23 +42,32 @@ export class ListPropertiesComponent implements OnInit, OnChanges {
   public actualPage = 1;
   public perPage = 12;
   
-  neighborhoodsControl: any = []
+  private neighborhoodsControl: any = []
 
-  createFormArray(): void {
+  private createFormArray(): void {
+
+    const {neighborhood} = JSON.parse(localStorage.getItem(StorageEnum.FILTERS))
+
+    let values = []
+    if (neighborhood[0] !== 0) {
+      values = this.neighborhoods.map(v => new FormControl(neighborhood.includes(v.code)));
+    } else {
+      values = this.neighborhoods.map(v => new FormControl(false));
+    }
     
-    const values = this.neighborhoods.map(v => new FormControl(false));
     this.neighborhoodsControl = this.formBuilder.array(values)
     this.keepSearchFilters()
+    this.filters.neighborhood = neighborhood
     this.generateForm()
   }
 
-  getNeighborhoodControls() {
+  private getNeighborhoodControls() {
 
     return this.searchForm.get('neighborhood') ? (<FormArray>this.searchForm.get('neighborhood')).controls : null;
   }
 
-  prepareNeighborhoodToSend() {
-    
+  private prepareNeighborhoodToSend() {
+
     const neighborhoodSubmit = this.filters.neighborhood
       .map((value, index) => value ? this.neighborhoods[index].code : null)
       .filter(value => value !== null)
@@ -145,7 +154,7 @@ export class ListPropertiesComponent implements OnInit, OnChanges {
         financeable: this.filters.financeable,
         finality: this.filters.finality,
         type: this.filters.type,
-        city: this.filters.city ,
+        city: this.filters.city,
         zone: this.filters.zone,
         neighborhood: this.neighborhoodsControl,
         code: this.filters.code,
@@ -216,8 +225,6 @@ export class ListPropertiesComponent implements OnInit, OnChanges {
     this.filters.minPrice = this.filters.minPrice ? this.converterParaNumero(this.filters.minPrice) : undefined;
     this.filters.maxPrice = this.filters.maxPrice ? this.converterParaNumero(this.filters.maxPrice) : undefined;
     this.loading = true;
-
-    console.log('filtros getProperties', this.filters)
     
     this.subscriptions.add(
       this.service.getProperties(this.filters).subscribe(
@@ -247,8 +254,6 @@ export class ListPropertiesComponent implements OnInit, OnChanges {
 
   public searchProperties(): void {
     this.filters = this.searchForm.getRawValue();
-
-    console.log('filtros neighborhood search', this.filters.neighborhood)
     
     this.filters.city = this.filters.city && this.filters.city !== '0' ? this.filters.city : undefined;
     this.filters.code = this.filters.code && this.filters.code !== '0' ? this.filters.code : undefined;

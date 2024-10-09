@@ -1,11 +1,11 @@
 import { AfterViewInit, Component, OnChanges, OnDestroy, OnInit } from '@angular/core';
+import { FormArray, FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { PropertyService } from '../services/property.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { PropertyModel } from '../models/property.model';
 import { PropertyDetailsModel } from '../models/property-details.model';
 import * as L from 'leaflet';
-import { FormArray, FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { SearchModel } from '../../navbar/search/model/search.model';
 import { FinalityModel } from '../../navbar/search/model/finality.model';
 import { TypeModel } from '../../navbar/search/model/type.model';
@@ -16,7 +16,6 @@ import { Options } from '@angular-slider/ngx-slider';
 import { StorageEnum } from '../../shared/storage.enum';
 import { ZoneModel } from '../../navbar/search/model/zone.model';
 import { PropertyZoneEnum } from '../../navbar/search/enum/property-zone.enum';
-import { TransactionEnum } from '../../shared/enum/transaction.enum';
 import { converterParaMoeda } from '../../shared/utils/parser.utils';
 import { PartnerModel } from 'src/app/shared/model/partner.model';
 
@@ -48,9 +47,9 @@ export class ViewPropertyComponent implements OnInit, OnDestroy, OnChanges, Afte
 
   private subscriptions: Subscription = new Subscription();
 
-  neighborhoodsControl: any = []
+  private neighborhoodsControl: any = []
 
-  createFormArray(): void {
+  private createFormArray(): void {
     
     const values = this.neighborhoods.map(v => new FormControl(false));
     this.neighborhoodsControl = this.formBuilder.array(values)
@@ -58,12 +57,12 @@ export class ViewPropertyComponent implements OnInit, OnDestroy, OnChanges, Afte
     this.generateForm()
   }
 
-  getNeighborhoodControls() {
+  private getNeighborhoodControls() {
 
     return this.searchForm.get('neighborhood') ? (<FormArray>this.searchForm.get('neighborhood')).controls : null;
   }
 
-  prepareNeighborhoodToSend() {
+  private prepareNeighborhoodToSend() {
     
     const neighborhoodSubmit = this.filters.neighborhood
       .map((value, index) => value ? this.neighborhoods[index].code : null)
@@ -231,7 +230,7 @@ export class ViewPropertyComponent implements OnInit, OnDestroy, OnChanges, Afte
         finality: 0,
         type: 0,
         city: 0,
-        neighborhood: this.neighborhoodsControl,
+        neighborhood: [0],
         zone: 0,
         code: null,
         minPrice: '',
@@ -288,8 +287,8 @@ export class ViewPropertyComponent implements OnInit, OnDestroy, OnChanges, Afte
       this.searchService.getNeighborhoods(this.searchForm.get('city').value).subscribe(
         neighborhoods => {
           this.neighborhoods = neighborhoods
-          this.createFormArray()
-        })
+          this.createFormArray()    
+      })
     );
   }
 
@@ -298,12 +297,12 @@ export class ViewPropertyComponent implements OnInit, OnDestroy, OnChanges, Afte
     
     this.filters.city = this.filters.city && this.filters.city !== '0' ? this.filters.city : undefined;
     this.filters.code = this.filters.code && this.filters.code !== '0' ? this.filters.code : undefined;
-    this.filters.finality = this.filters.finality && this.filters.finality !== '0' ? this.filters.finality : undefined;
+    this.filters.finality = this.filters.finality && this.filters.finality !== '0' ? this.filters.finality : 0;
     this.filters.neighborhood = this.filters.neighborhood && this.filters.neighborhood.length === 0 ? [0] : this.prepareNeighborhoodToSend();
     this.filters.featured = this.filters.featured && this.filters.featured !== '0' ? this.filters.featured : undefined;
-    this.filters.zone = this.filters.zone && this.filters.zone !== '0' ? this.filters.zone : undefined;
+    this.filters.zone = this.filters.zone && this.filters.zone !== '0' ? this.filters.zone : 1;
     this.filters.showSite = this.filters.showSite && this.filters.showSite !== '0' ? this.filters.showSite : undefined;
-    this.filters.type = this.filters.type && this.filters.type !== '0' ? this.filters.type : undefined;
+    this.filters.type = this.filters.type && this.filters.type !== '0' ? this.filters.type : 0;
     this.filters.minPrice = this.filters.minPrice ? this.converterParaNumero(this.filters.minPrice) : undefined;
     this.filters.maxPrice = this.filters.maxPrice ? this.converterParaNumero(this.filters.maxPrice) : undefined;
     this.filters.bathroom = this.filters.bathroom ? Number(this.filters.bathroom) : undefined;

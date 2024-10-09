@@ -9,9 +9,10 @@ import { AppService } from './services/app.service';
 import { AppRestService } from './services/app-rest.service';
 import { SearchComponent } from './navbar/search/search.component';
 import { NgxSliderModule } from '@angular-slider/ngx-slider';
+import { NgSelectModule } from '@ng-select/ng-select';
 import { SearchService } from './navbar/search/services/search.service';
 import { SearchRestService } from './navbar/search/services/search-rest.service';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NavbarService } from './navbar/navbar.service';
 import { ListPropertiesComponent } from './property/list-properties/list-properties.component';
 import { PropertyService } from './property/services/property.service';
@@ -71,6 +72,7 @@ import { HomepageRestService } from './shared/services/homepage-rest.service';
     HttpClientModule,
     NgxSliderModule,
     ReactiveFormsModule,
+    FormsModule,
     NgbModule,
     NgxMaskModule.forRoot(),
     ShareButtonsModule,
@@ -79,6 +81,7 @@ import { HomepageRestService } from './shared/services/homepage-rest.service';
     RouterModule,
     NgxSliderModule,
     SharedModule,
+    NgSelectModule
   ],
   providers: [
     AppService,
