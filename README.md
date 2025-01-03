@@ -1,6 +1,8 @@
 # Imobiliaria 7 de Setembro
 Repositorio com o codigo de [API](#api), [FRONTEND](#frontend) e [ADMIN](#admin)
 
+### Instruções para desenvolvimento em [DEV MODE](#dev-mode)
+
 ## API
 Api desenvolvida com NestJS
 ### Como executar em modo desenvolvimento?
@@ -13,19 +15,19 @@ docker compose up build-api
 ```
 
 ## FRONTEND
-Aplicação construida com ReactJS
+Aplicação construida com AngularJS
 ### Como executar em modo desenvolvimento?
 ```sh
-docker compose up frontend
+docker compose up site
 ```
 ### Como executar o build?
 ```sh
-docker compose up build-frontend
+docker compose up build-site
 ```
 
 
 ## ADMIN
-Aplicação construida com Angular JS
+Aplicação construida com ReactJS
 ### Como executar em modo desenvolvimento?
 ```sh
 docker compose up admin
@@ -43,3 +45,17 @@ npm run build
 Isso fará com que as pastas dos servers sejam atualizadas com os arquivos de builds gerados.
 
 Após sua execução, você deve subir seu conteudo manualmente para seus respectivos servidores.
+
+## DEV MODE
+
+Este projeto foi desenvolvido em modo containerizado (Docker) e no paradigma  MonoRepo. Portanto para o correto funcionamento do ambiente de desenvolvimento você deve:
+
+1. Ter o [Docker](https://docker.com) instalado na sua máquina de desenvolvimento;
+2. Para subir a aplicação base você deve copiar o arquivo `./.dev.api.env`, que está no diretório raíz deste projeto, para a raiz da pasta API e renomeá-lo para `.env`. Após isto executar o comando `docker compose up api` que irá subir os ambientes `API`e `Database`, liberando com isto as portas 3000 e 3306 em cada container para os serviços prestados pela API e o banco MySQL respectivamente;
+Para subir a aplicação `Site` utilize como parametro da variável ambiente o termo `development`, também copiando o arquivo `./admin/env.example` e renomeando o mesmo para `.env`. Ainda para o site modifique o arquivo `./admin/package.json` na propriedade `start` inserindo o termo `PORT=xxxx react-scripts start` para Linux/MacOS ou `Set PORT=xxxx && react-scripts start`. Voce pode utilizar por exemplo a porta `5000`
+3. Após este procedimento as duas aplicações frontend **(Admin e Site)** podem ser iniciadas conforme instruções de cada seção como está no início deste documento.
+
+Para acessar as aplicações utilize:
+
+- Para Site: http://localhost:5000 (caso tenha optado por esta porta na configuração descrita acima)
+- Para Admin: http://localhost:4200
