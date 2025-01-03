@@ -14,6 +14,8 @@ import { ImageSizeEnum } from "../enum/image-size.enum";
 import fetch from "node-fetch";
 import axios from "axios";
 
+sharp.concurrency(1)
+
 @Injectable()
 export class ImageService {
   constructor(private cdnService: CdnService) { }
