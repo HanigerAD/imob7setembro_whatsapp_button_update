@@ -265,8 +265,6 @@ export const ImovelPage = () => {
 
     let code = modelId || "";
 
-    console.log("Save form: ", newModel);
-
     if (code) {
       await apiService.patch(`/property/properties/${code}`, newModel);
     } else {
