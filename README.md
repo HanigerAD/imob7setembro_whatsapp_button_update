@@ -46,6 +46,8 @@ Isso fará com que as pastas dos servers sejam atualizadas com os arquivos de bu
 
 Após sua execução, você deve subir seu conteudo manualmente para seus respectivos servidores.
 
+> **ATENÇÃO**: Os diretórios de Build nas aplicações provavelmente não estarão atualizados com a última versão do código fonte no repositório do GitHub. Isto iria pesar desnessariamente o repositório com builds subsequentes, já que não há nenhum tipo de processo de CI/CD no momento que utilize estes diretórios a partir deste repositório.
+
 ## DEV MODE
 
 Este projeto foi desenvolvido em modo containerizado (Docker) e no paradigma  MonoRepo. Portanto para o correto funcionamento do ambiente de desenvolvimento você deve:
