@@ -1,5 +1,8 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { FormArray, FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { Component, Input, OnDestroy, OnInit, ElementRef, ViewChild } from '@angular/core';
+import { FormBuilder, FormGroup, FormControl, FormArray } from '@angular/forms';
+import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
+import { MatChipInputEvent } from '@angular/material/chips';
+import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { Options } from '@angular-slider/ngx-slider';
 import { LoginModel } from '../../shared/model/login.model';
 import { Subscription } from 'rxjs';
@@ -29,7 +32,12 @@ export class SearchComponent implements OnInit, OnDestroy {
   public types: TypeModel[] = [];
   public cities: CityModel[] = [];
   public neighborhoods: NeighborhoodModel[] = [];
+  public filteredNeighborhoods: NeighborhoodModel[] = [];
+  public selectedNeighborhoods: NeighborhoodModel[] = [];
   public activatedTab: SearchTabsEnum = SearchTabsEnum.URBAN;
+  readonly separatorKeysCodes = [ENTER, COMMA] as const;
+
+  @ViewChild('neighborhoodInput') neighborhoodInput: ElementRef<HTMLInputElement>;
 
   private subscriptions: Subscription = new Subscription();
 
@@ -86,8 +94,7 @@ export class SearchComponent implements OnInit, OnDestroy {
       finality: 0,
       type: 0,
       city: 0,
-      neighborhood: 
-      [[0]],
+      neighborhood: [[]],
       internalCode: null,
       minPrice: '',
       maxPrice: '',
@@ -164,10 +171,47 @@ export class SearchComponent implements OnInit, OnDestroy {
   public getNeighborhoods(): void {
     this.subscriptions.add(
       this.service.getNeighborhoods(this.searchForm.get('city').value).subscribe(
-        neighborhoods => {this.neighborhoods = neighborhoods
-        this.createFormArray()
-  })
+        neighborhoods => {
+          this.neighborhoods = neighborhoods;
+          this.filteredNeighborhoods = neighborhoods;
+          // Clear selected neighborhoods when city changes
+          this.selectedNeighborhoods = [];
+          this.updateNeighborhoodFormValue();
+        }
+      )
     );
+  }
+
+  public removeNeighborhood(neighborhood: NeighborhoodModel): void {
+    const index = this.selectedNeighborhoods.findIndex(n => n.code === neighborhood.code);
+    if (index >= 0) {
+      this.selectedNeighborhoods.splice(index, 1);
+      this.updateNeighborhoodFormValue();
+      // Reset input field after removing
+      if (this.neighborhoodInput) {
+        this.neighborhoodInput.nativeElement.value = '';
+      }
+    }
+  }
+
+  public selectNeighborhood(event: MatAutocompleteSelectedEvent): void {
+    const neighborhood = event.option.value as NeighborhoodModel;
+    if (!this.selectedNeighborhoods.find(n => n.code === neighborhood.code)) {
+      this.selectedNeighborhoods.push(neighborhood);
+      this.updateNeighborhoodFormValue();
+    }
+    // Clear the input field after selection
+    if (this.neighborhoodInput) {
+      this.neighborhoodInput.nativeElement.value = '';
+      // Return focus to the input to allow multiple selections
+      this.neighborhoodInput.nativeElement.focus();
+    }
+  }
+
+  private updateNeighborhoodFormValue(): void {
+    this.searchForm.patchValue({
+      neighborhood: this.selectedNeighborhoods.map(n => n.code)
+    });
   }
 
   public search(): void {

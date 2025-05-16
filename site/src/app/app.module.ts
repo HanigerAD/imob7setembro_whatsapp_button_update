@@ -1,5 +1,10 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MatChipsModule } from '@angular/material/chips';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatIconModule } from '@angular/material/icon';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -81,7 +86,12 @@ import { HomepageRestService } from './shared/services/homepage-rest.service';
     RouterModule,
     NgxSliderModule,
     SharedModule,
-    NgSelectModule
+    NgSelectModule,
+    BrowserAnimationsModule,
+    MatChipsModule,
+    MatAutocompleteModule,
+    MatFormFieldModule,
+    MatIconModule
   ],
   providers: [
     AppService,

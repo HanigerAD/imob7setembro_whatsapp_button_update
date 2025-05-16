@@ -62,14 +62,26 @@
                             </select>
                           </div>
 
-                          <div class="col-lg-3 mb-3" *ngIf="activatedTab == 'URBAN'">                            
-                            <div class="checkbox" class="row-sm-6"  formArrayName="neighborhood" *ngIf="neighborhoods && neighborhoods.length > 0">
-                              <div id="scrollable-checkbox-list">
-                                <div *ngFor="let item of getNeighborhoodControls(); let i = index" class="neighborhood-item">
-                                  <input type="checkbox" [formControlName]="i">
-                                  <span class="p-1">{{ neighborhoods[i].description }}</span>
-                                </div> 
+                          <div class="col-lg-3 mb-3" *ngIf="activatedTab == 'URBAN'">
+                            <div class="chip-field-container"
+                              *ngIf="searchForm.get('city').value && filteredNeighborhoods.length > 0">
+                              <div class="chip-field select_option form-control">
+                                <mat-chip-list #chipList>
+                                  <mat-chip *ngFor="let neighborhood of selectedNeighborhoods" [removable]="true"
+                                    (removed)="removeNeighborhood(neighborhood)">
+                                    {{neighborhood.description}}
+                                    <span matChipRemove class="material-icons" id="cancel-icon">cancel</span>
+                                  </mat-chip>
+                                  <input #neighborhoodInput [matAutocomplete]="auto" [matChipInputFor]="chipList"
+                                    [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                                    [placeholder]="selectedNeighborhoods.length ? '' : 'Selecione os bairros'">
+                                </mat-chip-list>
                               </div>
+                              <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selectNeighborhood($event)">
+                                <mat-option *ngFor="let neighborhood of filteredNeighborhoods" [value]="neighborhood">
+                                  {{neighborhood.description}}
+                                </mat-option>
+                              </mat-autocomplete>
                             </div>
                           </div>
 
@@ -78,14 +90,12 @@
                               placeholder="Código">
                           </div>
 
-                          <div class="col-lg-3 mb-3"
-                            *ngIf="activatedTab == 'URBAN' || activatedTab == 'RURAL'">
+                          <div class="col-lg-3 mb-3" *ngIf="activatedTab == 'URBAN' || activatedTab == 'RURAL'">
                             <input type="text" class="form-control" appAllowDecimalNumber formControlName="minPrice"
                               (keyup)="transformCurrency('minPrice')" placeholder="Valor Min." />
                           </div>
 
-                          <div class="col-lg-3 mb-3"
-                            *ngIf="activatedTab == 'URBAN' || activatedTab == 'RURAL'">
+                          <div class="col-lg-3 mb-3" *ngIf="activatedTab == 'URBAN' || activatedTab == 'RURAL'">
                             <input type="text" class="form-control" appAllowDecimalNumber formControlName="maxPrice"
                               (keyup)="transformCurrency('maxPrice')" placeholder="Valor Máx." />
                           </div>
