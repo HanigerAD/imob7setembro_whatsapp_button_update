@@ -2,6 +2,11 @@
   text-transform: inherit !important;
 }
 
+.search__container {
+  display: flex;
+  justify-content: center;
+}
+
 .search-box {
   background-color: #FFFFFF !important;
   display: flex;
@@ -109,4 +114,10 @@
 
 #cancel-icon {
   line-height: 18px;
+}
+
+#neighborhoodInput {
+  min-height: 60px;
+  height: auto;
+
 }
