@@ -116,36 +116,35 @@ export class ImageService {
   }
 
   private async aplicarMarcaDagua(image: string | Buffer, logo: string | Buffer): Promise<Buffer> {
+
     const baseImageBuffer = await this.loadImageBuffer(image);
-    const baseImage = await sharp(baseImageBuffer).withMetadata();
-
+    const baseImage = sharp(baseImageBuffer).withMetadata();
+  
     const watermarkBuffer = await this.loadImageBuffer(logo);
-    const watermark = await sharp(watermarkBuffer).withMetadata();
-
+    const watermark = sharp(watermarkBuffer).withMetadata();
+  
     const { width: baseImageWidth, height: baseImageHeight } = await baseImage.metadata();
-    let { width: watermarkWidth, height: watermarkHeight } = await watermark.metadata();
-
-    let newWatermarkWidth = baseImageWidth / 5;
-    let newWatermarkHeight = 0;
-
-    if (watermarkWidth > newWatermarkWidth) {
-      newWatermarkHeight = (watermarkHeight * ((newWatermarkWidth * 100) / watermarkWidth)) / 100;
-    } else {
-      newWatermarkHeight = (watermarkHeight * ((watermarkWidth * 100) / newWatermarkWidth)) / 100;
-    }
-
-    const newWatermarkBuffer = await watermark.resize(Math.round(newWatermarkWidth), Math.round(newWatermarkHeight), {
-      fit: 'inside'
-    })
+    const { width: watermarkWidth, height: watermarkHeight } = await watermark.metadata();
+  
+    const newWatermarkWidth = baseImageWidth / 5;
+    const newWatermarkHeight = watermarkHeight * (newWatermarkWidth / watermarkWidth);
+  
+    const resizedWatermarkBuffer = await watermark
+      .resize(Math.round(newWatermarkWidth), Math.round(newWatermarkHeight), { fit: 'inside' })
       .withMetadata()
       .png()
       .toBuffer();
-
-    const X = (baseImageWidth / 2) - (watermarkWidth / 2);
-    const Y = (baseImageHeight / 2) - (watermarkHeight / 2);
-
-    const imageToComposite = { input: newWatermarkBuffer, top: Math.round(X), left: Math.round(Y) } as sharp.OverlayOptions;
-
+  
+    // Usa os valores redimensionados para centralizar corretamente
+    const X = Math.round((baseImageWidth - newWatermarkWidth) / 2);
+    const Y = Math.round((baseImageHeight - newWatermarkHeight) / 2);
+  
+    const imageToComposite: sharp.OverlayOptions = {
+      input: resizedWatermarkBuffer,
+      left: X,
+      top: Y
+    };
+  
     const compositeImage = await baseImage.composite([imageToComposite]).withMetadata();
 
     const finalImage = await compositeImage.toBuffer();
