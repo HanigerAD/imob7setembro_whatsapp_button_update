@@ -17,7 +17,10 @@ import {
 import { MapaComponent } from "../../shared/mapa/mapa-component";
 import { PropertyTypeEnum } from "./property-type.enum";
 import { ToastHelper } from "../../../helpers/toast.helper";
-import { PERMISSIONS, useVerifyPermission } from "../../../hooks/useVerifyPermission";
+import {
+  PERMISSIONS,
+  useVerifyPermission,
+} from "../../../hooks/useVerifyPermission";
 
 type ImovelProps = {
   internalCode?: number;
@@ -60,30 +63,30 @@ type ImovelProps = {
   transaction?: number;
   situation?: number;
   linkYoutube?: string;
-}
+};
 
 const MODEL_INITIAL = {
   show: 1,
-  price: '0.00',
+  price: "0.00",
   dormitory: 0,
   unitAvailable: 1,
   bathroom: 0,
   parkingVacancy: 0,
-  privativeArea: '0',
-  totalArea: '0',
+  privativeArea: "0",
+  totalArea: "0",
   pavement: 0,
   financeable: 0,
   reserved: 0,
-  hectare: '0',
+  hectare: "0",
   featured: 0,
   superFeatured: 0,
   suite: 0,
   rented: 0,
   number: 0,
-  condominiumPrice: '0.00',
+  condominiumPrice: "0.00",
   showValue: 1,
   latitude: "-30.1093317",
-  longitude: "-51.3204208"
+  longitude: "-51.3204208",
 } as ImovelProps;
 
 export const ImovelPage = () => {
@@ -94,7 +97,9 @@ export const ImovelPage = () => {
   const [federativeUnits, setFederativeUnits] = useState([]);
   const [neighborhoods, setNeighborhoods] = useState([]);
   const [carregando, setCarregando] = useState(false);
-  const { hasPermission, verifyPermission } = useVerifyPermission(PERMISSIONS.GESTAO_DE_IMOVEIS);
+  const { hasPermission, verifyPermission } = useVerifyPermission(
+    PERMISSIONS.GESTAO_DE_IMOVEIS
+  );
 
   const modelId = params.code || null;
 
@@ -173,21 +178,21 @@ export const ImovelPage = () => {
       "longitude",
       "transaction",
       "situation",
-      "linkYoutube"
+      "linkYoutube",
     ]);
 
     [
-      'internalCode',
-      'dormitory',
-      'unitAvailable',
-      'bathroom',
-      'parkingVacancy',
-      'pavement',
-      'number',
-      'financeable',
-      'constuctionYear',
-      'suite',
-    ].forEach(key => {
+      "internalCode",
+      "dormitory",
+      "unitAvailable",
+      "bathroom",
+      "parkingVacancy",
+      "pavement",
+      "number",
+      "financeable",
+      "constuctionYear",
+      "suite",
+    ].forEach((key) => {
       if (!!newModel[key]) {
         newModel[key] = Number(newModel[key]);
       }
@@ -343,19 +348,21 @@ export const ImovelPage = () => {
   async function salvar(data: any) {
     setCarregando(true);
     const toastHelper = new ToastHelper();
-    toastHelper.loading('Processando...');
+    toastHelper.loading("Processando...");
 
     try {
       let code = await salvarImovel(data);
       await salvarImagensDoImovel(code, data.images);
       await salvarDocumentosDoImovel(code, data.documents);
 
-      toastHelper.success('Registro salvo com sucesso');
+      toastHelper.success("Registro salvo com sucesso");
       setCarregando(false);
 
       navigate(`/admin/imoveis`);
     } catch (error: any) {
-      let errorMessage = error?.response?.data?.message || "Houve um erro ao salvar o Imovel. Verifique se os campos foram preenchidos corretamente";
+      let errorMessage =
+        error?.response?.data?.message ||
+        "Houve um erro ao salvar o Imovel. Verifique se os campos foram preenchidos corretamente";
       toastHelper.error(errorMessage);
 
       if (error?.response?.data?.errors) {
@@ -461,6 +468,10 @@ export const ImovelPage = () => {
         newModel.price = converterParaMoeda(String(newModel.price));
       }
 
+      if (newModel.hectare) {
+        newModel.hectare = String(newModel.hectare);
+      }
+
       if (newModel.condominiumPrice) {
         newModel.condominiumPrice = converterParaMoeda(
           String(newModel.condominiumPrice)
@@ -472,8 +483,8 @@ export const ImovelPage = () => {
       }
 
       if (!newModel.latitude || !newModel.longitude) {
-        newModel.latitude = '-30.1093317';
-        newModel.longitude = '-51.3204208';
+        newModel.latitude = "-30.1093317";
+        newModel.longitude = "-51.3204208";
       } else {
         newModel.latitude = String(Number(newModel.latitude).toFixed(7));
         newModel.longitude = String(Number(newModel.longitude).toFixed(7));
@@ -482,20 +493,25 @@ export const ImovelPage = () => {
       newModel.show = newModel.show || MODEL_INITIAL.show;
       newModel.price = newModel.price || MODEL_INITIAL.price;
       newModel.dormitory = newModel.dormitory || MODEL_INITIAL.dormitory;
-      newModel.unitAvailable = newModel.unitAvailable || MODEL_INITIAL.unitAvailable;
+      newModel.unitAvailable =
+        newModel.unitAvailable || MODEL_INITIAL.unitAvailable;
       newModel.bathroom = newModel.bathroom || MODEL_INITIAL.bathroom;
-      newModel.parkingVacancy = newModel.parkingVacancy || MODEL_INITIAL.parkingVacancy;
-      newModel.privativeArea = newModel.privativeArea || MODEL_INITIAL.privativeArea;
+      newModel.parkingVacancy =
+        newModel.parkingVacancy || MODEL_INITIAL.parkingVacancy;
+      newModel.privativeArea =
+        newModel.privativeArea || MODEL_INITIAL.privativeArea;
       newModel.totalArea = newModel.totalArea || MODEL_INITIAL.totalArea;
       newModel.pavement = newModel.pavement || MODEL_INITIAL.pavement;
       newModel.financeable = newModel.financeable || MODEL_INITIAL.financeable;
       newModel.reserved = newModel.reserved || MODEL_INITIAL.reserved;
       newModel.hectare = newModel.hectare || MODEL_INITIAL.hectare;
       newModel.featured = newModel.featured || MODEL_INITIAL.featured;
-      newModel.superFeatured = newModel.superFeatured || MODEL_INITIAL.superFeatured;
+      newModel.superFeatured =
+        newModel.superFeatured || MODEL_INITIAL.superFeatured;
       newModel.suite = newModel.suite || MODEL_INITIAL.suite;
       newModel.rented = newModel.rented || MODEL_INITIAL.rented;
-      newModel.condominiumPrice = newModel.condominiumPrice || MODEL_INITIAL.condominiumPrice;
+      newModel.condominiumPrice =
+        newModel.condominiumPrice || MODEL_INITIAL.condominiumPrice;
       newModel.showValue = newModel.showValue || MODEL_INITIAL.showValue;
       newModel.latitude = newModel.latitude || MODEL_INITIAL.latitude;
       newModel.longitude = newModel.longitude || MODEL_INITIAL.longitude;
@@ -511,7 +527,7 @@ export const ImovelPage = () => {
   }
 
   const ehEmpreendimento = useMemo(() => {
-    return model?.type && model?.type?.code == PropertyTypeEnum.EMPREENDIMENTO
+    return model?.type && model?.type?.code == PropertyTypeEnum.EMPREENDIMENTO;
   }, [model.type]);
 
   useEffect(() => {
@@ -538,10 +554,12 @@ export const ImovelPage = () => {
 
   useEffect(() => {
     if (hasPermission === false) {
-      toast.error(`Usuario não possui a permissão ${PERMISSIONS.GESTAO_DE_IMOVEIS}`)
+      toast.error(
+        `Usuario não possui a permissão ${PERMISSIONS.GESTAO_DE_IMOVEIS}`
+      );
       navigate("/admin");
     }
-  }, [hasPermission])
+  }, [hasPermission]);
 
   useEffect(() => {
     buscarCidades();
@@ -789,7 +807,7 @@ export const ImovelPage = () => {
                       atualizarModel(
                         "city",
                         cities.find(({ code }) => code == event.target.value) ||
-                        null
+                          null
                       )
                     }
                   >
@@ -903,19 +921,22 @@ export const ImovelPage = () => {
                   <div className="col-md-8">
                     {model && model.latitude && model.longitude ? (
                       <MapaComponent
-                        style={{ width: "100%", height: '500px' }}
+                        style={{ width: "100%", height: "500px" }}
                         latLngLiteral={{
                           lat: Number(model.latitude),
-                          lng: Number(model.longitude)
+                          lng: Number(model.longitude),
                         }}
-                        onChangeAddress={(value) => atualizarModel("enderecoAproximado", value)}
+                        onChangeAddress={(value) =>
+                          atualizarModel("enderecoAproximado", value)
+                        }
                         onChangeLatLng={({ lat, lng }) => {
                           setModel((value: any) => ({
                             ...value,
                             latitude: String(lat.toFixed(7)),
-                            longitude: String(lng.toFixed(7))
-                          }))
-                        }} />
+                            longitude: String(lng.toFixed(7)),
+                          }));
+                        }}
+                      />
                     ) : null}
                   </div>
                   <div className="col-md-4">
@@ -928,7 +949,9 @@ export const ImovelPage = () => {
                         value={model.enderecoAproximado || ""}
                         disabled
                       />
-                      <label htmlFor="input-enderecoAproximado">Endereço Aproximado</label>
+                      <label htmlFor="input-enderecoAproximado">
+                        Endereço Aproximado
+                      </label>
                     </div>
 
                     <div className="form-floating mb-3">
