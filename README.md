@@ -57,6 +57,13 @@ Este projeto foi desenvolvido em modo containerizado (Docker) e no paradigma  Mo
 Para subir a aplicação `Site` utilize como parametro da variável ambiente o termo `development`, também copiando o arquivo `./admin/env.example` e renomeando o mesmo para `.env`. Ainda para o site modifique o arquivo `./admin/package.json` na propriedade `start` inserindo o termo `PORT=xxxx react-scripts start` para Linux/MacOS ou `Set PORT=xxxx && react-scripts start`. Voce pode utilizar por exemplo a porta `5000`
 3. Após este procedimento as duas aplicações frontend **(Admin e Site)** podem ser iniciadas conforme instruções de cada seção como está no início deste documento.
 
+> **IMPORTANTE**: Se você rodar o projeto pela primeira vez, para que seja possível utilizar a aplicação Admin para criar imóveis é necessário alguns ajustes manuais na base de dados de desenvolvimento para que a mesma tenha o mesmo tipo de campo da base de produção nas seguintes tabelas:
+
+- `imoveis`
+  - coluna 'código' alterar para Auto Increment e Primary Key.
+- `foto_imovel`
+  - coluna 'código' alterar para Auto Increment e Primary Key.
+
 Para acessar as aplicações utilize:
 
 - Para Site: http://localhost:5000 (caso tenha optado por esta porta na configuração descrita acima)

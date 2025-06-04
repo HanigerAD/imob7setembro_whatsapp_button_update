@@ -46,33 +46,6 @@ export class SearchComponent implements OnInit, OnDestroy {
     private formBuilder: FormBuilder
   ) { }
 
-  private neighborhoodsControl: any = []
-
-  private createFormArray(): void {
-
-    const values = this.neighborhoods.map(v => new FormControl(false));
-
-    
-    this.neighborhoodsControl = this.formBuilder.array(values)
-    this.reGenerateForm()
-  }
-
-  private getNeighborhoodControls() {
-
-    return this.searchForm.get('neighborhood') ? (<FormArray>this.searchForm.get('neighborhood')).controls : null;
-  }
-
-  private prepareNeighborhoodToSend() {
-
-    const neighborhoodSubmit = this.filters.neighborhood
-      // .map((value, index) => value ? this.neighborhoods[index].code : null)
-      // .filter(value => value !== null)
-
-    
-    console.log('enviando', neighborhoodSubmit)
-    return neighborhoodSubmit.length > 0 ? neighborhoodSubmit : [0]
-  }
-
   private keepSearchFilters(): void {
     this.filters = this.searchForm.getRawValue();
 
@@ -102,20 +75,6 @@ export class SearchComponent implements OnInit, OnDestroy {
       maxPrice: '',
       category: 0,
       zone: 0,
-    });
-  }
-
-  private reGenerateForm(): void {
-    this.keepSearchFilters()
-    this.searchForm = this.formBuilder.group({
-      city: this.filters.city && this.filters.city !== '0' ? this.filters.city : undefined,
-      finality: this.filters.finality && this.filters.finality !== '0' ? this.filters.finality : 0,
-      neighborhood: this.filters.neighborhood,
-      zone: this.filters.zone && this.filters.zone !== '0' ? this.filters.zone : 0,
-      type: this.filters.type && this.filters.type !== '0' ? this.filters.type : 0,
-      minPrice: this.filters.minPrice ? this.transformCurrency(this.filters.minPrice) : '',
-      maxPrice: this.filters.maxPrice ? this.transformCurrency(this.filters.maxPrice) : '',
-      internalCode: null
     });
   }
 
@@ -201,7 +160,6 @@ export class SearchComponent implements OnInit, OnDestroy {
     if (!this.selectedNeighborhoods.find(n => n.code === neighborhood.code)) {
       this.selectedNeighborhoods.push(neighborhood);
       this.updateNeighborhoodFormValue();
-      console.log('selecionados', this.selectedNeighborhoods)
     }
     // Clear the input field after selection
     if (this.neighborhoodInput) {
