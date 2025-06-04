@@ -99,7 +99,10 @@
                       <li *ngIf="property?.internalCode"><b>Código do Imóvel:</b> {{ property?.internalCode }} </li>
                       <li><b>Preço:</b>{{ property?.price && property?.price !== "0.00" ? 'R$' +
                         converterParaMoeda(property?.price, false) : 'A CONSULTAR' }}</li>
-                      <li *ngIf="property?.condominiumPrice && property?.condominiumPrice !== '0.00' && property?.condominiumPrice !== '0'"><b>Valor do Condominio:</b> {{ 'R$' + converterParaMoeda(property?.condominiumPrice, false) }}</li>
+                      <li
+                        *ngIf="property?.condominiumPrice && property?.condominiumPrice !== '0.00' && property?.condominiumPrice !== '0'">
+                        <b>Valor do Condominio:</b> {{ 'R$' + converterParaMoeda(property?.condominiumPrice, false) }}
+                      </li>
                       <li *ngIf="property?.totalArea"><b>Área Total:</b> {{ property?.totalArea }}m² </li>
                       <li *ngIf="property?.privativeArea"><b>Área Privativa:</b> {{ property?.privativeArea }}m² </li>
                       <li *ngIf="property?.dormitory"><b>Quartos:</b> {{ property?.dormitory }} </li>
@@ -110,8 +113,10 @@
                   <div class="col-md-6 col-lg-6">
                     <ul class="property__detail-info-list list-unstyled">
                       <li *ngIf="property?.parkingVacancy"><b>Vagas de garagem:</b> {{ property?.parkingVacancy }}</li>
-                      <li *ngIf="property?.constuctionYear"><b>Ano de construção:</b> {{ property?.constuctionYear }}</li>
-                      <li *ngIf="property?.type?.description"><b>Tipo de imóvel:</b> {{ property?.type?.description }}</li>
+                      <li *ngIf="property?.constuctionYear"><b>Ano de construção:</b> {{ property?.constuctionYear }}
+                      </li>
+                      <li *ngIf="property?.type?.description"><b>Tipo de imóvel:</b> {{ property?.type?.description }}
+                      </li>
                     </ul>
                   </div>
                 </div>
@@ -170,8 +175,8 @@
                   <div class="form-group">
                     <select class="wide select_option form-control" formControlName="type">
                       <option data-display="Property Status" value="0">Tipo</option>
-                      <option *ngFor="let type of types" [value]="type.code"> {{ type.description
-                        }}</option>
+                      <option *ngFor="let type of types" [value]="type.code"> {{ type.description }}
+                      </option>
 
                     </select>
                   </div>
@@ -190,12 +195,15 @@
                         }} </option>
                     </select>
                   </div>
-                  <div class="form-group">
-                    <select class="wide select_option form-control" formControlName="neighborhood">
-                      <option data-display="Locations" value="0">Bairros</option>
-                      <option *ngFor="let neighnorhood of neighborhoods" [value]="neighnorhood.code"> {{
-                        neighnorhood.description }}</option>
-                    </select>
+                  <div class="form-group" *ngIf="neighborhoods && neighborhoods.length > 0">
+                    <div class="checkbox" class="row-sm-6" formArrayName="neighborhood">
+                      <div id="scrollable-checkbox-list">
+                        <div *ngFor="let item of getNeighborhoodControls(); let i = index" class="neighborhood-item">
+                          <input type="checkbox" [formControlName]="i">
+                          <span class="p-1">{{ neighborhoods[i].description }}</span>
+                        </div>
+                      </div>
+                    </div>
                   </div>
                   <div class="form-group">
                     <select class="wide select_option form-control" formControlName="bedroom">
@@ -291,7 +299,8 @@
             <div class="tab-pane fade show active" id="pills-tab-two" role="tabpanel" aria-labelledby="pills-tab-two">
               <div class="row">
                 <a class="col-md-4 col-lg-4" *ngFor="let property of similarProperties.slice(0,2)"
-                  [routerLink]="['/detalhes-imovel/' + property.code]">
+                  (click)="seePropertyDetails(property.code)">
+
                   <div class="card__image card__box-v1">
                     <div class="card__image-header h-250 img-space">
                       <!--                                                    <div class="ribbon text-capitalize">sold out</div>-->

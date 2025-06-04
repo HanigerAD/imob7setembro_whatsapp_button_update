@@ -5,7 +5,7 @@ export class PropertyFilterRequest {
     public maxPrice?: number;
     public minPrice?: number;
     public city?: number;
-    public neighborhood?: string;
+    public neighborhood?: string[];
     public zone?: number;
     public hectare?: number;
     public code?: number;

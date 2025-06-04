@@ -29,7 +29,11 @@ export class PropertyRestService {
     if (filters) {
       Object.keys(filters).forEach(filter => {
         if (filters[filter]) {
-          params = params.append(filter, filters[filter]);
+          if (filter === 'neighborhood') {
+            params = params.append(filter, JSON.stringify(filters[filter]));
+          } else {
+            params = params.append(filter, filters[filter]);
+          }
         }
       });
     }
@@ -43,7 +47,11 @@ export class PropertyRestService {
     if (filters) {
       Object.keys(filters).forEach(filter => {
         if (filters[filter]) {
-          params = params.append(filter, filters[filter]);
+          if (filter === 'neighborhood') {
+            params = params.append(filter, JSON.stringify(filters[filter]));
+          } else {
+            params = params.append(filter, filters[filter]);
+          }
         }
       });
     }

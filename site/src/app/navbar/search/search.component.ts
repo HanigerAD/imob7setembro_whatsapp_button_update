@@ -1,16 +1,19 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit, ElementRef, ViewChild } from '@angular/core';
+import { FormBuilder, FormGroup, FormControl, FormArray } from '@angular/forms';
+import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
+import { MatChipInputEvent } from '@angular/material/chips';
+import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { Options } from '@angular-slider/ngx-slider';
 import { LoginModel } from '../../shared/model/login.model';
 import { Subscription } from 'rxjs';
 import { SearchService } from './services/search.service';
 import { CityModel } from './model/city.model';
 import { NeighborhoodModel } from './model/neighborhood.model';
-import { FormBuilder, FormGroup } from '@angular/forms';
 import { SearchTabsEnum } from './enum/search-tabs.enum';
 import { FinalityModel } from './model/finality.model';
 import { TypeModel } from './model/type.model';
 import { PropertyZoneEnum } from './enum/property-zone.enum';
-import { CurrencyPipe } from '@angular/common';
+import { SearchModel } from './model/search.model';
 
 @Component({
   selector: 'app-search',
@@ -24,11 +27,17 @@ export class SearchComponent implements OnInit, OnDestroy {
 
   public searchForm: FormGroup;
   public optionsSlider: Options;
+  public filters: SearchModel;
   public finalities: FinalityModel[] = [];
   public types: TypeModel[] = [];
   public cities: CityModel[] = [];
   public neighborhoods: NeighborhoodModel[] = [];
+  public filteredNeighborhoods: NeighborhoodModel[] = [];
+  public selectedNeighborhoods: NeighborhoodModel[] = [];
   public activatedTab: SearchTabsEnum = SearchTabsEnum.URBAN;
+  readonly separatorKeysCodes = [ENTER, COMMA] as const;
+
+  @ViewChild('neighborhoodInput') neighborhoodInput: ElementRef<HTMLInputElement>;
 
   private subscriptions: Subscription = new Subscription();
 
@@ -36,6 +45,39 @@ export class SearchComponent implements OnInit, OnDestroy {
     private service: SearchService,
     private formBuilder: FormBuilder
   ) { }
+
+  private neighborhoodsControl: any = []
+
+  private createFormArray(): void {
+
+    const values = this.neighborhoods.map(v => new FormControl(false));
+
+    
+    this.neighborhoodsControl = this.formBuilder.array(values)
+    this.reGenerateForm()
+  }
+
+  private getNeighborhoodControls() {
+
+    return this.searchForm.get('neighborhood') ? (<FormArray>this.searchForm.get('neighborhood')).controls : null;
+  }
+
+  private prepareNeighborhoodToSend() {
+
+    const neighborhoodSubmit = this.filters.neighborhood
+      // .map((value, index) => value ? this.neighborhoods[index].code : null)
+      // .filter(value => value !== null)
+
+    
+    console.log('enviando', neighborhoodSubmit)
+    return neighborhoodSubmit.length > 0 ? neighborhoodSubmit : [0]
+  }
+
+  private keepSearchFilters(): void {
+    this.filters = this.searchForm.getRawValue();
+
+  }
+
 
   public ngOnInit(): void {
     this.generateForm();
@@ -54,12 +96,26 @@ export class SearchComponent implements OnInit, OnDestroy {
       finality: 0,
       type: 0,
       city: 0,
-      neighborhood: 0,
+      neighborhood: [[0]],
       internalCode: null,
       minPrice: '',
       maxPrice: '',
       category: 0,
-      zone: 0
+      zone: 0,
+    });
+  }
+
+  private reGenerateForm(): void {
+    this.keepSearchFilters()
+    this.searchForm = this.formBuilder.group({
+      city: this.filters.city && this.filters.city !== '0' ? this.filters.city : undefined,
+      finality: this.filters.finality && this.filters.finality !== '0' ? this.filters.finality : 0,
+      neighborhood: this.filters.neighborhood,
+      zone: this.filters.zone && this.filters.zone !== '0' ? this.filters.zone : 0,
+      type: this.filters.type && this.filters.type !== '0' ? this.filters.type : 0,
+      minPrice: this.filters.minPrice ? this.transformCurrency(this.filters.minPrice) : '',
+      maxPrice: this.filters.maxPrice ? this.transformCurrency(this.filters.maxPrice) : '',
+      internalCode: null
     });
   }
 
@@ -117,15 +173,58 @@ export class SearchComponent implements OnInit, OnDestroy {
   public getNeighborhoods(): void {
     this.subscriptions.add(
       this.service.getNeighborhoods(this.searchForm.get('city').value).subscribe(
-        neighborhoods => this.neighborhoods = neighborhoods
+        neighborhoods => {
+          this.neighborhoods = neighborhoods;
+          this.filteredNeighborhoods = neighborhoods;
+          // Clear selected neighborhoods when city changes
+          this.selectedNeighborhoods = [];
+          this.updateNeighborhoodFormValue();
+        }
       )
     );
+  }
+
+  public removeNeighborhood(neighborhood: NeighborhoodModel): void {
+    const index = this.selectedNeighborhoods.findIndex(n => n.code === neighborhood.code);
+    if (index >= 0) {
+      this.selectedNeighborhoods.splice(index, 1);
+      this.updateNeighborhoodFormValue();
+      // Reset input field after removing
+      if (this.neighborhoodInput) {
+        this.neighborhoodInput.nativeElement.value = '';
+      }
+    }
+  }
+
+  public selectNeighborhood(event: MatAutocompleteSelectedEvent): void {
+    const neighborhood = event.option.value as NeighborhoodModel;
+    if (!this.selectedNeighborhoods.find(n => n.code === neighborhood.code)) {
+      this.selectedNeighborhoods.push(neighborhood);
+      this.updateNeighborhoodFormValue();
+      console.log('selecionados', this.selectedNeighborhoods)
+    }
+    // Clear the input field after selection
+    if (this.neighborhoodInput) {
+      this.neighborhoodInput.nativeElement.value = '';
+      // Remove focus to the input to allow multiple selections
+      this.neighborhoodInput.nativeElement.blur();
+    }
+  }
+
+  private updateNeighborhoodFormValue(): void {
+    this.searchForm.patchValue({
+      neighborhood: this.selectedNeighborhoods.map(n => n.code)
+    });
+   
   }
 
   public search(): void {
     this.manageSelectedValues();
 
-    this.service.saveFiltersStorage(this.searchForm.getRawValue());
+    this.filters = this.searchForm.getRawValue();
+    this.filters.neighborhood = this.filters.neighborhood.length > 0 ? this.filters.neighborhood : [0]
+
+    this.service.saveFiltersStorage(this.filters);
     this.service.redirectToListProperties();
   }
 

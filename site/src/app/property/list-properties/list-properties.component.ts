@@ -1,5 +1,5 @@
 import { Component, OnChanges, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, FormControl, FormArray } from '@angular/forms';
 import { Options } from '@angular-slider/ngx-slider';
 import { CityModel } from '../../navbar/search/model/city.model';
 import { NeighborhoodModel } from '../../navbar/search/model/neighborhood.model';
@@ -41,6 +41,43 @@ export class ListPropertiesComponent implements OnInit, OnChanges {
   public propertiesCounter = 0;
   public actualPage = 1;
   public perPage = 12;
+  
+  private neighborhoodsControl: any = []
+
+  private createFormArray(): void {
+
+    const {neighborhood} = JSON.parse(localStorage.getItem(StorageEnum.FILTERS))
+
+    let values = []
+    if (neighborhood[0] !== 0) {
+      values = this.neighborhoods.map(v => new FormControl(neighborhood.includes(v.code)));
+    } else {
+      values = this.neighborhoods.map(v => new FormControl(false));
+    }
+    
+    this.neighborhoodsControl = this.formBuilder.array(values)
+    this.keepSearchFilters()
+    this.filters.neighborhood = neighborhood
+    this.generateForm()
+  }
+
+  private getNeighborhoodControls() {
+
+    return this.searchForm.get('neighborhood') ? (<FormArray>this.searchForm.get('neighborhood')).controls : null;
+  }
+
+  private prepareNeighborhoodToSend() {
+
+    const neighborhoodSubmit = this.filters.neighborhood
+      .map((value, index) => value ? this.neighborhoods[index].code : null)
+      .filter(value => value !== null)
+
+    return neighborhoodSubmit.length > 0 ? neighborhoodSubmit : [0]
+  }
+
+  private keepSearchFilters(): void {
+    this.filters = this.searchForm.getRawValue();
+  }
 
   public converterParaMoeda = converterParaMoeda;
 
@@ -48,8 +85,10 @@ export class ListPropertiesComponent implements OnInit, OnChanges {
     private formBuilder: FormBuilder,
     private service: PropertyService,
     private searchService: SearchService,
-    private router: Router
+    private router: Router,
   ) { }
+
+ 
 
   public ngOnInit(): void {
     this.getFinalities();
@@ -58,6 +97,7 @@ export class ListPropertiesComponent implements OnInit, OnChanges {
     this.getCities();
     this.getFilters();
     this.generateForm();
+
 
     this.getProperties();
     window.scroll(0, 0);
@@ -99,7 +139,7 @@ export class ListPropertiesComponent implements OnInit, OnChanges {
         .finality(0)
         .type(0)
         .city(0)
-        .neighborhood(0)
+        .neighborhood(this.neighborhoodsControl)
         .zone(0)
         .build();
 
@@ -116,7 +156,7 @@ export class ListPropertiesComponent implements OnInit, OnChanges {
         type: this.filters.type,
         city: this.filters.city,
         zone: this.filters.zone,
-        neighborhood: this.filters.neighborhood,
+        neighborhood: this.neighborhoodsControl,
         code: this.filters.code,
         minPrice: [this.filters.minPrice ? this.formatMoney(this.filters.minPrice) : ''],
         maxPrice: [this.filters.maxPrice ? this.formatMoney(this.filters.maxPrice) : ''],
@@ -126,7 +166,7 @@ export class ListPropertiesComponent implements OnInit, OnChanges {
       });
     }
 
-    this.ruralZoneSelected = this.searchForm.get('zone').value === PropertyZoneEnum.RURAL;
+    this.ruralZoneSelected = this.searchForm.get('zone').value === PropertyZoneEnum.RURAL;    
   }
 
   private getFinalities(): void {
@@ -169,7 +209,10 @@ export class ListPropertiesComponent implements OnInit, OnChanges {
   public getNeighborhoods(): void {
     this.subscriptions.add(
       this.searchService.getNeighborhoods(this.searchForm.get('city').value).subscribe(
-        neighborhoods => this.neighborhoods = neighborhoods
+        neighborhoods => {
+          this.neighborhoods = neighborhoods
+          this.createFormArray()    
+        }
       )
     );
   }
@@ -182,7 +225,7 @@ export class ListPropertiesComponent implements OnInit, OnChanges {
     this.filters.minPrice = this.filters.minPrice ? this.converterParaNumero(this.filters.minPrice) : undefined;
     this.filters.maxPrice = this.filters.maxPrice ? this.converterParaNumero(this.filters.maxPrice) : undefined;
     this.loading = true;
-
+    
     this.subscriptions.add(
       this.service.getProperties(this.filters).subscribe(
         properties => this.manageSuccessGetProperties(properties),
@@ -215,7 +258,7 @@ export class ListPropertiesComponent implements OnInit, OnChanges {
     this.filters.city = this.filters.city && this.filters.city !== '0' ? this.filters.city : undefined;
     this.filters.code = this.filters.code && this.filters.code !== '0' ? this.filters.code : undefined;
     this.filters.finality = this.filters.finality && this.filters.finality !== '0' ? this.filters.finality : undefined;
-    this.filters.neighborhood = this.filters.neighborhood && this.filters.neighborhood !== '0' ? this.filters.neighborhood : undefined;
+    this.filters.neighborhood = this.filters.neighborhood && this.filters.neighborhood.length === 0 ? [0] : this.prepareNeighborhoodToSend()
     this.filters.featured = this.filters.featured && this.filters.featured !== '0' ? this.filters.featured : undefined;
     this.filters.zone = this.filters.zone && this.filters.zone !== '0' ? this.filters.zone : undefined;
     this.filters.showSite = this.filters.showSite && this.filters.showSite !== '0' ? this.filters.showSite : undefined;
@@ -226,7 +269,8 @@ export class ListPropertiesComponent implements OnInit, OnChanges {
     this.filters.bedroom = this.filters.bedroom ? Number(this.filters.bedroom) : undefined;
     this.filters.parkingVacancy = this.filters.parkingVacancy ? Number(this.filters.parkingVacancy) : undefined;
     this.filters.financeable = this.filters.financeable ? 1 : 0;
-    
+    this.actualPage = 1
+
     this.getProperties();
   }
 

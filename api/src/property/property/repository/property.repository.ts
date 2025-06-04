@@ -126,7 +126,14 @@ export class PropertyRepository {
         }
 
         case 'bairro': {
-          queryBuilder.where('bairro.codigo', '=', filterValue);
+          // queryBuilder.where('bairro.codigo', '=', filterValue);
+          if (filterValue[0] === '0') {
+            queryBuilder.whereNotIn('bairro.codigo', filterValue);
+
+          } else {
+
+            queryBuilder.whereIn('bairro.codigo', filterValue);
+          }
           break;
         }
 

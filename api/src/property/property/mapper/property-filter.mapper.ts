@@ -11,7 +11,7 @@ export class PropertyFilterMapper {
       .codigo(request?.code)
       .codigo_interno(request?.internalCode)
       .transacao(request?.finality ? Number(request?.finality) : null)
-      .bairro(this.validateNeighborhoods(request.neighborhood))
+      .bairro(request?.neighborhood ? this.validateNeighborhoods(request.neighborhood) : null)
       .hectare(request?.hectare)
       .zona(request?.zone)
       .municipio(request?.city)
@@ -29,11 +29,10 @@ export class PropertyFilterMapper {
   }
 
   public static validateNeighborhoods(neighborhoods: any): any {
-    if (neighborhoods?.length == 1) {
-      return Array.of(neighborhoods);
-    } else if (neighborhoods?.length > 1) {
-      return neighborhoods;
-    }
+
+    const stringArray = Array.from(JSON.parse(neighborhoods), num => num.toString())
+
+    return stringArray
   }
 
   public static generatePriceFilter(filter: PropertyFilterRequest): PriceFilterEntity {
