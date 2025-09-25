@@ -1,3 +1,4 @@
+import { create } from 'xmlbuilder2';
 import { ImageResponse } from './../integration/response/photo.response';
 import { BadRequestException, ConflictException, Injectable } from '@nestjs/common';
 import { Builder } from 'builder-pattern';
@@ -52,6 +53,7 @@ import { ConfigurationService } from 'src/configuration/service/configuration.se
 import { ImageWatermark } from 'src/common/integration/request/image-watermark';
 import { CategoryRequest } from '../../../property/category/integration/response/category.request';
 import { PropertyResponse } from '../integration/response/property.response';
+
 
 
 
@@ -353,5 +355,73 @@ export class PropertyService {
     return this.repository.getValueLog(table, value)
       .then(response => response[0]);
   }
+
+  
+public async generateXmlFeed(): Promise<string> {
+  
+  const properties = await this.getAllProperties({
+    pagina: 1,
+    porPagina: 1000,
+  } as any);
+
+  const root: any = { imoveis: { imovel: [] as any[] } };
+
+  // helpers
+  const isAbsolute = (url?: string) => !!url && /^https?:\/\//i.test(url || '');
+  const baseCdn = (process.env.CDN_URL || '').replace(/\/$/, '');
+  const photoUrl = (name?: string) => {
+    if (!name) return '';
+    return isAbsolute(name) ? name : (baseCdn ? `${baseCdn}/${name}` : name);
+  };
+  const num = (v: any, fallback = 0) => {
+    const n = Number(v);
+    return Number.isFinite(n) ? n : fallback;
+  };
+
+  for (const p of properties ?? []) {
+    // --- FALLBACKS para campos achatados vs aninhados ---
+    const logradouro = p.address?.street ?? p.logradouro ?? '';
+    const numero     = p.address?.number ?? p.numero ?? '';
+    const bairro     = p.neighborhood?.description ?? p.neighborhood ?? '';
+    const cidade     = p.city?.description ?? p.city ?? '';
+    const estado     = p.federativeUnit?.acronym ?? p.uf ?? '';
+    const descricao  = p.description ?? p.descricao ?? '';
+
+    // valores (usa sellPrice/rentPrice se existirem; senão cai para price + transaction)
+    const valorVenda   = num(p.sellPrice ?? (String(p.transaction).toLowerCase() === 'venda' ? p.price : 0));
+    const valorLocacao = num(p.rentPrice ?? (String(p.transaction).toLowerCase() === 'aluguel' ? p.price : 0));
+
+    // fotos: principal + demais, todas como URL absoluta
+    const fotos: Array<any> = [];
+    if (p.photo) fotos.push({ '@principal': '1', '#': photoUrl(p.photo) });
+    if (Array.isArray(p.images)) {
+      for (const img of p.images) {
+        const u = photoUrl(img);
+        if (u) fotos.push({ '#': u });
+      }
+    }
+
+    root.imoveis.imovel.push({
+      codigo: p.code ?? p.internalCode ?? '',
+      titulo: p.title ?? '',
+      valor_venda: valorVenda,
+      valor_locacao: valorLocacao,
+      endereco: {
+        logradouro,
+        numero,
+        bairro,
+        cidade,
+        estado,
+      },
+      descricao,
+      fotos: { foto: fotos },
+    });
+  }
+
+  const doc = create({ version: '1.0', encoding: 'UTF-8' }).ele(root);
+  return doc.end({ prettyPrint: true });
+}
+
+
 
 }

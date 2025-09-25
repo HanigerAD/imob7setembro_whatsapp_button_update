@@ -62,7 +62,8 @@
     "sharp": "^0.27.2",
     "ssl-root-cas": "^1.3.1",
     "swagger-ui-express": "^4.1.6",
-    "uuidv4": "^6.2.12"
+    "uuidv4": "^6.2.12",
+    "xmlbuilder2": "^3.1.1"
   },
   "devDependencies": {
     "@nestjs/cli": "^7.6.0",

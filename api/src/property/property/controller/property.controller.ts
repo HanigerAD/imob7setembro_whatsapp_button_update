@@ -3,6 +3,7 @@ import {
   Controller,
   Delete,
   Get,
+  Header,
   HttpCode,
   HttpStatus,
   Param,
@@ -37,6 +38,7 @@ import { PropertyDocumentResponse } from "../integration/response/property-docum
 import { LogRequest } from "../integration/request/log.request";
 import { LogResponse } from "../integration/response/log.response";
 import { CategoryRequest } from "../../../property/category/integration/response/category.request";
+
 
 @Controller("property")
 export class PropertyController {
@@ -278,4 +280,14 @@ export class PropertyController {
   ): Promise<any> {
     return this.service.getValueLog(field, value);
   }
+
+
+@Get('feed.xml')
+@Header('Content-Type', 'application/xml; charset=utf-8')
+async getXmlFeed(): Promise<string> {
+  return this.service.generateXmlFeed();
+}
+
+
+
 }
